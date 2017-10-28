@@ -8,7 +8,7 @@ CLIENT_ID = socket.gethostname().split('-')[1]
 class MyTCPHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
-        self.data = self.request.recv(1024).strip()
+        self.data = self.request.recv(4).strip()
         print('{} wrote:'.format(self.client_address[0]))
         print(self.data)
         self.request.sendall(self.data)

@@ -7,7 +7,7 @@ assert(len(sys.argv) == 2)
 target = sys.argv[1]
 
 HOST, PORT = '192.168.1.{}'.format(target), 5000
-data = 'Player {} hit Player {}'.format(socket.gethostname().split('-')[1],
+data = '{}->{}'.format(socket.gethostname().split('-')[1],
                                         target)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
