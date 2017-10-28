@@ -14,5 +14,5 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
 if __name__ == "__main__":
     HOST, PORT = '192.168.1.2', 5000
 
-    with socketserver.TCPServer((HOST, PORT), MyTCPHandler) as server:
-        server.serve_forever()
+    server = socketserver.TCPServer((HOST, PORT), MyTCPHandler)
+    server.serve_forever()
