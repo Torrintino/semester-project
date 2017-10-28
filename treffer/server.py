@@ -3,6 +3,8 @@
 import socketserver
 import socket
 
+CLIENT_ID = socket.gethostname().split('-')[1]
+
 class MyTCPHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
@@ -12,7 +14,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         self.request.sendall(self.data)
 
 if __name__ == "__main__":
-    HOST, PORT = '192.168.1.2', 5000
+    HOST, PORT = '192.168.1.{}'.format(CLIENT_ID), 5000
 
     server = socketserver.TCPServer((HOST, PORT), MyTCPHandler)
     server.serve_forever()
