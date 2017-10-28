@@ -8,10 +8,9 @@ CLIENT_ID = socket.gethostname().split('-')[1]
 class MyTCPHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
-        self.data = self.request.recv(4).strip()
-        print('{} wrote:'.format(self.client_address[0]))
-        print(self.data)
-        self.request.sendall(self.data)
+        self.data = self.request.recv(8).strip().split(b'->')
+        marksman = self.data[0]
+        target = self.data[1]
 
 if __name__ == "__main__":
     HOST, PORT = '192.168.1.{}'.format(CLIENT_ID), 5000
