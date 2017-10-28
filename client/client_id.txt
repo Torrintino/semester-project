@@ -1,0 +1,4 @@
+Diese Liste dient der eindeutigen Identifikation jedes Clients
+
+ID  	    	  Mac-Adresse (WiFi)
+1		  b8:27:eb:8d:12:96

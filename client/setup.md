@@ -28,6 +28,8 @@ Anleitung:
      bug)
  11. Führt `sudo raspi-config` aus und ändert die Lokalisierung auf deutsche
      Settings
+ 12. Ändert den hostnamen zu client-x, wobei x die Client ID ist. Wenn der RasPi
+     noch keine Client ID hat, die bitte in Client ID Liste eintragen
 
 Eventuell ist `apt --fix-broken install` notwendig
 
