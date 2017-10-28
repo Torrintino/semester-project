@@ -30,3 +30,10 @@ Anleitung:
      Settings
 
 Eventuell ist `apt --fix-broken install` notwendig
+
+Als nächstes richten wir git ein
+ 1. `sudo apt install git`
+ 2. `git clone https://gitlab.informatik.hu-berlin.de/coding-tag/hardware.git`
+
+Jetzt kann man direkt auf dem Raspberry Pi arbeiten und auf alle Skripts
+zugreifen.
