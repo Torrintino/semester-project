@@ -18,7 +18,7 @@ Anleitung:
  3. Ihr braucht den device Pfad eures SD card readers. Ich empfehle die Verwendung von `lsblk` dafür. Bei mir heißt er zum Beispiel `/dev/mmcblk0`
  4. Führt `umount` für alle Partionen der SD card aus, die gemountet sind
  5. Geht in den Download Ordner und führt folgendes Kommando aus
- `dd if=<version>-raspbian-strecht-lite.img of=<device Pfad> bs=1M`
+ `dd if=<version>-raspbian-strech-lite.img of=<device Pfad> bs=1M`
  6. Führt `sync` aus
  7. Gegebenfalls noch mal `umount` ausführen und SD Karte herausnehmen
  8. SD Karte in den Raspberry Pi stecken und einschalten
@@ -28,3 +28,5 @@ Anleitung:
      bug)
  11. Führt `sudo raspi-config` aus und ändert die Lokalisierung auf deutsche
      Settings
+
+Eventuell ist `apt --fix-broken install` notwendig
