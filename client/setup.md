@@ -30,10 +30,11 @@ Anleitung:
      Settings
  12. Ändert den hostnamen zu client-x, wobei x die Client ID ist. Wenn der RasPi
      noch keine Client ID hat, die bitte in Client ID Liste eintragen
+ 13. Unter Interfacing Options ssh aktivieren
 
 Eventuell ist `apt --fix-broken install` notwendig
 
-Als nächstes richten wir git ein
+Als nächstes richten wir git ein:
  1. `sudo apt install git`
  2. `git clone https://gitlab.informatik.hu-berlin.de/coding-tag/hardware.git`
 
