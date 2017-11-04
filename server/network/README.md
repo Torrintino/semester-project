@@ -12,14 +12,15 @@ Der Server kann mit mehreren Access Points verbunden werden, die sich über Roam
 Wir verwenden das 192.168.0.0/16 Netz für unsere Adressen. Jeder Server und jeder Client erhält eine eindeutige ID. Diese wird auch für seine jeweilige IP Adresse verwendet.
 
 Die Aufteilung geschieht folgendermaßen:
-192.168.1.*
-192.168.1.1 - der zentrale Server
-192.168.1.2-249 - Clients
-192.168.1.250-254 - Testgeräte die als Clients fungieren
 
-192.168.2.* - zusätzliche Server
-192.168.2.2-249 - Server
-192.168.2.250-254 - Testgeräte die als Server fungieren
+ * 192.168.1.*
+ * 192.168.1.1 - der zentrale Server
+ * 192.168.1.2-249 - Clients
+ * 192.168.1.250-254 - Testgeräte die als Clients fungieren
+
+ * 192.168.2.* - zusätzliche Server
+ * 192.168.2.2-249 - Server
+ * 192.168.2.250-254 - Testgeräte die als Server fungieren
 
 Die ID's für Clients und Server sind fest an ein Gerät gebunden. Die Adressen für Testgeräte dürfen beliebig vergeben werden, sie sind für private Geräte gedacht, die letztendlich nicht für das Spielen verwendet werden.
 Es kann theoretisch mehrere Geräte für den zentralen Server geben, es darf davon aber immer nur einer davon innerhalb eines Netzwerks existieren.
