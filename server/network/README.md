@@ -13,12 +13,12 @@ Wir verwenden das 192.168.0.0/16 Netz für unsere Adressen. Jeder Server und jed
 
 Die Aufteilung geschieht folgendermaßen:
 
- * 192.168.1.*
+ * 192.168.1.x
  * 192.168.1.1 - der zentrale Server
  * 192.168.1.2-249 - Clients
  * 192.168.1.250-254 - Testgeräte die als Clients fungieren
 
- * 192.168.2.* - zusätzliche Server
+ * 192.168.2.x - zusätzliche Server
  * 192.168.2.2-249 - Server
  * 192.168.2.250-254 - Testgeräte die als Server fungieren
 
