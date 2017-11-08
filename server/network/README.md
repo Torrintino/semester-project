@@ -13,13 +13,14 @@ Wir verwenden das 192.168.0.0/16 Netz für unsere Adressen. Jeder Server und jed
 
 Die Aufteilung geschieht folgendermaßen:
 
- * 192.168.1.x
+
+192.168.1.x
  * 192.168.1.1 - der zentrale Server
  * 192.168.1.2-249 - Clients
  * 192.168.1.250-254 - Testgeräte die als Clients fungieren
 
- * 192.168.2.x - zusätzliche Server
- * 192.168.2.2-249 - Server
+192.168.2.x
+ * 192.168.2.2-249 - allgemeine Server
  * 192.168.2.250-254 - Testgeräte die als Server fungieren
 
 Die ID's für Clients und Server sind fest an ein Gerät gebunden. Die Adressen für Testgeräte dürfen beliebig vergeben werden, sie sind für private Geräte gedacht, die letztendlich nicht für das Spielen verwendet werden.
