@@ -1,0 +1,100 @@
+# .clang-format
+
+Language: Cpp
+BasedOnStyle: Google
+AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
+AlignConsecutiveDeclarations: false
+AlignTrailingComments: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: true
+BinPackArguments: true
+BinPackParameters: true
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: false
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: false
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeTernaryOperators: false
+ColumnLimit: 100
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+IndentCaseLabels: false
+IndentWidth: 4
+IndentWrappedFunctionNames: false
+KeepEmptyLinesAtTheStartOfBlocks: true
+NamespaceIndentation: None
+PointerAlignment: Left
+ReflowComments: true
+SortIncludes: false
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+Standard: Cpp11
+TabWidth: 4
+UseTab: Never
+
+
+# Unsure:
+
+# It would be better if this was set to true. However, this also applies to "= default" and
+# "= delete" for constructors / assignment operator overloads and those look horrible with this key
+# set to true.
+AlignConsecutiveAssignments: false
+
+# I don't know - that never bothered me.
+AlignOperands: true
+
+# The number of empty lines to keep should be unlimited in my opinion.
+MaxEmptyLinesToKeep: 20
+
+
+# TODO (possibly not supported):
+
+# BreakBeforeBraces ???
+# CommentPragmas ???
+# ConstructorInitializerIndentWidth ???
+# ExperimentalAutoDetectBinPacking ???
+# Penalty* ???
+
+
+# Not supported by clang-format-3.8 which is part of the packages for Debian/Raspbian Stretch:
+
+# AlignEscapedNewlines: Left
+# BraceWrapping:
+#  AfterExternBlock: false
+#  SplitEmptyFunction: true
+#  SplitEmptyRecord: true
+#  SplitEmptyNamespace: true
+# BreakBeforeInheritanceComma: false
+# BreakConstructorInitializers: BeforeColon
+# BreakStringLiterals: false
+# CompactNamespaces: false
+# FixNamespaceComments: true
+# IndentPPDirectives: None
+# SortUsingDeclarations: false
+# SpaceAfterTemplateKeyword: false
+
