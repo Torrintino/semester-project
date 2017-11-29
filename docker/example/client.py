@@ -2,6 +2,7 @@
 
 import socket
 import socketserver
+import sys
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
 
@@ -10,6 +11,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         if req == b'You are dead':
             self.request.sendall(b'%d is sad' % 
                 int(socket.gethostname().split('-')[1]))
+            sys.exit(0)
         
 if __name__ == "__main__":
     HOST, PORT = socket.gethostname(), 5000
