@@ -5,9 +5,25 @@
 
 #include <cstdint>
 #include <functional>
+#include <stdexcept>
 #include <string>
 
 #include <sys/socket.h>
+
+
+#define DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(super, x) \
+    class x : public super { public: x(std::string const& _msg) : super(_msg) { } };
+
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, AcceptFailedException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, BindFailedException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, ConnectFailedException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(ConnectFailedException, ConnectFailedNoSuchFileException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, ReceivedHeaderIncompleteException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, ReceivedMessageIncompleteException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, RecvFailedException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, SockFailedException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, SendFailedException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, UnlinkFailedException)
 
 
 class CSocketWrapper final // to make RAII work (preventig memory leaks)
@@ -39,7 +55,7 @@ class FileDeleter final
 public:
     FileDeleter(std::string const& _file_name);
     FileDeleter(FileDeleter const& _other) = delete;
-    FileDeleter(FileDeleter&& _other);
+    FileDeleter(FileDeleter&& _other) = delete;
     FileDeleter& operator=(FileDeleter const& _other) & = delete;
     FileDeleter& operator=(FileDeleter&& _other) & = delete;
     ~FileDeleter();

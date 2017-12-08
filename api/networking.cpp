@@ -12,7 +12,6 @@
 #include <cstring>
 #include <limits>
 #include <memory>
-#include <stdexcept>
 #include <utility>
 
 #include "networking.hpp"
@@ -34,8 +33,7 @@ static void bindUnixSocket(CSocketWrapper& _socket, std::string const& _file_nam
     
     if (iresult != 0 && errno != ENOENT) { // ignore non-existing files
         perror("Error: Cannot unlink file for local Unix socket");
-        throw std::runtime_error("Error: Cannot unlink file " + _file_name
-                                 + " for local Unix socket.");
+        throw UnlinkFailedException("Cannot unlink file " + _file_name + " for local Unix socket.");
     }
     
     iresult = bind(_socket.getFD(), (struct sockaddr*)&name,
@@ -43,7 +41,7 @@ static void bindUnixSocket(CSocketWrapper& _socket, std::string const& _file_nam
     
     if (iresult != 0) {
         perror("Error: Cannot bind local Unix socket");
-        throw std::runtime_error("Error: Cannot bind local Unix socket.");
+        throw BindFailedException("Cannot bind local Unix socket.");
     }
 }
 
@@ -56,22 +54,22 @@ static void sendToSocket(CSocketWrapper& _socket, MessageHeader::TypeType _type,
     }
     
     MessageHeader header = {
-            (uint32_t)_data.length(), // size
-            _type                     // type
+            static_cast<uint32_t>(_data.length()), // size
+            _type                                  // type
     };
     
     ssize_t sent = send(_socket.getFD(), &header, sizeof(header), 0);
     
     if (sent < 0) {
         perror("Error: Cannot send message header");
-        throw std::runtime_error("Error: Cannot send message header.");
+        throw SendFailedException("Cannot send message header.");
     }
     
     sent = send(_socket.getFD(), _data.c_str(), _data.length(), 0);
     
     if (sent < 0) {
         perror("Error: Cannot send message");
-        throw std::runtime_error("Error: Cannot send message.");
+        throw SendFailedException("Cannot send message.");
     }
 }
 
@@ -89,17 +87,17 @@ static void receiveFromSocket(CSocketWrapper& _socket,
             if (errno == EWOULDBLOCK) // no data is available
                 return;
             perror("Error: Cannot receive message");
-            throw std::runtime_error("Error: Cannot receive message.");
+            throw RecvFailedException("Cannot receive message.");
         }
         
         if (received != sizeof(_header)) {
-            throw std::runtime_error("Error: Did not receive the entire header.");
+            throw ReceivedHeaderIncompleteException("Did not receive the entire header.");
         }
         
         _header_written = true;
     }
     
-    std::unique_ptr<char> data = std::make_unique<char>((size_t)_header.size + 1);
+    std::unique_ptr<char> data = std::make_unique<char>(static_cast<size_t>(_header.size));
     
     received = recv(_socket.getFD(), data.get(), _header.size, 0);
     
@@ -107,16 +105,16 @@ static void receiveFromSocket(CSocketWrapper& _socket,
         if (errno == EWOULDBLOCK) // no data is available
             return;
         perror("Error: Cannot receive message");
-        throw std::runtime_error("Error: Cannot receive message.");
+        throw RecvFailedException("Cannot receive message.");
     }
-    
-    if (received != _header.size) {
-        throw std::runtime_error("Error: Did not receive the entire message.");
-    }
-    
-    _func(_header.type, std::string(data.get(), (uint32_t)received));
     
     _header_written = false;
+    
+    if (received != _header.size) {
+        throw ReceivedMessageIncompleteException("Did not receive the entire message.");
+    }
+    
+    _func(_header.type, std::string(data.get(), static_cast<uint32_t>(received)));
 }
 
 
@@ -128,11 +126,9 @@ static void receiveFromSocket(CSocketWrapper& _socket,
 CSocketWrapper::CSocketWrapper(int _namespace, int _style, int _protocol)
         : m_sockfd(socket(_namespace, _style, _protocol))
 {
-    m_sockfd = ::socket(_namespace, _style, _protocol);
-    
     if (m_sockfd == -1) {
         perror("Error: Cannot create socket");
-        throw std::runtime_error("Error: Cannot create socket.");
+        throw SockFailedException("Cannot create socket.");
     }
 }
 
@@ -163,7 +159,7 @@ CSocketWrapper CSocketWrapper::accept(struct sockaddr* _addr, socklen_t* _length
     
     if (new_sockfd == -1) {
         perror("Error: Cannot accept connection to socket");
-        throw std::runtime_error("Error: Cannot accept connection to socket.");
+        throw AcceptFailedException("Cannot accept connection to socket.");
     }
     
     return CSocketWrapper(new_sockfd);
@@ -251,7 +247,10 @@ UnixSender::UnixSender(std::string const& _file_name, std::string const& _receiv
     
     if (iresult != 0) {
         perror("Error: Cannot connect to server");
-        throw std::runtime_error("Error: Cannot connect to server.");
+        if (errno == ENOENT)
+            throw ConnectFailedNoSuchFileException("Cannot connect to server: No such file or "
+                                                   "directory.");
+        throw ConnectFailedException("Cannot connect to server.");
     }
 }
 
