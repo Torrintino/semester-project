@@ -18,7 +18,7 @@
 #include "networking.hpp"
 
 
-static void bindLocalUnixSocket(CSocketWrapper& _socket, std::string const& _file_name)
+static void bindUnixSocket(CSocketWrapper& _socket, std::string const& _file_name)
 {
     struct sockaddr_un name;
     name.sun_family = AF_LOCAL;
@@ -59,8 +59,6 @@ static void sendToSocket(CSocketWrapper& _socket, MessageHeader::TypeType _type,
             (uint32_t)_data.length(), // size
             _type                     // type
     };
-    
-    static_assert(sizeof(header) == 8);
     
     ssize_t sent = send(_socket.getFD(), &header, sizeof(header), 0);
     
@@ -184,7 +182,7 @@ void CSocketWrapper::shutdown(int _how) noexcept
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// FileDeleter //////////////////////////////////////////////////////////////////////////////////
+// FileDeleter /////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 FileDeleter::FileDeleter(std::string const& _file_name)
@@ -210,7 +208,7 @@ UnixReceiver::UnixReceiver(std::string const& _file_name)
           m_socket(AF_LOCAL, SOCK_DGRAM, 0),
           m_buffered_header_available(false)
 {
-    bindLocalUnixSocket(m_socket, _file_name);
+    bindUnixSocket(m_socket, _file_name);
     
     // make socket non-blocking:
     fcntl(m_socket.getFD(), F_SETFL, O_NONBLOCK); // ignore errors
@@ -234,7 +232,7 @@ void UnixReceiver::receive(std::function<void(MessageHeader::TypeType, std::stri
 UnixSender::UnixSender(std::string const& _file_name, std::string const& _receiver_file_name)
         : m_socket_file_deleter(_file_name), m_socket(AF_LOCAL, SOCK_DGRAM, 0)
 {
-    bindLocalUnixSocket(m_socket, _file_name);
+    bindUnixSocket(m_socket, _file_name);
     
     // connect to server:
     struct sockaddr_un name;
