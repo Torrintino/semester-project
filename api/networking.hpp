@@ -1,7 +1,7 @@
-// networking.hpp
+// api/networking.hpp
 
-#ifndef CODINGTAG_HARDWARE_API_NETWORKING_HPP_
-#define CODINGTAG_HARDWARE_API_NETWORKING_HPP_ 1
+#ifndef CODINGTAG_HARDWARE_API_NETWORKING_HPP_HEADER_GUARD_
+#define CODINGTAG_HARDWARE_API_NETWORKING_HPP_HEADER_GUARD_ 1
 
 #include <cstdint>
 #include <functional>
@@ -11,15 +11,21 @@
 #include <sys/socket.h>
 
 
+namespace codingtag {
+
 #define DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(super, x) \
-    class x : public super { public: x(std::string const& _msg) : super(_msg) { } };
+    class x : public super \
+    { \
+    public: \
+        x(std::string const& _msg) : super(_msg) { } \
+        virtual ~x() = default; \
+    };
 
 DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, AcceptFailedException)
 DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, BindFailedException)
 DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, ConnectFailedException)
 DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(ConnectFailedException, ConnectFailedNoSuchFileException)
-DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, ReceivedHeaderIncompleteException)
-DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, ReceivedMessageIncompleteException)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, ReceivedUnexpectedMessageException)
 DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, RecvFailedException)
 DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, SockFailedException)
 DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, SendFailedException)
@@ -113,4 +119,7 @@ private:
 };
 
 
-#endif // CODINGTAG_HARDWARE_API_NETWORKING_HPP_
+} // namespace codingtag
+
+
+#endif // CODINGTAG_HARDWARE_API_NETWORKING_HPP_HEADER_GUARD_

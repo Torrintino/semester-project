@@ -1,4 +1,4 @@
-// networking.cpp
+// api/networking.cpp
 
 #include <fcntl.h>
 #include <sys/socket.h>
@@ -16,6 +16,8 @@
 
 #include "networking.hpp"
 
+
+namespace codingtag {
 
 static void bindUnixSocket(CSocketWrapper& _socket, std::string const& _file_name)
 {
@@ -91,15 +93,20 @@ static void receiveFromSocket(CSocketWrapper& _socket,
         }
         
         if (received != sizeof(_header)) {
-            throw ReceivedHeaderIncompleteException("Did not receive the entire header.");
+            throw ReceivedUnexpectedMessageException("Did not receive the entire header.");
         }
         
         _header_written = true;
     }
     
-    std::unique_ptr<char> data = std::make_unique<char>(static_cast<size_t>(_header.size));
+    if (_header.size > std::numeric_limits<size_t>::max() - 1) {
+        throw ReceivedUnexpectedMessageException("Received message header with too large value for "
+                                                 "size.");
+    }
     
-    received = recv(_socket.getFD(), data.get(), _header.size, 0);
+    std::unique_ptr<char> data = std::make_unique<char>(static_cast<size_t>(_header.size) + 1);
+    
+    received = recv(_socket.getFD(), data.get(), static_cast<size_t>(_header.size) + 1, 0);
     
     if (received < 0) {
         if (errno == EWOULDBLOCK) // no data is available
@@ -111,10 +118,10 @@ static void receiveFromSocket(CSocketWrapper& _socket,
     _header_written = false;
     
     if (received != _header.size) {
-        throw ReceivedMessageIncompleteException("Did not receive the entire message.");
+        throw ReceivedUnexpectedMessageException("Received message of unexpected size.");
     }
     
-    _func(_header.type, std::string(data.get(), static_cast<uint32_t>(received)));
+    _func(_header.type, std::string(data.get(), _header.size));
 }
 
 
@@ -246,11 +253,11 @@ UnixSender::UnixSender(std::string const& _file_name, std::string const& _receiv
                               + 1);
     
     if (iresult != 0) {
-        perror("Error: Cannot connect to server");
         if (errno == ENOENT)
-            throw ConnectFailedNoSuchFileException("Cannot connect to server: No such file or "
-                                                   "directory.");
-        throw ConnectFailedException("Cannot connect to server.");
+            throw ConnectFailedNoSuchFileException("Cannot connect to server (receiver): No such "
+                                                   "file or directory.");
+        perror("Error: Cannot connect to server (receiver)");
+        throw ConnectFailedException("Cannot connect to server (receiver).");
     }
 }
 
@@ -262,3 +269,6 @@ void UnixSender::send(MessageHeader::TypeType _type, std::string const& _data)
 {
     sendToSocket(m_socket, _type, _data);
 }
+
+
+} // namespace codingtag
