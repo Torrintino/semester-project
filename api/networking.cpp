@@ -51,7 +51,7 @@ static void bindUnixSocket(CSocketWrapper& _socket, std::string const& _file_nam
 static void sendToSocket(CSocketWrapper& _socket, MessageHeader::TypeType _type,
                          std::string const& _data)
 {
-    if (_data.length() > std::numeric_limits<MessageHeader::TypeType>::max()) {
+    if (_data.length() > std::numeric_limits<uint32_t>::max()) {
         throw std::logic_error("Data too long.");
     }
     
