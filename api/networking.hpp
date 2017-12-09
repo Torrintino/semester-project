@@ -77,8 +77,7 @@ private:
 
 struct MessageHeader
 {
-    typedef uint8_t TypeType;
-        // TODO: maybe uint32_t? I'd prefer a sizeof(MessageHeader) of a power of 2.
+    typedef uint32_t TypeType;
     
     uint32_t size;
     TypeType type; 
