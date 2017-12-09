@@ -39,8 +39,16 @@ void InterfaceToServices::receiveIR(uint32_t _src_client_id)
     if (!serialized)
         throw MessageSerializationError("Google Protocol Buffers message ReceiveIR cannot be "
                                         "serialized.");
-                    
-    m_sender->send(1, to_send); // TODO: which type ID?
+    
+    try {
+        m_sender->send(1, to_send); // TODO: which type ID?
+    }
+    catch (SendFailedConnectionError& e) {
+        m_sender = nullptr;
+        // If the connection fails then the Receiver has most likely crashed. Try to reconnect by
+        // recreating the socket:
+        m_sender = std::make_unique<UnixSender>(hardware_socket_file, services_socket_file);
+    }
 }
 
 

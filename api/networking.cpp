@@ -63,6 +63,11 @@ static void sendToSocket(CSocketWrapper& _socket, MessageHeader::TypeType _type,
     ssize_t sent = send(_socket.getFD(), &header, sizeof(header), 0);
     
     if (sent < 0) {
+        if (errno == ECONNREFUSED)
+            throw SendFailedConnectionRefusedException("Cannot send message header: Connection "
+                                                       "refused.");
+        if (errno == ENOTCONN)
+            throw SendFailedNotConnectedException("Cannot send message header: Not connected.");
         perror("Error: Cannot send message header");
         throw SendFailedException("Cannot send message header.");
     }
@@ -70,6 +75,10 @@ static void sendToSocket(CSocketWrapper& _socket, MessageHeader::TypeType _type,
     sent = send(_socket.getFD(), _data.c_str(), _data.length(), 0);
     
     if (sent < 0) {
+        if (errno == ECONNREFUSED)
+            throw SendFailedConnectionRefusedException("Cannot send message: Connection refused.");
+        if (errno == ENOTCONN)
+            throw SendFailedNotConnectedException("Cannot send message: Not connected.");
         perror("Error: Cannot send message");
         throw SendFailedException("Cannot send message.");
     }
@@ -256,6 +265,9 @@ UnixSender::UnixSender(std::string const& _file_name, std::string const& _receiv
         if (errno == ENOENT)
             throw ConnectFailedNoSuchFileException("Cannot connect to server (receiver): No such "
                                                    "file or directory.");
+        if (errno == ECONNREFUSED)
+            throw ConnectFailedConnectionRefusedException("Cannot connect to server (receiver): "
+                                                          "Connection refused.");
         perror("Error: Cannot connect to server (receiver)");
         throw ConnectFailedException("Cannot connect to server (receiver).");
     }
