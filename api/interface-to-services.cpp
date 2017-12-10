@@ -18,6 +18,12 @@ static std::string const services_socket_file = "codingtag.socket";
 #endif
 
 
+namespace messages {
+    static MessageHeader::TypeType const SendIR = 1;
+    static MessageHeader::TypeType const ReceiveIR = 2;
+}
+
+
 InterfaceToServices::InterfaceToServices() = default;
 
 
@@ -41,7 +47,7 @@ void InterfaceToServices::receiveIR(uint32_t _src_client_id)
                                         "serialized.");
     
     try {
-        m_sender->send(1, to_send); // TODO: which type ID?
+        m_sender->send(messages::ReceiveIR, to_send);
     }
     catch (SendFailedConnectionError& e) {
         m_sender = nullptr;

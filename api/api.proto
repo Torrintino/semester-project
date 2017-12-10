@@ -3,12 +3,12 @@
 syntax = "proto2";
 package codingtag;
 
-// services -> hardware:
+// services -> hardware (MessageType 1):
 message SendIR {
 	required uint32 dest_client_id = 1;
 }
 
-// hardware -> services:
+// hardware -> services (MessageType 2):
 message ReceiveIR {
 	required uint32 src_client_id = 1;
 }
