@@ -32,5 +32,5 @@ hardware-api: $(OBJ_FILES) Makefile
 	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -lprotobuf -llirc_client -o hardware-api
 
 clean:
-	rm -f client hardware-api $(OBJ_FILES) api.pb.h
+	rm -f client hardware-api $(OBJ_FILES) api.pb.h api.pb.cc
 
