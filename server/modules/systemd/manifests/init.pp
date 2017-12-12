@@ -8,6 +8,18 @@ class systemd {
     command => '/bin/ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf'
   }
 
+  file { 'hostname':
+    path => '/etc/hostname',
+    ensure => file,
+    content => 'server-1',
+  }
+
+  file { 'hosts':
+    path => '/etc/hosts',
+    ensure => file,
+    source => 'puppet:///modules/systemd/hosts',
+  }
+
   file { 'eth0.network':
     path => '/etc/systemd/network/eth0.network',
     ensure => file,

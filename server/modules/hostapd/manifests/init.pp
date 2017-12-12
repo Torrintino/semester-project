@@ -4,7 +4,6 @@ class hostapd {
     path => '/etc/default/hostapd',
     ensure => file,
     source => 'puppet:///modules/hostapd/hostapd',
-    notify => Service['hostapd']
   }
 
   file { 'hostapd.conf':
