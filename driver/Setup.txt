@@ -1,0 +1,6 @@
+0.Trotz des Namens IrRecieverD, ist auch ein kleiner Sender implementiert.
+1.Lirc installieren und einrichten.
+(Beispielanleitung: alexba.in/blog/2013/01/06/setting-up-lirc-on-the-raspberrypi/)
+2.lirc_client installieren mit: "sudo apt-get install liblirc-dev"
+3.Die lircd.conf von mir nach /etc/lirc/ verschieben
+4.Der Linker für die "IrReciever" Dateien ist "/usr/include/lirc -llirc_client"
