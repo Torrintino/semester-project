@@ -9,10 +9,10 @@
 namespace codingtag {
 namespace hardware {
 
-#if 0 // TODO just temporary for testing purposes
 static std::string const hardware_socket_file = "/var/run/codingtag-hardware.socket";
 static std::string const services_socket_file = "/var/run/codingtag-services.socket";
-#else
+
+#if 0 // just for testing purposes
 static std::string const hardware_socket_file = "codingtag-client.socket";
 static std::string const services_socket_file = "codingtag.socket";
 #endif
