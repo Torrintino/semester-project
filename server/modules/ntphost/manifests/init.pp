@@ -10,4 +10,9 @@ class ntphost {
     require => Exec['apt-update'],
     ensure => installed,
   }
+
+  service { 'ntp':
+    ensure => running,
+    hasrestart => true,
+  }
 }
