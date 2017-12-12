@@ -70,6 +70,7 @@ int main()
         goto failure;
     }
     
+    deinitReciever();
     return EXIT_SUCCESS;
     
 failure:
