@@ -1,8 +1,9 @@
 // api/main.cpp
 
 #include <atomic>
-#include <cstdlib>
 #include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <exception>
 #include <iostream>
 #include <stdexcept>
