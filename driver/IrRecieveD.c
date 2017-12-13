@@ -3,8 +3,9 @@
 #include <fcntl.h>
 #include <string.h>
 
+
 //0,wenn erfolgreich, initialisiert den lircd-Socket
-int initReciever(){
+int initReceiver(){
 	int socketId;
 	if((socketId=lirc_init("codingTagR",1))==-1){
 		printf("Fehler beim Connecten zu Lirc\n");
@@ -40,37 +41,37 @@ int readInput(char *code){
 					ret = 4;
 					break;
 				case'5':
-					ret = 0;
+					ret = 5;
 					break;
 				case'6':
-					ret = 0;
+					ret = 6;
 					break;
 				case'7':
-					ret = 0;
+					ret = 7;
 					break;
 				case'8':
-					ret = 0;
+					ret = 8;
 					break;
 				case'9':
-					ret = 0;
+					ret = 9;
 					break;
 				case'A':
-					ret = 0;
+					ret = 10;
 					break;
 				case'B':
-					ret = 0;
+					ret = 11;
 					break;
 				case'C':
-					ret = 0;
+					ret = 12;
 					break;
 				case'D':
-					ret = 0;
+					ret = 13;
 					break;
 				case'E':
-					ret = 0;
+					ret = 14;
 					break;
 				case'F':
-					ret = 0;
+					ret = 15;
 					break;
 				default:
 					break;
@@ -81,7 +82,7 @@ int readInput(char *code){
 	return ret;
 }
 //Leert falls notwendig(Bsp. nach Timeout wegen Treffer)
-int flushReciever(char*code){
+int flushReceiver(char*code){
 	lirc_nextcode(&code);
 	while(code !=NULL){
 		lirc_nextcode(&code);
@@ -90,7 +91,7 @@ return 0;
 }
 
 //Disconnect vom Socket, sobald nicht mehr nötig
-int deinitReciever(){
+int deinitReceiver(){
 	lirc_deinit();
 }
 //Code senden, blockt, aber bei 16bit kein Problem
