@@ -13,6 +13,8 @@ namespace codingtag {
 namespace hardware {
 
 DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, MessageSerializationError)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, MessageParsingError)
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, MessageOfUnknownTypeError)
 
 
 class InterfaceToServices final
@@ -27,7 +29,10 @@ public:
     
     void receiveIR(uint32_t _src_client_id);
     
+    void checkForReceivedMessages();
+    
 private:
+    UnixReceiver m_receiver;
     std::unique_ptr<UnixSender> m_sender;
 };
 
