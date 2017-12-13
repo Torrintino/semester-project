@@ -5,7 +5,7 @@ package codingtag;
 
 // services -> hardware (MessageType 1):
 message SendIR {
-	required uint32 dest_client_id = 1;
+	required uint32 dummy = 1;
 }
 
 // hardware -> services (MessageType 2):
