@@ -8,11 +8,11 @@
 int initReceiver(){
 	int socketId;
 	if((socketId=lirc_init("codingTagR",1))==-1){
-		printf("Fehler beim Connecten zu Lirc\n");
+		fprintf(stderr,"Fehler beim Connecten zu Lirc\n");
 		return -1;
 	}
 	if(fcntl(socketId,F_SETFL,O_NONBLOCK)==-1){
-	printf("Fehler beim Blockieren aufheben\n");
+	fprintf(stderr,"Fehler beim Blockieren aufheben\n");
 	return -1;
 	}
 	return socketId;
@@ -103,7 +103,7 @@ int sendCode(int sendPlayer){
 	strcpy(remote,"12");
 	strcpy(player,"KEY_");
 	if(sendPlayer>15){
-		printf("Spieleranzahl überstiegen.");
+		fprintf(stderr,"Spieleranzahl überstiegen.");
 		return -1;
 	}
 	switch(sendPlayer){
@@ -140,12 +140,11 @@ int sendCode(int sendPlayer){
 	}
 	fd= lirc_get_local_socket(NULL,0);
 	if(fd<1){
-	printf("Keine Verbindung zum Socket möglich");
-	return -1;
+    	fprintf(stderr,"Keine Verbindung zum Socket möglich");
+    	return -1;
 	}
-	fflush(stdout);
 	if(lirc_send_one(fd,remote,player )==-1){
-		printf("Konnte keinen Code senden");
+		fprintf(stderr,"Konnte keinen Code senden");
 		return -1;
 	}
 	return 0;
