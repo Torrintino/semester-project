@@ -1,6 +1,6 @@
 // api/main.cpp
 
-#include <atomic>
+#include <chrono>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -13,6 +13,8 @@
 #include "interface-to-services.hpp"
 #include "../driver/IrRecieveD.h"
 
+
+using namespace std::literals;
 
 using namespace codingtag;
 using namespace codingtag::hardware;
@@ -66,7 +68,10 @@ int main()
     try {
         InterfaceToServices interface;
         
+        auto last_timepoint = std::chrono::system_clock::now();
+        
         while (!termination_requested) {
+            // check for incoming messages from Services:
             try {
                 interface.checkForReceivedMessages();
             }
@@ -82,22 +87,35 @@ int main()
             }
             
             
-            // TODO: send own ID about every second OR alternatively wait for input from Services
-            
-            char buffer[64];
-            int received_id = readInput(buffer);
-            
-            if (received_id > 0) {
-                try {
-                    interface.receiveIR((uint32_t)received_id);
+            // send own ID via IR every 0.5 seconds:
+            {
+                auto current_timepoint = std::chrono::system_clock::now();
+                
+                if (current_timepoint - last_timepoint > 500ms) {
+                    last_timepoint = current_timepoint;
+                    
+                    sendCode(2); // TODO : What is my own client ID?
                 }
-                catch (ConnectFailedNoSuchFileException& e) {
-                    std::cerr << "Error: Catched ConnectFailedNoSuchFileException: "
-                              << e.what() << std::endl;
-                }
-                catch (ConnectFailedConnectionRefusedException& e) {
-                    std::cerr << "Error: Catched ConnectFailedConnectionRefusedException: "
-                              << e.what() << std::endl;
+            }
+            
+            
+            // check for incoming IR events:
+            {
+                char buffer[64];
+                int received_id = readInput(buffer);
+                
+                if (received_id > 0) {
+                    try {
+                        interface.receiveIR((uint32_t)received_id);
+                    }
+                    catch (ConnectFailedNoSuchFileException& e) {
+                        std::cerr << "Error: Catched ConnectFailedNoSuchFileException: "
+                                  << e.what() << std::endl;
+                    }
+                    catch (ConnectFailedConnectionRefusedException& e) {
+                        std::cerr << "Error: Catched ConnectFailedConnectionRefusedException: "
+                                  << e.what() << std::endl;
+                    }
                 }
             }
         }
@@ -120,6 +138,7 @@ int main()
     
     deinitReceiver();
     return EXIT_SUCCESS;
+    
     
 failure:
     deinitReceiver();
