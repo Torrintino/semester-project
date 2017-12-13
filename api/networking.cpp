@@ -97,12 +97,18 @@ static void receiveFromSocket(CSocketWrapper& _socket,
         if (received < 0) {
             if (errno == EWOULDBLOCK) // no data is available
                 return;
-            perror("Error: Cannot receive message");
-            throw RecvFailedException("Cannot receive message.");
+            perror("Error: Cannot receive message header");
+            throw RecvFailedException("Cannot receive message header.");
         }
         
         if (received != sizeof(_header)) {
             throw ReceivedUnexpectedMessageException("Did not receive the entire header.");
+        }
+        
+        if (_header.size == 0) {
+            // Some message do not have any content.
+            _func(_header.type, std::string());
+            return;
         }
         
         _header_written = true;
