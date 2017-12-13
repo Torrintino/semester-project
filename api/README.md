@@ -5,9 +5,9 @@ Zur Laufzeit braucht es die Packages 'libprotobuf10' und 'liblirc0'.
 
 # Kompilierung und Installation
 
-Das Ausführen des Befehls 'make' in diesem Verzeichnis erzeugt das Programm 'hardware-api', welche
-die Middelware zwischen Hardware und Services darstellt. Dabei wird auch die Datei
-'../driver/IrRecieveD.c' kompiliert. Es werden dabei 'gcc' und 'g++' aufgerufen. Sollte eine
+Das Ausführen des Befehls 'make' in diesem Verzeichnis erzeugt das Programm 'hardware-api', welches
+die Middleware zwischen Hardware und Services darstellt. Dabei wird auch die Datei
+'../driver/IrRecieveD.c' kompiliert. Es werden 'gcc' und 'g++' aufgerufen. Sollte eine
 Cross-Kompilierung notwendig sein, so müssen die Variablen 'CXX' und 'CC' in der Makefile
 entsprechend gesetzt werden.
 
