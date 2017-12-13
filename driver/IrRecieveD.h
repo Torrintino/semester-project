@@ -1,7 +1,16 @@
-#include "IrRecieveD.h"
+
+#ifndef CODINGTAG_HARDWARE_DRIVER_IRRECIEVED_H_HEADER_GUARD_
+#define CODINGTAG_HARDWARE_DRIVER_IRRECIEVED_H_HEADER_GUARD_ 1
+
 #include <lirc/lirc_client.h>
 #include <fcntl.h>
 #include <string.h>
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 //ACHTUNG: char* code ist nur ein Array pointer, den das Hauptprogramm aufsetzen sollte,
 //	   aus Gründen der Effizienz und meiner eigenen Unfähigkeit
@@ -21,3 +30,10 @@ int flushReceiver(char*code);
 int deinitReceiver();
 //Code senden, blockt, aber bei 16bit kein Problem
 int sendCode(int sendPlayer);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // CODINGTAG_HARDWARE_DRIVER_IRRECIEVED_H_HEADER_GUARD_
