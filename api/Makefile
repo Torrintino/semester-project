@@ -25,8 +25,8 @@ networking.o: networking.cpp $(HEADER_FILES)
 interface-to-services.o: interface-to-services.cpp $(HEADER_FILES) api.pb.h
 	$(CXX) -c $(CXXFLAGS) interface-to-services.cpp -o interface-to-services.o
 
-main.o: main.cpp interface-to-services.hpp networking.hpp $(HEADER_FILES)
-	$(CXX) -c $(CXXFLAGS) main.cpp -o main.o
+main.o: main.cpp $(HEADER_FILES) Makefile
+	$(CXX) -c $(CXXFLAGS) -Wno-unused main.cpp -o main.o
 
 hardware-api: $(OBJ_FILES) Makefile
 	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -lprotobuf -llirc_client -o hardware-api
