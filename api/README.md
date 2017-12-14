@@ -1,6 +1,7 @@
 # Packages
 
-Es werden zur Kompilierung die Packages 'libprotobuf-dev' und 'liblirc-dev' benötigt.
+Es werden zur Kompilierung die Packages 'libprotobuf-dev', 'protobuf-compiler' und 'liblirc-dev'
+benötigt.
 Zur Laufzeit braucht es die Packages 'libprotobuf10' und 'liblirc0'.
 
 # Kompilierung und Installation
