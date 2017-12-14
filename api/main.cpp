@@ -78,7 +78,7 @@ int main()
         own_client_id = 0;
         
         // parse the client id:
-        for (size_t i = 7; i < 11; ++i) {
+        for (size_t i = 7; true; ++i) {
             if (hostname[i] == '\0') {
                 break;
             }
