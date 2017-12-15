@@ -13,5 +13,5 @@ node 'server-1' {
 }
 
 node default {
-
+  include client
 }
