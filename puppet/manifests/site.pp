@@ -10,10 +10,12 @@ node 'server-1' {
   include systemd
   include dnsmasq
   include hostapd
+  include ntpserver
 }
 
 node default {
   include client
   include lirc
   include hardware_api
+  include ntphost
 }
