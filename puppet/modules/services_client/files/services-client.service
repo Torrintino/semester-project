@@ -1,0 +1,11 @@
+[Unit]
+Description=Coding-Tag client stub
+Requires=hardware-api.service
+
+[Service]
+Type=forking
+PIDFile=/var/run/services-client.pid
+ExecStart=/usr/bin/services-client
+
+[Install]
+WantedBy=multi-user.target

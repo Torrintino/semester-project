@@ -7,15 +7,18 @@ exec { 'apt-upgrade':
 }
 
 node 'server-1' {
+  include server
   include systemd
   include dnsmasq
   include hostapd
   include ntpserver
+  include services_server
 }
 
 node default {
   include client
+  include ntphost
   include lirc
   include hardware_api
-  include ntphost
+  include services_client
 }
