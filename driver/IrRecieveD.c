@@ -93,6 +93,7 @@ return 0;
 //Disconnect vom Socket, sobald nicht mehr nötig
 int deinitReceiver(){
 	lirc_deinit();
+	return 0;
 }
 //Code senden, blockt, aber bei 16bit kein Problem
 int sendCode(int sendPlayer){
