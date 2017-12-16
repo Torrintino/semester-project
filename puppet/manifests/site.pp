@@ -15,4 +15,5 @@ node 'server-1' {
 node default {
   include client
   include lirc
+  include hardware_api
 }
