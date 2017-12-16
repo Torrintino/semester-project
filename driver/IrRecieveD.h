@@ -16,7 +16,10 @@ extern "C" {
 //	   aus Gründen der Effizienz und meiner eigenen Unfähigkeit
 
 
-//0,wenn erfolgreich, initialisiert den lircd-Socket
+//initialisiert den lircd-Socket
+// Returns:
+//   SocketID (Success)
+//   -1 (Failure)
 int initReceiver();
 	
 //Liest den Input vom Socket aus, sollte im Hauptprogramm 

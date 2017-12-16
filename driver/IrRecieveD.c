@@ -4,7 +4,7 @@
 #include <string.h>
 
 
-//0,wenn erfolgreich, initialisiert den lircd-Socket
+// Returns Socket ID on success, -1 on Failure
 int initReceiver(){
 	int socketId;
 	if((socketId=lirc_init("codingTagR",1))==-1){
