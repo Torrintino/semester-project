@@ -111,11 +111,12 @@ int main()
     // init IR driver:
     {
         int iresult = initReceiver();
-        
+        /*
         if (iresult != 0) {
             std::cerr << "Error: IR Driver initialization failed." << std::endl;
             return EXIT_FAILURE;
         }
+	*/
     }
     
     
