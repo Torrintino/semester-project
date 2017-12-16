@@ -132,7 +132,7 @@ static void receiveFromSocket(CSocketWrapper& _socket,
     
     _header_written = false;
     
-    if (received != _header.size) {
+    if (static_cast<uint32_t>(received) != _header.size) {
         throw ReceivedUnexpectedMessageException("Received message of unexpected size.");
     }
     
