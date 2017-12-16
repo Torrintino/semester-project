@@ -12,4 +12,16 @@ class client {
     source => 'puppet:///modules/client/wpa_supplicant.conf'
   }
 
+  file { 'modules':
+    path => '/etc/modules',
+    ensure => file,
+    source => 'puppet:///modules/client/modules'
+  }
+
+  file { 'config.txt':
+    path => '/boot/config.txt',
+    ensure => file,
+    source => 'puppet:///modules/client/config.txt'
+  }
+
 }
