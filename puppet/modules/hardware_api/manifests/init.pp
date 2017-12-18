@@ -19,7 +19,8 @@ class hardware_api {
   file { 'hardware-api':
     path => '/usr/bin/hardware-api',
     ensure => file,
-    source => 'puppet:///modules/hardware_api/hardware-api'
+    source => 'puppet:///modules/hardware_api/hardware-api',
+    mode => '0744',
   }
 
   service { 'hardware-api':

@@ -1,6 +1,5 @@
 [Unit]
 Description=Coding-Tag central server
-Requires=hardware-api.service
 
 [Service]
 Type=forking
