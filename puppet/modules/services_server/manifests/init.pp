@@ -5,21 +5,6 @@ class services_server {
     ensure => installed,
   }
 
-  package { 'python':
-    require => Exec['apt-update'],
-    ensure => installed,
-  }
-
-  package { 'python-pip':
-    require => Exec['apt-update'],
-    ensure => installed,
-  }
-
-  exec { 'pip-flask':
-    require => Package['python-pip'],
-    command => '/usr/bin/pip install flask',
-  }
-
   file { 'libservices-common.so':
     path => '/usr/lib/libservices-common.so',
     ensure => file,

@@ -13,6 +13,7 @@ node 'server-1' {
   include hostapd
   include ntpserver
   include services_server
+  include services_website
 }
 
 node default {

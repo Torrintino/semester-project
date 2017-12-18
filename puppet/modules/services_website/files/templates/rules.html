@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lasertag</title>
+</head>
+<body>
+<h1>Lasertag - Nerd Style</h1>
+<h4>Bitte geben Sie die Einstellungen ein:</h4>
+<form method="POST" action="/startgame">
+    <div>
+        Spiel Nummer: <input type="number" value="0" name="spielnummer"> <br><br>
+        Spielerzahl:<input type="number" value="0" name ="spielerzahl"> <br><br>
+
+        Spieler 0:<input type="text" name="spieler0"><br>
+        Spieler 1:<input type="text" name="spieler1"><br>
+        Spieler 2:<input type="text" name="spieler2"><br>
+        Spieler 3:<input type="text" name="spieler3"><br>
+        Spieler 4:<input type="text" name="spieler4"><br>
+        Spieler 5:<input type="text" name="spieler5"><br>
+        Spieler 6:<input type="text" name="spieler6"><br>
+        Spieler 7:<input type="text" name="spieler7"><br>
+
+        <h4>Spielmodus wählen</h4>
+
+        <input type="radio" name="spielmodus" value="mod1"> Modus 1<br>
+        <input type="radio" name="spielmodus" value="mod2"> Modus 2<br>
+        <input type="radio" name="spielmodus" value="mod3"> Modus 3<br>
+        <input type="radio" name="spielmodus" value="mod4"> Modus 4<br><br>
+
+        <input type = "submit" value="Spiel starten">
+    </div>
+</form>
+</body>
+</html>
