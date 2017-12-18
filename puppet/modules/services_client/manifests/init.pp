@@ -1,8 +1,9 @@
 class services_client {
 
-  package { 'libprotobuf10':
-    require => Exec['apt-update'],
-    ensure => installed,
+  file { 'libservices-common.so':
+    path => '/usr/lib/libservices-common.so',
+    ensure => file,
+    source => 'puppet:///modules/services_server/libservices-common.so',
   }
 
   file { 'services-client.service':
@@ -15,11 +16,13 @@ class services_client {
     path => '/usr/bin/services-client',
     ensure => file,
     source => 'puppet:///modules/services_client/services-client',
+    mode => '0744',
   }
 
   service { 'services-client':
     ensure => running,
     hasrestart => true,
+    require => Service['hardware-api'],
   }
 
 }
