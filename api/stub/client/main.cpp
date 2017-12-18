@@ -79,7 +79,6 @@ int main()
             catch (std::runtime_error& e) {
                 std::cerr << "Error: Catched unhandled instance of std::runtime_error: "
                           << e.what() << std::endl;
-                return EXIT_FAILURE;
             }
         }
     }
@@ -98,10 +97,6 @@ int main()
                   << e.what() << std::endl;
         return EXIT_FAILURE;
     }
-    
-    return EXIT_SUCCESS;
-    
-    // do stuff:
     
     return EXIT_SUCCESS;
 }
