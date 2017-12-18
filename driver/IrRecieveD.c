@@ -148,6 +148,7 @@ int sendCode(int sendPlayer){
 		fprintf(stderr,"Konnte keinen Code senden");
 		return -1;
 	}
+	close(fd);
 	return 0;
 }
 /*Testecke
