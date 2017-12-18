@@ -43,14 +43,14 @@ public:
     CSocketWrapper(CSocketWrapper const& _other) = delete;
     CSocketWrapper(CSocketWrapper&& _other);
     CSocketWrapper& operator=(CSocketWrapper const& _other) & = delete;
-    CSocketWrapper& operator=(CSocketWrapper&& _other) & = delete;
+    CSocketWrapper& operator=(CSocketWrapper&& _other) &;
     ~CSocketWrapper();
     
-    int getFD() { return m_sockfd; }
+    int getFD() const { return m_sockfd; }
     CSocketWrapper accept(struct sockaddr* _addr, socklen_t* _length_ptr);
-            // not needed anymore
-    void shutdown(int _how) noexcept;
-            // not needed anymore
+    void shutdown(int _how) const noexcept;
+    
+    bool operator<(CSocketWrapper const& _other) const { return m_sockfd < _other.m_sockfd; }
     
 private:
     CSocketWrapper(int _sockfd) : m_sockfd(_sockfd) { }

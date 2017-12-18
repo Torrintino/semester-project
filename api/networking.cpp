@@ -22,6 +22,7 @@ namespace codingtag {
 static void bindUnixSocket(CSocketWrapper& _socket, std::string const& _file_name)
 {
     struct sockaddr_un name;
+    memset(&name, 0, sizeof(name));
     name.sun_family = AF_LOCAL;
     
     if (_file_name.length() >= sizeof(name.sun_path)) {
@@ -51,7 +52,8 @@ static void bindUnixSocket(CSocketWrapper& _socket, std::string const& _file_nam
 static void sendToSocket(CSocketWrapper& _socket, MessageHeader::TypeType _type,
                          std::string const& _data)
 {
-    if (_data.length() > std::numeric_limits<uint32_t>::max()) {
+    if (       _data.length() > std::numeric_limits<uint32_t>::max()
+            || _data.length() > std::numeric_limits<ssize_t>::max()) {
         throw std::logic_error("Data too long.");
     }
     
@@ -162,6 +164,25 @@ CSocketWrapper::CSocketWrapper(CSocketWrapper&& _other)
 }
 
 
+CSocketWrapper& CSocketWrapper::operator=(CSocketWrapper&& _other) &
+{
+    if (m_sockfd == _other.m_sockfd)
+        return *this;
+    
+    if (m_sockfd != -1) {
+        int iresult = ::close(m_sockfd);
+        
+        if (iresult != 0) {
+            perror("Error: Cannot close connection socket");
+        }
+    }
+    
+    m_sockfd = std::exchange(_other.m_sockfd, -1);
+    
+    return *this;
+}
+
+
 CSocketWrapper::~CSocketWrapper()
 {
     if (m_sockfd == -1)
@@ -188,7 +209,7 @@ CSocketWrapper CSocketWrapper::accept(struct sockaddr* _addr, socklen_t* _length
 }
 
 
-void CSocketWrapper::shutdown(int _how) noexcept
+void CSocketWrapper::shutdown(int _how) const noexcept
 {
     int iresult = ::shutdown(m_sockfd, _how);
     
@@ -254,6 +275,7 @@ UnixSender::UnixSender(std::string const& _file_name, std::string const& _receiv
     
     // connect to server:
     struct sockaddr_un name;
+    memset(&name, 0, sizeof(name));
     name.sun_family = AF_LOCAL;
     
     if (_receiver_file_name.length() >= sizeof(name.sun_path)) {
