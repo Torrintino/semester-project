@@ -20,4 +20,14 @@ class server {
     ensure => installed,
   }
 
+  package { 'cmake':
+    require => Exec['apt-update'],
+    ensure => installed,
+  }
+
+  package { 'libevent-dev':
+    require => Exec['apt-update'],
+    ensure => installed,
+  }
+
 }
