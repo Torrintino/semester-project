@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 #include <signal.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "interface-to-services.hpp"
@@ -33,9 +34,50 @@ extern "C" {
 }
 
 
-int main()
+DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, IRInitializationError)
+
+
+class IRDriverWrapper
+{
+public:
+    IRDriverWrapper() {
+        int iresult = initReceiver();
+        
+        if (iresult == -1)
+            throw IRInitializationError("IR Driver initialization failed.");
+    }
+    IRDriverWrapper(IRDriverWrapper const& _other) = delete;
+    IRDriverWrapper(IRDriverWrapper&& _other) = delete;
+    IRDriverWrapper& operator=(IRDriverWrapper const& _other) & = delete;
+    IRDriverWrapper& operator=(IRDriverWrapper&& _other) & = delete;
+    ~IRDriverWrapper() { deinitReceiver(); }
+};
+
+
+int main(int argc, char* argv[])
 {
     termination_requested = false;
+    
+    srand(time(NULL));
+    
+    bool simulate = false;
+    
+    if (argc > 1) {
+        if (argc == 2) {
+            if (strcmp(argv[1], "simulate") == 0) {
+                simulate = true;
+            }
+            else {
+                std::cerr << "Error: Unknown option: \"" << argv[1] << "\"." << std::endl;
+                return EXIT_FAILURE;
+            }
+        }
+        else {
+            std::cerr << "Error: Too many parameters were set. None or one was expected."
+                      << std::endl;
+            return EXIT_FAILURE;
+        }
+    }
     
     
     // ignore SIGPIPEs:
@@ -56,7 +98,7 @@ int main()
     
     
     // get own client id:
-    uint32_t own_client_id;
+    uint32_t own_client_id = 0;
     {
         char hostname[256];
         
@@ -108,18 +150,8 @@ int main()
     }
     
     
-    // init IR driver:
-    {
-        int iresult = initReceiver();
-        
-        if (iresult == -1) {
-            std::cerr << "Error: IR Driver initialization failed." << std::endl;
-            return EXIT_FAILURE;
-        }	
-    }
-    
-    
     try {
+        IRDriverWrapper ir_driver;
         InterfaceToServices interface;
         
         auto last_timepoint = std::chrono::system_clock::now();
@@ -148,6 +180,25 @@ int main()
                 if (current_timepoint - last_timepoint > 500ms) {
                     last_timepoint = current_timepoint;
                     sendCode(static_cast<int>(own_client_id));
+                    
+                    if (simulate) {
+                        uint32_t val = rand();
+                        
+                        if (val % 13 == 0) {    
+                            try {
+                                interface.receiveIR(val % 3 + 2);
+                            }
+                            catch (ConnectFailedNoSuchFileException& e) {
+                                std::cerr << "Error: Catched ConnectFailedNoSuchFileException: "
+                                          << e.what() << std::endl;
+                            }
+                            catch (ConnectFailedConnectionRefusedException& e) {
+                                std::cerr << "Error: Catched "
+                                             "ConnectFailedConnectionRefusedException: "
+                                          << e.what() << std::endl;
+                            }
+                        }
+                    }
                 }
             }
             
@@ -173,27 +224,25 @@ int main()
             }
         }
     }
+    catch (IRInitializationError& e) {
+        std::cerr << "Error: IRInitializationError: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
     catch (std::logic_error& e) {
         std::cerr << "Error: Catched unhandled instance of std::logic_error: "
                   << e.what() << std::endl;
-        goto failure;
+        return EXIT_FAILURE;
     }
     catch (std::runtime_error& e) {
         std::cerr << "Error: Catched unhandled instance of std::runtime_error: "
                   << e.what() << std::endl;
-        goto failure;
+        return EXIT_FAILURE;
     }
     catch (std::exception& e) {
         std::cerr << "Error: Catched unhandled instance of std::exception: "
                   << e.what() << std::endl;
-        goto failure;
+        return EXIT_FAILURE;
     }
     
-    deinitReceiver();
     return EXIT_SUCCESS;
-    
-    
-failure:
-    deinitReceiver();
-    return EXIT_FAILURE;
 }
