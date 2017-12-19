@@ -157,8 +157,8 @@ int main(){
 	char *code;
 	code = (char*)malloc(sizeof(char));
 	initReciever();
-	sendCode(1);
 	while(1==1){
+		sendCode(1);
 		for(int i=0;i<10000;i++){
 			for(int j=0;j<10000;j++){
 			k=i+j;
