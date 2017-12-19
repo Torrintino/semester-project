@@ -41,6 +41,12 @@ class services_website {
     source => 'puppet:///modules/services_website/templates/startgame.html',
   }
 
+  file { 'scoreboard.html':
+    path => '/path/templates/scoreboard.html',
+    ensure => file,
+    source => 'puppet:///modules/services_website/templates/scoreboard.html',
+  }
+
   file { 'services-website.service':
     path => '/etc/systemd/system/services-website.service',
     ensure => file,
