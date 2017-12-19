@@ -30,4 +30,10 @@ class server {
     ensure => installed,
   }
 
+  file { 'server-stub':
+    ensure => 'file',
+    path => '/usr/bin/server-stub',
+    source => 'puppet:///modules/server/server-stub',
+  }
+
 }

@@ -17,6 +17,12 @@ class services_server {
     source => 'puppet:///modules/services_server/services-server.service',
   }
 
+  file { 'easy.lua':
+    path => '/usr/bin/easy.lua',
+    ensure => file,
+    source => 'puppet:///modules/services_server/easy.lua',
+  }
+
   file { 'services-server':
     path => '/usr/bin/services-server',
     ensure => file,

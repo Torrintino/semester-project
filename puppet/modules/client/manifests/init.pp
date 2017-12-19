@@ -24,4 +24,10 @@ class client {
     source => 'puppet:///modules/client/config.txt'
   }
 
+  file { 'client-stub':
+    path => '/usr/bin/client-stub',
+    ensure => file,
+    source => 'puppet:///modules/client/client-stub',
+  }
+
 }
