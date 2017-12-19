@@ -9,8 +9,8 @@
 <h4>Bitte geben Sie die Einstellungen ein:</h4>
 <form method="POST" action="/startgame">
     <div>
-        Spiel Nummer: <input type="number" value="0" name="spielnummer"> <br><br>
-        Spielerzahl:<input type="number" value="0" name ="spielerzahl"> <br><br>
+        Spielnummer:<input type="text" name ="spielnummer"> <br><br>
+        Spielerzahl:<input type="text" name ="spielerzahl"> <br><br>
 
         Spieler 0:<input type="text" name="spieler0"><br>
         Spieler 1:<input type="text" name="spieler1"><br>
@@ -23,10 +23,11 @@
 
         <h4>Spielmodus wählen</h4>
 
+        <input type="radio" name="spielmodus" value="mod0"> Einfach Variante<br>
         <input type="radio" name="spielmodus" value="mod1"> Modus 1<br>
         <input type="radio" name="spielmodus" value="mod2"> Modus 2<br>
         <input type="radio" name="spielmodus" value="mod3"> Modus 3<br>
-        <input type="radio" name="spielmodus" value="mod4"> Modus 4<br><br>
+        <br>
 
         <input type = "submit" value="Spiel starten">
     </div>

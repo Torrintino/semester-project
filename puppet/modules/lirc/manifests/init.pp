@@ -10,15 +10,10 @@ class lirc {
     ensure => installed,
   }
 
-  file { 'hardware.conf':
-    path => '/etc/lirc/hardware.conf',
+  file { 'lirc_options.conf':
+    path => '/etc/lirc/lirc_options.conf',
     ensure => file,
-    source => 'puppet:///modules/lirc/hardware.conf'
-  }
-
-  exec { 'old2new':
-    command => '/usr/share/lirc/lirc-old2new',
-    creates => '/etc/lirc/lirc_options.conf',
+    source => 'puppet:///modules/lirc/lirc_options.conf'
   }
 
   file { 'lircd.conf':
