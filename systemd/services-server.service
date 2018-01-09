@@ -1,0 +1,10 @@
+[Unit]
+Description=Coding-Tag central server
+
+[Service]
+Type=forking
+PIDFile=/var/run/services-server.pid
+ExecStart=/usr/bin/services-server
+
+[Install]
+WantedBy=multi-user.target
