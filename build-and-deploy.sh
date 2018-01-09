@@ -5,8 +5,8 @@
 # servers file system.
 set -e
 
-PUPPET_DIR = /etc/puppet/code/environments/production/
-MODULES = $PUPPET_DIR/modules
+PUPPET_DIR=/etc/puppet/code/environments/production
+MODULES=$PUPPET_DIR/modules
 
 cd /home/pi
 
@@ -41,7 +41,7 @@ pushd hardware
 pushd systemd
 cp services-website.service /etc/systemd/system/multi-user.target.wants/
 cp services-server.service /etc/systemd/system/multi-user.target.wants/
-cp service-client.service $MODULES/services_client/files/
+cp services-client.service $MODULES/services_client/files/
 cp hardware-api.service $MODULES/hardware_api/files/
 popd
 popd
@@ -55,8 +55,8 @@ popd
 
 pushd services
 pushd build
-cp services-server lib-services-common.so /usr/bin/
-cp services-client lib-services-common.so service-client.service $MODULES/services-client/files/
+cp services-server libservices-common.so /usr/bin/
+cp services-client libservices-common.so $MODULES/services_client/files/
 popd
 pushd website
 cp website.py /path/website.py
@@ -64,7 +64,7 @@ popd
 popd
 
 echo "Restarting systemd services"
-systemctl --daemon-reload
+systemctl daemon-reload
 systemctl restart services-server
 systemctl restart services-website
 
