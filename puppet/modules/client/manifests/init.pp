@@ -18,10 +18,11 @@ class client {
     source => 'puppet:///modules/client/modules'
   }
 
-  file { 'resolv.conf':
-    path => '/etc/resolv.conf',
+  file { 'resolved.conf':
+    path => '/etc/systemd/resolved.conf',
     ensure => file,
-    source => 'puppet:///modules/client/resolv.conf'
+    source => 'puppet:///modules/client/resolved.conf',
+    notify => Service['systemd-resolved'],
   }
 
   file { 'config.txt':
@@ -30,10 +31,9 @@ class client {
     source => 'puppet:///modules/client/config.txt'
   }
 
-  file { 'client-stub':
-    path => '/usr/bin/client-stub',
-    ensure => file,
-    source => 'puppet:///modules/client/client-stub',
+  service { 'systemd-resolved':
+    ensure => running,
+    hasrestart => true,
   }
 
 }
