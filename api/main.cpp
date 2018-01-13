@@ -102,6 +102,8 @@ int main(int argc, char* argv[])
     
     // get own client id:
     uint32_t own_client_id = 0;
+    
+    if (!simulate)
     {
         char hostname[256];
         
