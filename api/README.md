@@ -25,4 +25,4 @@ zufällige IR-Daten (von 2 bis einschl. 4) an Services weitergegeben, als wenn s
 empfangen worden wären. Dies dient zum Testen des Zusammenspiels von Hardware und Services.
 
 Anmerkung: Für den umgekehrten Fall (eine Simulation von Services, um die IR-Funktionalität zu
-testen) befinden sich im Unterverzeichnis 'stub' ein Testprogramme.
+testen) befinden sich im Unterverzeichnis 'stub' Testprogramme.
