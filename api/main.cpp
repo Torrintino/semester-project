@@ -6,6 +6,7 @@
 #include <cstring>
 #include <exception>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 
 #include <signal.h>
@@ -68,13 +69,15 @@ int main(int argc, char* argv[])
                 simulate = true;
             }
             else {
-                std::cerr << "Error: Unknown option: \"" << argv[1] << "\"." << std::endl;
+                std::cerr << "Error: Unknown option: \"" << argv[1] << "\"." << std::endl
+                          << "A valid option is \"simulate\"." << std::endl;
                 return EXIT_FAILURE;
             }
         }
         else {
             std::cerr << "Error: Too many parameters were set. None or one was expected."
-                      << std::endl;
+                      << std::endl
+                      << "A valid option is \"simulate\"." << std::endl;
             return EXIT_FAILURE;
         }
     }
@@ -151,8 +154,20 @@ int main(int argc, char* argv[])
     
     
     try {
-        IRDriverWrapper ir_driver;
+        std::unique_ptr<IRDriverWrapper> ir_driver;
+        
+        if (!simulate) {
+            ir_driver = std::make_unique<IRDriverWrapper>();
+        }
+        
         InterfaceToServices interface;
+        
+        std::cerr << "Initialization complete. Entering the event loop." << std::endl;
+        
+        if (simulate) {
+            std::cerr << "Note: Simulation mode is activated." << std::endl;
+        }
+        
         
         auto last_timepoint = std::chrono::system_clock::now();
         
@@ -178,9 +193,6 @@ int main(int argc, char* argv[])
                 auto current_timepoint = std::chrono::system_clock::now();
                 
                 if (current_timepoint - last_timepoint > 500ms) {
-                    last_timepoint = current_timepoint;
-                    sendCode(static_cast<int>(own_client_id));
-                    
                     if (simulate) {
                         uint32_t val = rand();
                         
@@ -199,17 +211,25 @@ int main(int argc, char* argv[])
                             }
                         }
                     }
+                    else {
+                        sendCode(static_cast<int>(own_client_id));
+                    }
+                    
+                    last_timepoint = current_timepoint;
                 }
             }
             
             
             // check for incoming IR events:
+            if (!simulate)
             {
                 char buffer[64];
                 int received_id = readInput(buffer);
                 
                 if (received_id > 0) {
                     try {
+                        std::cerr << "Received IR message \"" << (uint32_t)received_id << "\"."
+                                  << std::endl;
                         interface.receiveIR((uint32_t)received_id);
                     }
                     catch (ConnectFailedNoSuchFileException& e) {
