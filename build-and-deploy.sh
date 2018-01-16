@@ -26,13 +26,13 @@ pushd services
 git pull
 
 pushd build
-cmake -DCMAKE_BUILD_TYPE=Release -DDONT_FORK_SERVER=OFF -DDONT_FORK_CLIENT=0FF .. > build.log
+#cmake -DCMAKE_BUILD_TYPE=Release -DDONT_FORK_SERVER=OFF -DDONT_FORK_CLIENT=0FF .. > build.log
 
 echo "Building services-client"
-make -j4 services-client >> build.log
+#make -j4 services-client >> build.log
 
 echo "Building services-server"
-make -j4 services-server >> build.log
+#make -j4 services-server >> build.log
 popd
 popd
 

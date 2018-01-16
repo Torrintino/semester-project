@@ -3,7 +3,7 @@ class services_client {
   file { 'libservices-common.so':
     path => '/usr/lib/libservices-common.so',
     ensure => file,
-    source => 'puppet:///modules/services_server/libservices-common.so',
+    source => 'puppet:///modules/services_client/libservices-common.so',
   }
 
   file { 'services-client.service':
