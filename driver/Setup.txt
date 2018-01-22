@@ -1,7 +1,7 @@
 0.Trotz des Namens IrRecieverD, ist auch ein kleiner Sender implementiert.
 1.Lirc installieren und einrichten.
     1.1 Get Lirc: "sudo apt-get install lirc"
-    1.2"sudo nano /etc/modules"
+    1.2"/etc/modules"
     am Ende 
     "lirc_dev
      
