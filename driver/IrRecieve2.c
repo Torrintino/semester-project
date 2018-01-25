@@ -206,7 +206,7 @@ int main(){
 		k=readInput(code);
 		printf("%u",k);
 		fflush(stdout);
-		stop_send_often(ctx);
+		//stop_send_often(ctx);
 	}
 	deinitReciever();
 	return 0;
