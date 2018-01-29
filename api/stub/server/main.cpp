@@ -5,6 +5,7 @@
 
 #include <signal.h>
 #include <string.h>
+#include <time.h>
 
 #include "../common/tcp-networking.hpp"
 
@@ -40,7 +41,7 @@ int main()
     action.sa_sigaction = signal_handler;
     action.sa_flags = SA_SIGINFO;
     
-    if (sigaction(SIGTERM, &action, NULL) != 0) {
+    if (sigaction(SIGTERM, &action, nullptr) != 0) {
         perror("Error: Signal handler for SIGTERM could not be set");
         return EXIT_FAILURE;
     }
@@ -52,6 +53,9 @@ int main()
         
         while (!termination_requested) {
             try {
+                struct timespec gap = { 0, 10000000l };
+                nanosleep(&gap, nullptr);
+                
                 server.receive([&](auto const& _connection, auto _type, auto _data) {
                     if (_type == TCPConnection::MessageTypeConnectionInit) {
                         std::cout << _connection.getOtherEndName() << " connected." << std::endl;

@@ -5,6 +5,7 @@
 
 #include <signal.h>
 #include <string.h>
+#include <time.h>
 
 #include "../common/tcp-networking.hpp"
 #include "api.pb.h"
@@ -56,7 +57,6 @@ int main()
                 
                 while (!termination_requested) {
                     struct timespec gap = { 0, 10000000l };
-                    
                     nanosleep(&gap, nullptr);
                     
                     receiver.receive([&](MessageHeader::TypeType _type, std::string _data) {
