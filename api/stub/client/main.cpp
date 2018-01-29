@@ -41,7 +41,7 @@ int main()
     action.sa_sigaction = signal_handler;
     action.sa_flags = SA_SIGINFO;
     
-    if (sigaction(SIGTERM, &action, NULL) != 0) {
+    if (sigaction(SIGTERM, &action, nullptr) != 0) {
         perror("Error: Signal handler for SIGTERM could not be set");
         return EXIT_FAILURE;
     }
@@ -55,6 +55,10 @@ int main()
                 UnixReceiver receiver("/var/run/codingtag-services.socket");
                 
                 while (!termination_requested) {
+                    struct timespec gap = { 0, 10000000l };
+                    
+                    nanosleep(&gap, nullptr);
+                    
                     receiver.receive([&](MessageHeader::TypeType _type, std::string _data) {
                         switch (_type) {
                         case 2: {
