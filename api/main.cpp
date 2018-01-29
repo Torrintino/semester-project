@@ -293,6 +293,11 @@ int main(int argc, char* argv[])
                     trySendingIRToServices(interface, received_id);
                 }
             }
+            
+            
+            // wait a little so the PI does not get to hot:
+            struct timespec gap = { 0, 2000000l };
+            nanosleep(&gap, nullptr);
         }
     }
     catch (IRInitializationError& e) {
