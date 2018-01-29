@@ -1,6 +1,7 @@
 // api/main.cpp
 
 #include <chrono>
+#include <cinttypes>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -55,29 +56,49 @@ public:
 };
 
 
+void trySendingIRToServices(InterfaceToServices& _interface, uint32_t _received_id)
+{
+    try {
+        _interface.receiveIR(_received_id);
+    }
+    catch (ConnectFailedNoSuchFileException& e) {
+        std::cerr << "Error: Catched ConnectFailedNoSuchFileException: " << e.what() << std::endl;
+    }
+    catch (ConnectFailedConnectionRefusedException& e) {
+        std::cerr << "Error: Catched ConnectFailedConnectionRefusedException: " << e.what()
+                  << std::endl;
+    }
+}
+
+
 int main(int argc, char* argv[])
 {
     termination_requested = false;
     
     srand(time(NULL));
     
-    bool simulate = false;
+    bool simulate_random = false;
+    bool simulate_manual = false;
     
     if (argc > 1) {
         if (argc == 2) {
-            if (strcmp(argv[1], "simulate") == 0) {
-                simulate = true;
+            if (strcmp(argv[1], "simulate-random") == 0) {
+                simulate_random = true;
+            }
+            else if (strcmp(argv[1], "simulate-manual") == 0) {
+                simulate_manual = true;
             }
             else {
                 std::cerr << "Error: Unknown option: \"" << argv[1] << "\"." << std::endl
-                          << "A valid option is \"simulate\"." << std::endl;
+                          << "Valid options are \"simulate-random\", \"simulate-manual\"."
+                          << std::endl;
                 return EXIT_FAILURE;
             }
         }
         else {
             std::cerr << "Error: Too many parameters were set. None or one was expected."
                       << std::endl
-                      << "A valid option is \"simulate\"." << std::endl;
+                      << "Valid options are \"simulate-random\", \"simulate-manual\"." << std::endl;
             return EXIT_FAILURE;
         }
     }
@@ -103,7 +124,7 @@ int main(int argc, char* argv[])
     // get own client id:
     uint32_t own_client_id = 0;
     
-    if (!simulate)
+    if ((!simulate_random) && (!simulate_manual))
     {
         char hostname[256];
         
@@ -158,7 +179,7 @@ int main(int argc, char* argv[])
     try {
         std::unique_ptr<IRDriverWrapper> ir_driver;
         
-        if (!simulate) {
+        if ((!simulate_random) && (!simulate_manual)) {
             ir_driver = std::make_unique<IRDriverWrapper>();
         }
         
@@ -166,8 +187,16 @@ int main(int argc, char* argv[])
         
         std::cerr << "Initialization complete. Entering the event loop." << std::endl;
         
-        if (simulate) {
-            std::cerr << "Note: Simulation mode is activated." << std::endl;
+        if (simulate_random) {
+            std::cerr << "Note: Random simulation mode is activated. No actual IR data is being "
+                         "received or sent via the hardware."
+                      << std::endl;
+        }
+        
+        if (simulate_manual) {
+            std::cerr << "Note: Manual simulation mode is activated. No actual IR data is being "
+                         "received or sent via the hardware."
+                      << std::endl;
         }
         
         
@@ -190,30 +219,61 @@ int main(int argc, char* argv[])
             }
             
             
+            // if we use the manual simulation mode, check if we have input to send to Services:
+            if (simulate_manual) {
+                fd_set set;
+                FD_ZERO(&set);
+                FD_SET(STDIN_FILENO, &set);
+                
+                struct timeval timeout;
+                timeout.tv_sec = 0;
+                timeout.tv_usec = 10000;
+                
+                int iresult = select(FD_SETSIZE, &set, NULL, NULL, &timeout);
+                
+                if (iresult >= 1) {
+                    uint32_t signal_to_send = 0;
+                    
+                    iresult = fscanf(stdin, " %" PRIu32, &signal_to_send);
+                    
+                    if (iresult != 1) {
+                        std::cout << "Error parsing the input: " << strerror(errno) << "."
+                                  << std::endl;
+                        while (true) {
+                            iresult = select(FD_SETSIZE, &set, NULL, NULL, &timeout);
+                            
+                            if (iresult <= 0)
+                                break;
+                            
+                            getchar();
+                        }
+                    }
+                    
+                    if (signal_to_send == 0) {
+                        std::cout << "Error: Signal must not be zero." << std::endl;
+                    }
+                    else {
+                        std::cout << "Sending received IR message " << signal_to_send
+                                  << " to Services..." << std::endl;
+                        trySendingIRToServices(interface, signal_to_send);
+                    }
+                }
+            }
+            
+            
             // send own ID via IR every 0.5 seconds:
             {
                 auto current_timepoint = std::chrono::system_clock::now();
                 
                 if (current_timepoint - last_timepoint > 500ms) {
-                    if (simulate) {
+                    if (simulate_random) {
                         uint32_t val = rand();
                         
-                        if (val % 13 == 0) {    
-                            try {
-                                interface.receiveIR(val % 3 + 2);
-                            }
-                            catch (ConnectFailedNoSuchFileException& e) {
-                                std::cerr << "Error: Catched ConnectFailedNoSuchFileException: "
-                                          << e.what() << std::endl;
-                            }
-                            catch (ConnectFailedConnectionRefusedException& e) {
-                                std::cerr << "Error: Catched "
-                                             "ConnectFailedConnectionRefusedException: "
-                                          << e.what() << std::endl;
-                            }
+                        if (val % 7 == 0) {    
+                            trySendingIRToServices(interface, val % 11 + 2);
                         }
                     }
-                    else {
+                    else if (!simulate_manual) {
                         sendCode(static_cast<int>(own_client_id));
                     }
                     
@@ -223,25 +283,14 @@ int main(int argc, char* argv[])
             
             
             // check for incoming IR events:
-            if (!simulate)
+            if ((!simulate_random) && (!simulate_manual))
             {
                 char buffer[64];
                 int received_id = readInput(buffer);
                 
                 if (received_id > 0) {
-                    try {
-                        std::cerr << "Received IR message \"" << (uint32_t)received_id << "\"."
-                                  << std::endl;
-                        interface.receiveIR((uint32_t)received_id);
-                    }
-                    catch (ConnectFailedNoSuchFileException& e) {
-                        std::cerr << "Error: Catched ConnectFailedNoSuchFileException: "
-                                  << e.what() << std::endl;
-                    }
-                    catch (ConnectFailedConnectionRefusedException& e) {
-                        std::cerr << "Error: Catched ConnectFailedConnectionRefusedException: "
-                                  << e.what() << std::endl;
-                    }
+                    std::cerr << "Received IR message \"" << received_id << "\"." << std::endl;
+                    trySendingIRToServices(interface, received_id);
                 }
             }
         }
