@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 {
     termination_requested = false;
     
-    srand(time(NULL));
+    srand(time(nullptr));
     
     bool simulate_random = false;
     bool simulate_manual = false;
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
     action.sa_sigaction = signal_handler;
     action.sa_flags = SA_SIGINFO;
     
-    if (sigaction(SIGTERM, &action, NULL) != 0) {
+    if (sigaction(SIGTERM, &action, nullptr) != 0) {
         perror("Error: Signal handler for SIGTERM could not be set");
         return EXIT_FAILURE;
     }
@@ -229,7 +229,7 @@ int main(int argc, char* argv[])
                 timeout.tv_sec = 0;
                 timeout.tv_usec = 10000;
                 
-                int iresult = select(FD_SETSIZE, &set, NULL, NULL, &timeout);
+                int iresult = select(FD_SETSIZE, &set, nullptr, nullptr, &timeout);
                 
                 if (iresult >= 1) {
                     uint32_t signal_to_send = 0;
@@ -240,7 +240,7 @@ int main(int argc, char* argv[])
                         std::cout << "Error parsing the input: " << strerror(errno) << "."
                                   << std::endl;
                         while (true) {
-                            iresult = select(FD_SETSIZE, &set, NULL, NULL, &timeout);
+                            iresult = select(FD_SETSIZE, &set, nullptr, nullptr, &timeout);
                             
                             if (iresult <= 0)
                                 break;
