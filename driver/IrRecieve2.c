@@ -156,10 +156,46 @@ int sendCode(int sendPlayer){
 	return 0;
 }
 //Nicht blockierendes, permanentes senden.
-int send_often(lirc_cmd_ctx ctx){
+int send_often(lirc_cmd_ctx ctx, int sendPlayer){
 	int fd= lirc_get_local_socket(NULL,0);
 	int r;
-	r= lirc_command_init(&ctx,"%s %s %s\n","SEND_START","12","KEY_0");
+	char player[5];
+	char remote[2];
+	strcpy(remote,"12");
+	strcpy(player,"KEY_");
+	switch(sendPlayer){
+		case 1: strcat(player,"1");
+			break;
+		case 2: strcat(player,"2");
+			break;
+		case 3: strcat(player,"3");
+			break;
+		case 4: strcat(player,"4");
+			break;
+		case 5: strcat(player,"5");
+			break;
+		case 6: strcat(player,"6");
+			break;
+		case 7: strcat(player,"7");
+			break;
+		case 8: strcat(player,"8");
+			break;
+		case 9: strcat(player,"9");
+			break;
+		case 10: strcat(player,"A");
+			break;
+		case 11: strcat(player,"B");
+			break;
+		case 12: strcat(player,"C");
+			break;
+		case 13: strcat(player,"D");
+			break;
+		case 14: strcat(player,"E");
+			break;
+		case 15: strcat(player,"F");
+			break;
+	}
+	r= lirc_command_init(&ctx,"%s %s %s\n","SEND_START",remote,player);
 	do{
 	r=lirc_command_run(&ctx,fd);
 	if(r!=0 && r!=EAGAIN){
@@ -169,10 +205,46 @@ int send_often(lirc_cmd_ctx ctx){
 	close(fd);
 }
 //stoppen von Send_often();
-int stop_send_often(lirc_cmd_ctx ctx){
+int stop_send_often(lirc_cmd_ctx ctx, int sendPlayer){
 	int fd= lirc_get_local_socket(NULL,0);
 	int r;
-	r= lirc_command_init(&ctx,"%s %s %s\n","SEND_STOP","12","KEY_0");
+	char player[5];
+	char remote[2];
+	strcpy(remote,"12");
+	strcpy(player,"KEY_");
+	switch(sendPlayer){
+		case 1: strcat(player,"1");
+			break;
+		case 2: strcat(player,"2");
+			break;
+		case 3: strcat(player,"3");
+			break;
+		case 4: strcat(player,"4");
+			break;
+		case 5: strcat(player,"5");
+			break;
+		case 6: strcat(player,"6");
+			break;
+		case 7: strcat(player,"7");
+			break;
+		case 8: strcat(player,"8");
+			break;
+		case 9: strcat(player,"9");
+			break;
+		case 10: strcat(player,"A");
+			break;
+		case 11: strcat(player,"B");
+			break;
+		case 12: strcat(player,"C");
+			break;
+		case 13: strcat(player,"D");
+			break;
+		case 14: strcat(player,"E");
+			break;
+		case 15: strcat(player,"F");
+			break;
+	}
+	r= lirc_command_init(&ctx,"%s %s %s\n","SEND_STOP",remote,player);
 	do{
 	r=lirc_command_run(&ctx,fd);
 	if(r!=0 && r!=EAGAIN){
