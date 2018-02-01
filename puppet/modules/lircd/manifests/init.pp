@@ -27,7 +27,7 @@ class lircd {
   }
 
   file { 'ir-remote.conf':
-    path => '/etc/modprobe/ir-remote.conf',
+    path => '/etc/modprobe.d/ir-remote.conf',
     ensure => file,
     source => 'puppet:///modules/lircd/ir-remote.conf'
   }
