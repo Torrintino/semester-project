@@ -5,6 +5,7 @@ Description=Coding-Tag central server
 Type=forking
 PIDFile=/var/run/services-server.pid
 ExecStart=/usr/bin/services-server
+KillSignal=TERM
 
 [Install]
 WantedBy=multi-user.target

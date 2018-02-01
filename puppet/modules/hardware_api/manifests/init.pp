@@ -1,12 +1,10 @@
 class hardware_api {
 
   package { 'libprotobuf10':
-    require => Exec['apt-update'],
     ensure => installed,
   }
 
   package { 'liblirc0':
-    require => Exec['apt-update'],
     ensure => installed,
   }
 
