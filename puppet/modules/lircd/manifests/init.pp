@@ -1,6 +1,6 @@
 class lircd {
 
-  package { 'lircd':
+  package { 'lirc':
     ensure => installed,
   }
 
