@@ -25,16 +25,16 @@ echo "Build services project"
 pushd services
 git pull
 
-pushd build
-#cmake -DCMAKE_BUILD_TYPE=Release -DDONT_FORK_SERVER=OFF -DDONT_FORK_CLIENT=0FF .. > build.log
-
 echo "Building services-client"
-#make -j4 services-client >> build.log
+make -j4 services-client >> build.log
 
 echo "Building services-server"
-#make -j4 services-server >> build.log
+make -j4 services-server >> build.log
 popd
-popd
+
+echo "Stopping systemd services"
+systemctl stop services-server
+systemctl stop services-website
 
 echo "Deploying systemd services"
 pushd hardware
@@ -54,10 +54,8 @@ popd
 popd
 
 pushd services
-pushd build
 cp services-server libservices-common.so /usr/bin/
 cp services-client libservices-common.so $MODULES/services_client/files/
-popd
 pushd website
 cp website.py /path/website.py
 popd
@@ -65,8 +63,8 @@ popd
 
 echo "Restarting systemd services"
 systemctl daemon-reload
-systemctl restart services-server
-systemctl restart services-website
+systemctl start services-server
+systemctl start services-website
 
 echo "Update puppet configuration"
 pushd hardware

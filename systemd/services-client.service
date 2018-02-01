@@ -6,6 +6,7 @@ Requires=hardware-api.service
 Type=forking
 PIDFile=/var/run/services-client.pid
 ExecStart=/usr/bin/services-client
+KillSignal=TERM
 
 [Install]
 WantedBy=multi-user.target
