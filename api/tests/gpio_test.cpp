@@ -15,13 +15,25 @@
 #include <wiringPi.h>
 
 
-// in use for IR:
-//             1    = BCM GPIO pin 18 = Header pin 12
-//             3    = BCM GPIO pin 22 = Header pin 15
+// pin IDs: 
+//   Wiring  BCM_GPIO  Header
+//      0       17       11  // in use for IR
+//      1       18       12  // in use for IR
+//      2       27       13
+//      3       22       15
+//      4       23       16
+//      5       24       18
+//      6       25       22
+//      7        4        7
+//      8        2        3
+//      9        3        5
+//     10        8       24
+//     11        7       26
 
-#define LED_R0 0 // = BCM GPIO pin 17 = Header pin 11
-#define LED_Y0 2 // = BCM GPIO pin 27 = Header pin 13
-#define LED_G0 4 // = BCM GPIO pin 23 = Header pin 16
+
+#define LED_R0 2
+#define LED_Y0 3
+#define LED_G0 4
 
 
 using namespace std::literals;
