@@ -12,4 +12,7 @@ class client {
     source => 'puppet:///modules/client/wpa_supplicant.conf'
   }
 
+  package { 'wiringpi':
+    ensure => installed,
+  }
 }
