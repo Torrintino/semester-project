@@ -3,4 +3,4 @@
 # This file contains the names of kernel modules that should be loaded
 # at boot time, one per line. Lines beginning with "#" are ignored.
 lirc_dev
-lirc_rpi gpio_in_pin=18 gpio_out_pin=22
+lirc_rpi gpio_in_pin=18 gpio_out_pin=17
