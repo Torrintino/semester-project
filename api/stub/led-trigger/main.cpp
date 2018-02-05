@@ -1,11 +1,9 @@
-// api/stub/client/main.cpp
+// api/stub/led-trigger/main.cpp
 
 #include <cstdlib>
 #include <iostream>
 
 #include <signal.h>
-#include <string.h>
-#include <time.h>
 
 #include "../../networking.hpp"
 #include "api.pb.h"
