@@ -56,7 +56,7 @@ int main()
                 UnixReceiver receiver("/var/run/codingtag-services.socket");
                 
                 while (!termination_requested) {
-                    struct timespec gap = { 0, 10000000l };
+                    struct timespec gap = { 0, 1000000l };
                     nanosleep(&gap, nullptr);
                     
                     receiver.receive([&](MessageHeader::TypeType _type, std::string _data) {

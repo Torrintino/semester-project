@@ -53,7 +53,7 @@ int main()
         
         while (!termination_requested) {
             try {
-                struct timespec gap = { 0, 10000000l };
+                struct timespec gap = { 0, 1000000l };
                 nanosleep(&gap, nullptr);
                 
                 server.receive([&](auto const& _connection, auto _type, auto _data) {
