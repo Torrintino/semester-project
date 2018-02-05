@@ -3,7 +3,7 @@
 syntax = "proto2";
 package codingtag;
 
-// services -> hardware (MessageType 1):
+// services -> hardware (MessageType 1) UNUSED:
 message SendIR {
 	required uint32 dummy = 1;
 }
@@ -11,4 +11,19 @@ message SendIR {
 // hardware -> services (MessageType 2):
 message ReceiveIR {
 	required uint32 src_client_id = 1;
+}
+
+// services -> hardware (MessageType 3):
+message TriggerLEDEvent {
+    required uint32 event = 1;
+    /*
+     * 1 - was hit, invulnerable (time1 - time in secs that the player is invulnerable)
+     * 2 - has hit (optional time1 - how long it is being displayed in secs)
+     * 3 - game starts (time1 - delay in secs; time2 - runtime in secs)
+     * 4 - game ends (time1 - delay in secs)
+     * 5 - dead
+     * 6 - last life
+     */
+    optional uint32 time1 = 2;
+    optional uint32 time2 = 3;
 }
