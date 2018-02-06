@@ -15,6 +15,7 @@
 #include <unistd.h>
 
 #include "interface-to-services.hpp"
+#include "led-event-status.hpp"
 #include "../driver/IrRecieveD.h"
 
 
@@ -121,6 +122,10 @@ int main(int argc, char* argv[])
     }
     
     
+    // initialize LEDEventStatus:
+    LEDEventStatus led_event_status(simulate_random || simulate_manual);
+    
+    
     // get own client id:
     uint32_t own_client_id = 0;
     
@@ -183,19 +188,23 @@ int main(int argc, char* argv[])
             ir_driver = std::make_unique<IRDriverWrapper>();
         }
         
-        InterfaceToServices interface;
+        InterfaceToServices interface([&](uint32_t _event, uint32_t _time1, uint32_t _time2) {
+            std::cerr << "Received LED event " << _event << " with times "
+                      << _time1 << ", " << _time2 << "." << std::endl;
+            led_event_status.triggerLEDEvent(_event, _time1, _time2);
+        });
         
         std::cerr << "Initialization complete. Entering the event loop." << std::endl;
         
         if (simulate_random) {
             std::cerr << "Note: Random simulation mode is activated. No actual IR data is being "
-                         "received or sent via the hardware."
+                         "received or sent via the hardware. No LEDs are being controlled."
                       << std::endl;
         }
         
         if (simulate_manual) {
             std::cerr << "Note: Manual simulation mode is activated. No actual IR data is being "
-                         "received or sent via the hardware."
+                         "received or sent via the hardware. No LEDs are being controlled."
                       << std::endl;
         }
         
@@ -261,12 +270,17 @@ int main(int argc, char* argv[])
             }
             
             
-            // send own ID via IR every 0.5 seconds:
+            // do time-related stuff:
             {
                 auto current_timepoint = std::chrono::system_clock::now();
                 
+                // refresh the LED status:
+                led_event_status.setNow(current_timepoint);
+                
+                // every 0.5 seconds:
                 if (current_timepoint - last_timepoint > 500ms) {
                     if (simulate_random) {
+                        // send random ID to Services as if it was received via IR:
                         uint32_t val = rand();
                         
                         if (val % 7 == 0) {    
@@ -274,7 +288,9 @@ int main(int argc, char* argv[])
                         }
                     }
                     else if (!simulate_manual) {
-                        sendCode(static_cast<int>(own_client_id));
+                        // send own ID via IR:
+                        if (!led_event_status.isDead())
+                            sendCode(static_cast<int>(own_client_id));
                     }
                     
                     last_timepoint = current_timepoint;
@@ -296,7 +312,7 @@ int main(int argc, char* argv[])
             
             
             // wait a little so the PI does not get to hot:
-            struct timespec gap = { 0, 2000000l };
+            struct timespec gap = { 0, 500000l };
             nanosleep(&gap, nullptr);
         }
     }

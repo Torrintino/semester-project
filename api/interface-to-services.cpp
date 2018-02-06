@@ -28,8 +28,10 @@ namespace messages {
 }
 
 
-InterfaceToServices::InterfaceToServices()
-        : m_receiver(hardware_socket_file)
+InterfaceToServices::InterfaceToServices(std::function<void(uint32_t, uint32_t, uint32_t)>
+                                             _led_event_callback_function)
+        : m_receiver(hardware_socket_file),
+          m_led_event_callback_function(_led_event_callback_function)
 {
     // intentionally empty
 }
@@ -70,7 +72,26 @@ void InterfaceToServices::checkForReceivedMessages()
 {
     m_receiver.receive([&](MessageHeader::TypeType _type, std::string _data) {
         switch (_type) {
-            // TODO: No messages to receive from Services yet.
+        case 3: {
+            TriggerLEDEvent trigger_led_event;
+            bool parsed = trigger_led_event.ParseFromString(_data);
+            
+            if (!parsed)
+                throw MessageParsingError("Received message of type TriggerLEDEvent that could not "
+                                          "be parsed");
+            
+            uint32_t event = trigger_led_event.event();
+            uint32_t time1 = trigger_led_event.has_time1() ? trigger_led_event.time1() : 0;
+            uint32_t time2 = trigger_led_event.has_time2() ? trigger_led_event.time2() : 0;
+            
+            if (event < 1 || event > 6)
+                throw MessageOfUnknownTypeError("Received TriggerLEDEvent with an unknown event "
+                                                + std::to_string(event) + ".");
+            
+            m_led_event_callback_function(event, time1, time2);
+            
+            break;
+        }
         default:
             throw MessageOfUnknownTypeError("Received message of unknown type "
                                             + std::to_string(_type) + ".");

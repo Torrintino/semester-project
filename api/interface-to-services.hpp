@@ -4,6 +4,7 @@
 #define CODINGTAG_HARDWARE_API_INTERFACE_TO_SERVICES_HPP_HEADER_GUARD_ 1
 
 #include <cstdint>
+#include <functional>
 #include <memory>
 
 #include "networking.hpp"
@@ -20,7 +21,8 @@ DEFINE_SIMPLE_DERIVATE_OF_EXCEPTION(std::runtime_error, MessageOfUnknownTypeErro
 class InterfaceToServices final
 {
 public:
-    InterfaceToServices();
+    InterfaceToServices(std::function<void(uint32_t, uint32_t, uint32_t)>
+                            _led_event_callback_function);
     InterfaceToServices(InterfaceToServices const& _other) = delete;
     InterfaceToServices(InterfaceToServices&& _other) = delete;
     InterfaceToServices& operator=(InterfaceToServices const& _other) & = delete;
@@ -34,6 +36,7 @@ public:
 private:
     UnixReceiver m_receiver;
     std::unique_ptr<UnixSender> m_sender;
+    std::function<void(uint32_t, uint32_t, uint32_t)> m_led_event_callback_function;
 };
 
 

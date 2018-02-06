@@ -1,7 +1,7 @@
 .PHONY: all clean
 
-HEADER_FILES = networking.hpp interface-to-services.hpp ../driver/IrRecieveD.h api.proto Makefile
-OBJ_FILES = networking.o interface-to-services.o IrReceiveD.o api.pb.o main.o
+HEADER_FILES = networking.hpp led-event-status.hpp interface-to-services.hpp ../driver/IrRecieveD.h api.proto Makefile
+OBJ_FILES = networking.o led-event-status.o interface-to-services.o IrReceiveD.o api.pb.o main.o
 
 CXX      = g++
 CC       = gcc
@@ -22,14 +22,17 @@ IrReceiveD.o: ../driver/IrRecieveD.c ../driver/IrRecieveD.h Makefile
 networking.o: networking.cpp $(HEADER_FILES)
 	$(CXX) -c $(CXXFLAGS) networking.cpp -o networking.o
 
+led-event-status.o: led-event-status.cpp $(HEADER_FILES)
+	$(CXX) -c $(CXXFLAGS) led-event-status.cpp -o led-event-status.o
+
 interface-to-services.o: interface-to-services.cpp $(HEADER_FILES) api.pb.h
 	$(CXX) -c $(CXXFLAGS) interface-to-services.cpp -o interface-to-services.o
 
 main.o: main.cpp $(HEADER_FILES)
-	$(CXX) -c $(CXXFLAGS) -Wno-unused main.cpp -o main.o
+	$(CXX) -c $(CXXFLAGS) -Wno-unused-parameter main.cpp -o main.o
 
 hardware-api: $(OBJ_FILES) Makefile
-	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -lprotobuf -llirc_client -o hardware-api
+	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -lprotobuf -llirc_client -lwiringPi -o hardware-api
 
 clean:
 	rm -f hardware-api $(OBJ_FILES) api.pb.h api.pb.cc
