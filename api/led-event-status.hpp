@@ -35,19 +35,19 @@ private:
     int m_wiring_pi_status;
     bool m_dead;
     bool m_last_life;
-    int64_t m_game_starts_in = -1;
+    int64_t m_game_starts_in;
         // time in 10s of milliseconds the game starts in
         // negative value: no game scheduled
-    int64_t m_game_ends_in = -1;
+    int64_t m_game_ends_in;
         // time in 10s of milliseconds the game ends in
         // negative value: no game running or scheduled
-    int64_t m_invulnerable_led_left = -1;
+    int64_t m_invulnerable_led_left;
         // time in 10s of milliseconds in which the player is still invulnerable
         // negative value: vulnerable
-    int64_t m_has_hit = -1;
+    int64_t m_has_hit;
         // time in 10s of milliseconds that a hit is shown
         // negative value: has not hit anything recently
-    uint64_t m_time_elapsed = 0;
+    uint64_t m_time_elapsed;
         // total time elapsed in 10s of milliseconds
     Timepoint m_last_timepoint;
 };
