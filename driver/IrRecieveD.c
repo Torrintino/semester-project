@@ -2,6 +2,7 @@
 #include <lirc/lirc_client.h>
 #include <fcntl.h>
 #include <string.h>
+#include <wiringPi.h>
 
 
 // Returns Socket ID on success, -1 on Failure
