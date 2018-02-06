@@ -31,3 +31,7 @@ stdout.
 
 Anmerkung: Für den umgekehrten Fall (eine Simulation von Services, um die IR-Funktionalität zu
 testen) befinden sich im Unterverzeichnis 'stub' Testprogramme.
+
+Ein IR-Signal wird gesendet, wenn der Button gedrückt wird. Wenn kein Button angeschlossen ist, kann
+das Programm mit dem Argument 'no-button' gestartet werden. Dann wird alle 500 Millisekunden ein
+IR-Signal gesendent.

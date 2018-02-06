@@ -7,27 +7,7 @@
 #include <wiringPi.h>
 
 #include "led-event-status.hpp"
-
-
-// pin IDs: 
-//   Wiring  BCM_GPIO  Header
-//      0       17       11  // in use for IR
-//      1       18       12  // in use for IR
-//      2       27       13
-//      3       22       15
-//      4       23       16
-//      5       24       18
-//      6       25       22
-//      7        4        7
-//      8        2        3
-//      9        3        5
-//     10        8       24
-//     11        7       26
-
-
-#define LED_R0 2
-#define LED_Y0 3
-#define LED_G0 4
+#include "gpio-pins.h"
 
 
 using namespace std::literals;
@@ -36,9 +16,9 @@ namespace codingtag {
 namespace hardware {
 
 
-LEDEventStatus::LEDEventStatus(bool _simulation_only)
+LEDEventStatus::LEDEventStatus(int _wiring_pi_status)
         : m_stderr_is_terminal(isatty(STDERR_FILENO) == 1),
-          m_wiring_pi_status(-1),
+          m_wiring_pi_status(_wiring_pi_status),
           m_dead(false),
           m_last_life(false),
           m_game_starts_in(-1),
@@ -48,16 +28,6 @@ LEDEventStatus::LEDEventStatus(bool _simulation_only)
           m_time_elapsed(0),
           m_last_timepoint(std::chrono::system_clock::now())
 {
-    if (!_simulation_only) {
-        m_wiring_pi_status = wiringPiSetup();
-    
-        if (m_wiring_pi_status == -1) {
-            std::cerr << "Error: WiringPi initalization failed! This error will be ignored. "
-                         "No LEDs will be controlled by this program."
-                      << std::endl;
-        }
-    }
-    
     if (m_wiring_pi_status != -1) {
         pinMode(LED_R0, OUTPUT);
         pinMode(LED_Y0, OUTPUT);

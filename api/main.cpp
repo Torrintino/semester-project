@@ -14,6 +14,9 @@
 #include <time.h>
 #include <unistd.h>
 
+#include <wiringPi.h>
+
+#include "gpio-pins.h"
 #include "interface-to-services.hpp"
 #include "led-event-status.hpp"
 #include "../driver/IrRecieveD.h"
@@ -80,6 +83,7 @@ int main(int argc, char* argv[])
     
     bool simulate_random = false;
     bool simulate_manual = false;
+    bool no_button = false;
     
     if (argc > 1) {
         if (argc == 2) {
@@ -89,9 +93,13 @@ int main(int argc, char* argv[])
             else if (strcmp(argv[1], "simulate-manual") == 0) {
                 simulate_manual = true;
             }
+            else if (strcmp(argv[1], "no-button") == 0) {
+                no_button = true;
+            }
             else {
                 std::cerr << "Error: Unknown option: \"" << argv[1] << "\"." << std::endl
-                          << "Valid options are \"simulate-random\", \"simulate-manual\"."
+                          << "Valid options are \"simulate-random\", \"simulate-manual\", "
+                             "\"no-button\"."
                           << std::endl;
                 return EXIT_FAILURE;
             }
@@ -99,7 +107,9 @@ int main(int argc, char* argv[])
         else {
             std::cerr << "Error: Too many parameters were set. None or one was expected."
                       << std::endl
-                      << "Valid options are \"simulate-random\", \"simulate-manual\"." << std::endl;
+                      << "Valid options are \"simulate-random\", \"simulate-manual\", "
+                         "\"no-button\"."
+                      << std::endl;
             return EXIT_FAILURE;
         }
     }
@@ -122,8 +132,34 @@ int main(int argc, char* argv[])
     }
     
     
+    // initialize wiringPi:
+    int wiring_pi_status = -1;
+    
+    if (!(simulate_random || simulate_manual)) {
+        wiring_pi_status = wiringPiSetup();
+    
+        if (wiring_pi_status == -1) {
+            std::cerr << "Error: WiringPi initalization failed! This error will be ignored. "
+                         "No LEDs will be controlled by this program. No buttons will be used."
+                      << std::endl;
+            
+            no_button = true;
+        }
+    }
+    
+    
+    // initialize Button:
+    if (!no_button) {
+        pinMode(BUTTON_IR, INPUT);
+        pullUpDnControl(BUTTON_IR, PUD_UP);
+    }
+    else {
+        std::cerr << "Warning: Button deactivated." << std::endl;
+    }
+    
+    
     // initialize LEDEventStatus:
-    LEDEventStatus led_event_status(simulate_random || simulate_manual);
+    LEDEventStatus led_event_status(wiring_pi_status);
     
     
     // get own client id:
@@ -210,6 +246,7 @@ int main(int argc, char* argv[])
         
         
         auto last_timepoint = std::chrono::system_clock::now();
+        auto last_ir_data_sent_timepoint = last_timepoint;
         
         while (!termination_requested) {
             // check for incoming messages from Services:
@@ -278,7 +315,7 @@ int main(int argc, char* argv[])
                 led_event_status.setNow(current_timepoint);
                 
                 // every 0.5 seconds:
-                if (current_timepoint - last_timepoint > 500ms) {
+                if ((simulate_random || no_button) && current_timepoint - last_timepoint > 500ms) {
                     if (simulate_random) {
                         // send random ID to Services as if it was received via IR:
                         uint32_t val = rand();
@@ -287,13 +324,22 @@ int main(int argc, char* argv[])
                             trySendingIRToServices(interface, val % 11 + 2);
                         }
                     }
-                    else if (!simulate_manual) {
+                    else {
                         // send own ID via IR:
                         if (!led_event_status.isDead())
                             sendCode(static_cast<int>(own_client_id));
                     }
                     
                     last_timepoint = current_timepoint;
+                }
+                
+                
+                // send IR-data if button was pressed
+                if (!(simulate_random || simulate_manual || no_button) && !digitalRead(BUTTON_IR)
+                        && current_timepoint - last_ir_data_sent_timepoint > 100ms) {
+                    if (!led_event_status.isDead())
+                        sendCode(static_cast<int>(own_client_id));
+                    last_ir_data_sent_timepoint = current_timepoint;
                 }
             }
             

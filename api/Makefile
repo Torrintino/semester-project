@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-HEADER_FILES = networking.hpp led-event-status.hpp interface-to-services.hpp ../driver/IrRecieveD.h api.proto Makefile
+HEADER_FILES = networking.hpp led-event-status.hpp interface-to-services.hpp gpio-pins.h ../driver/IrRecieveD.h api.proto Makefile
 OBJ_FILES = networking.o led-event-status.o interface-to-services.o IrReceiveD.o api.pb.o main.o
 
 CXX      = g++

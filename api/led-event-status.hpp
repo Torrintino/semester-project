@@ -16,7 +16,7 @@ class LEDEventStatus final
 public:
     typedef decltype(std::chrono::system_clock::now()) Timepoint;
     
-    LEDEventStatus(bool _simulation_only);
+    LEDEventStatus(int _wiring_pi_status);
     LEDEventStatus(LEDEventStatus const& _other) = delete;
     LEDEventStatus(LEDEventStatus&& _other) = delete;
     LEDEventStatus& operator=(LEDEventStatus const& _other) & = delete;
