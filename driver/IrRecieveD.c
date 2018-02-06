@@ -151,6 +151,23 @@ int sendCode(int sendPlayer){
 	close(fd);
 	return 0;
 }
+
+int setupButtons(int Buttonnummer){
+    wiringPiSetupGpio();
+    
+    pinMode(Buttonnummer, INPUT);
+    pullUpDnControl(Buttonnummer, PUD_UP);
+    return 1;
+}
+
+int isPressed(int Buttonnummer){
+    if(digitalRead(Buttonnummer)){
+        return 0;//Knopf ist nicht gedrückt
+    }else{
+        return 1;//Knopf ist gedrückt
+    }
+    
+}
 /*Testecke
 int main(){
 	int k;
