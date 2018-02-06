@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
         std::cerr << "Error: Expected at least one argument." << std::endl;
         std::cerr << "Possible arguments are (all times are in seconds):" << std::endl
                   << "was hit:" << std::endl
-                  << "  1 <time that the player is vulnerable>" << std::endl
+                  << "  1 <time that the player is invulnerable>" << std::endl
                   << "has hit:" << std::endl
                   << "  2 [<time that it is shown>]" << std::endl
                   << "game starts:" << std::endl
