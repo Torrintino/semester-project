@@ -19,5 +19,7 @@
     "options lirc_rpi gpio_in_pin=18 gpio_out_pin=22"
     hinzufügen.
 2.lirc_client installieren mit: "sudo apt-get install liblirc-dev"
-3.Die lircd.conf von mir nach /etc/lirc/ verschieben
-4.Der Linker für die "IrReciever" Dateien ist "/usr/include/lirc -llirc_client"
+3.wiringPi installieren.
+4.Die lircd.conf von mir nach /etc/lirc/ verschieben
+5.Der Linker für die "IrReciever" Dateien ist "/usr/include/lirc -llirc_client"
+  sowie "wiringPi"
