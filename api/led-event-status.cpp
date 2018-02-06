@@ -152,8 +152,6 @@ void LEDEventStatus::refreshLEDs()
     bool y = false;
     bool g = false;
     
-    // TODO
-    
     if (m_game_ends_in >= 0) {
         // game is running or scheduled:
         if (m_game_starts_in >= 0) {
