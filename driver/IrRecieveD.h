@@ -1,4 +1,3 @@
-
 #ifndef CODINGTAG_HARDWARE_DRIVER_IRRECIEVED_H_HEADER_GUARD_
 #define CODINGTAG_HARDWARE_DRIVER_IRRECIEVED_H_HEADER_GUARD_ 1
 
@@ -33,7 +32,10 @@ int flushReceiver(char*code);
 int deinitReceiver();
 //Code senden, blockt, aber bei 16bit kein Problem
 int sendCode(int sendPlayer);
-
+//Button init
+int setupButtons(int Buttonnummer);
+//Ist Button gedrückt? Ja 1 sonst 0;
+int isPressed(int Buttonnummer);
 
 #ifdef __cplusplus
 }
