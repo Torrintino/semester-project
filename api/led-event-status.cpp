@@ -46,7 +46,7 @@ void LEDEventStatus::triggerLEDEvent(uint32_t _event, uint32_t _time1, uint32_t 
         m_invulnerable_led_left = _time1 * 100l;
         break;
     case 2:
-        m_has_hit = (_time1 == 0 ? _time1 : 4) * 100l;
+        m_has_hit = (_time1 == 0 ? 4 : _time1) * 100l;
         break;
     case 3:
         if (_time2 == 0) {
