@@ -1,1 +1,1 @@
-# verwendete Schaltungen für die Präsentation in Bildform.
+verwendete Schaltungen für die Präsentation in Bildform.
