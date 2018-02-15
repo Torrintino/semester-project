@@ -1,5 +1,6 @@
 [Unit]
 Description=Coding-Tag website 
+Requires=mysql.server
 
 [Service]
 Type=simple

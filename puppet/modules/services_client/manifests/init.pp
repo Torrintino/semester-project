@@ -12,6 +12,18 @@ class services_client {
     source => 'puppet:///modules/services_client/services-client.service',
   }
 
+  file { 'libmysqlclient.so':
+    path => '/usr/lib/libmysqlclient.so',
+    ensure => file,
+    source => 'puppet:///modules/services_client/libmysqlclient.so',
+  }
+
+  file { 'libmysqlclient.so.18':
+    path => '/usr/lib/libmysqlclient.so.18',
+    ensure => file,
+    source => 'puppet:///modules/services_client/libmysqlclient.so.18',
+  }
+
   file { 'services-client':
     path => '/usr/bin/services-client',
     ensure => file,

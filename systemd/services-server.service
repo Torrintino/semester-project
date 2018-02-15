@@ -1,5 +1,6 @@
 [Unit]
 Description=Coding-Tag central server
+Requires=services-website.server
 
 [Service]
 Type=forking
@@ -8,4 +9,4 @@ ExecStart=/usr/bin/services-server
 KillSignal=TERM
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default
