@@ -4,7 +4,7 @@ HEADER_FILES = ../../networking.hpp ../common/tcp-networking.hpp Makefile
 OBJ_FILES = networking.o tcp-networking.o main.o
 
 CXX      = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -g -Og
+CXXFLAGS = -std=c++14 -Wall -Wextra -O3
 
 all: server-stub
 

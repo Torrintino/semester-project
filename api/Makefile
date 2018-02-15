@@ -5,8 +5,8 @@ OBJ_FILES = networking.o led-event-status.o interface-to-services.o IrReceiveD.o
 
 CXX      = g++
 CC       = gcc
-CFLAGS   = -std=c99 -Wall -Wextra -g -Og
-CXXFLAGS = -std=c++14 -Wall -Wextra -g -Og
+CFLAGS   = -std=c99 -Wall -Wextra -O3
+CXXFLAGS = -std=c++14 -Wall -Wextra -O3
 
 all: hardware-api
 

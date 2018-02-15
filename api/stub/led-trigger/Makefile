@@ -4,7 +4,7 @@ HEADER_FILES = ../../networking.hpp ../../api.proto Makefile
 OBJ_FILES = networking.o api.pb.o main.o
 
 CXX      = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -g -Og
+CXXFLAGS = -std=c++14 -Wall -Wextra -O3
 
 all: led-trigger
 

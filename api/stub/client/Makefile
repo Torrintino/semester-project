@@ -4,7 +4,7 @@ HEADER_FILES = ../../networking.hpp ../common/tcp-networking.hpp ../../api.proto
 OBJ_FILES = networking.o tcp-networking.o api.pb.o main.o
 
 CXX      = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -g -Og
+CXXFLAGS = -std=c++14 -Wall -Wextra -O3
 
 all: client-stub
 
