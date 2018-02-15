@@ -279,6 +279,7 @@ void TCPServer::shutdownConnection(TCPConnection const& _connection)
 TCPClient::TCPClient(std::string const& _server, uint16_t _server_port)
         : m_connection(_server)
 {
+    int iresult;
     struct sockaddr_in name;
     memset(&name, 0, sizeof(name));
     
@@ -294,7 +295,7 @@ TCPClient::TCPClient(std::string const& _server, uint16_t _server_port)
     
     name.sin_addr = *(struct in_addr*)hostinfo->h_addr;
     
-    int iresult = connect(m_connection.m_socket.getFD(), (struct sockaddr*)&name, sizeof(name));
+    iresult = connect(m_connection.m_socket.getFD(), (struct sockaddr*)&name, sizeof(name));
     
     if (iresult != 0) {
         if (errno == EINPROGRESS) {
@@ -331,7 +332,7 @@ connection_established:
     {
         char hostname[256];
         
-        int iresult = gethostname(hostname, 256);
+        iresult = gethostname(hostname, 256);
         
         if (iresult != 0) {
             perror("Error: Could not get hostname to tell the opposite end of the TCP connection "

@@ -46,11 +46,11 @@ int main(int argc, char* argv[])
                           "/var/run/codingtag-hardware.socket");
         
         TriggerLEDEvent trigger_led_event;
-        trigger_led_event.set_event(atoll(argv[1]));
+        trigger_led_event.set_event(static_cast<uint32_t>(atoll(argv[1])));
         if (argc >= 3)
-            trigger_led_event.set_time1(atoll(argv[2]));
+            trigger_led_event.set_time1(static_cast<uint32_t>(atoll(argv[2])));
         if (argc >= 4)
-            trigger_led_event.set_time2(atoll(argv[3]));
+            trigger_led_event.set_time2(static_cast<uint32_t>(atoll(argv[3])));
         
         std::string to_send;
         bool serialized = trigger_led_event.SerializeToString(&to_send);

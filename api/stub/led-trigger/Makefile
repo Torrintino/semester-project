@@ -4,7 +4,11 @@ HEADER_FILES = ../../networking.hpp ../../api.proto Makefile
 OBJ_FILES = networking.o api.pb.o main.o
 
 CXX      = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -O3
+CXXFLAGS = -std=c++14 -O3 -Wall -Wextra -Wpedantic -Wformat=2 -Wformat-security -Wnull-dereference \
+           -Winit-self -Wuninitialized -Wstrict-overflow=5 -Warray-bounds=2 -Wshadow \
+           -Wframe-larger-than=16384 -Wstack-usage=16384 -Wcast-qual -Wcast-align -Wconversion
+
+# -Wundef deactivated because protoc generates shitty code...
 
 all: led-trigger
 

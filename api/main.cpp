@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 {
     termination_requested = false;
     
-    srand(time(nullptr));
+    srand(static_cast<unsigned int>(time(nullptr)));
     
     bool simulate_random = false;
     bool simulate_manual = false;

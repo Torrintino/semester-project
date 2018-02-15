@@ -40,7 +40,8 @@ static void bindUnixSocket(CSocketWrapper& _socket, std::string const& _file_nam
     }
     
     iresult = bind(_socket.getFD(), (struct sockaddr*)&name,
-                   offsetof(struct sockaddr_un, sun_path) + _file_name.length() + 1);
+                   static_cast<socklen_t>(offsetof(struct sockaddr_un, sun_path)
+                   + _file_name.length() + 1));
     
     if (iresult != 0) {
         perror("Error: Cannot bind local Unix socket");
@@ -286,8 +287,8 @@ UnixSender::UnixSender(std::string const& _file_name, std::string const& _receiv
     name.sun_path[_receiver_file_name.length()] = '\0';
     
     int iresult = connect(m_socket.getFD(), (struct sockaddr*)&name,
-                          offsetof(struct sockaddr_un, sun_path) + _receiver_file_name.length()
-                              + 1);
+                          static_cast<socklen_t>(offsetof(struct sockaddr_un, sun_path)
+                          + _receiver_file_name.length() + 1));
     
     if (iresult != 0) {
         if (errno == ENOENT)
