@@ -57,8 +57,37 @@ In diesem Abschnitt wird das geplante System beschrieben mit dem die Gruppe die 
 
 ### Die Spielgeräte
 
-Wie oben bereits beschrieben, war für das Nachbilden von Lasertag eine drahtlose Übertragungsmethode notwendig, die möglichst zuverlässig ist. Im realen Lasertag wird dafür Infrarot verwendet und es werden LED's benutzt, um den Abschuss darzustellen. Auch in diesem Projekt fiel die Wahl auf Infrarot, es ist im Gegensatz zu Laser nicht schädlich für die Augen und es können über eine größere Distanz zielgerichtet gesendet werden. Es gibt kostengünstige Komponenten wie LED's und Sensoren, sowie Open Source Treiber für die Modellierung für Daten. Es reicht nicht aus, einfach nur zu erkennen, dass man getroffen wurde, weil es für die Spielregeln notwendig ist zu wissen, von welchem Spieler der Schuss kam. Diese Notwendigkeit ergibt sich daraus, das zwei Systeme die über das Netzwerk kommunizieren, dazu in der Lage sein müssen sich eindeutig zu identifizieren. Daher war es sehr nützlich, dass über Infrarot Daten versendet werden können, wie zum Beispiel bei Fernbedienungen. Die gegenseitige Identifizierung haben wir also so gelöst, dass das Spielgerät eines Spielers beim Abschuss eine ID versendet. Wenn der Sensor eines Spielers diese ID empfängt, weiß das Gerät von wem der Schuss kam und es weiß ebenso seine eigene ID. Daher hat es eine Information der Form: Spieler X hat Spieler Y getroffen. Diese Information wird an die Services Komponente weitergegeben, da hardwaretechnisch die Arbeit erledigt ist.
+Wie oben bereits beschrieben, war für das Nachbilden von Lasertag eine drahtlose Übertragungsmethode notwendig, die möglichst zuverlässig ist. Im realen Lasertag wird dafür Infrarot verwendet und es werden LED's benutzt, um den Abschuss darzustellen. Auch in diesem Projekt fiel die Wahl auf Infrarot, es ist im Gegensatz zu Laser nicht schädlich für die Augen und es können über eine größere Distanz zielgerichtet gesendet werden. Es gibt kostengünstige Komponenten wie LED's und Sensoren, sowie Open Source Treiber für die Modellierung für Daten. Es reicht nicht aus, einfach nur zu erkennen, dass man getroffen wurde, weil es für die Spielregeln notwendig ist zu wissen, von welchem Spieler der Schuss kam. Diese Notwendigkeit ergibt sich daraus, das zwei Systeme die über das Netzwerk kommunizieren, dazu in der Lage sein müssen sich eindeutig zu identifizieren. Daher war es sehr nützlich, dass über Infrarot Daten versendet werden können, wie zum Beispiel bei Fernbedienungen.
 
+Die gegenseitige Identifizierung wurde so gelöst, dass das Spielgerät eines Spielers beim Abschuss eine ID versendet. Wenn der Sensor eines Spielers diese ID empfängt, weiß das Gerät von wem der Schuss kam und es weiß ebenso seine eigene ID. Daher hat es eine Information der Form: Spieler X hat Spieler Y getroffen.
+
+Als Gerät fiel die Wahl auf den Raspberry Pi Model Zero W. Die Entscheidung wurde getroffen, weil ein leichter, stromsparender Computer benötigt wurde, der freiprogrammierbar ist und mit Infrarotkomponenten erweitert werden kann. Für den kabellosen Betrieb werden Powerbanks verwendet, um die Geräte mit Strom zu versorgen.
+
+### Netzwerkarchitektur
+
+Informationen über Abschüsse müssen eine entsprechende Auswirkung auf den Spielstand haben. Eine Option dafür wäre die selbe Applikation auf jedem Gerät zu installieren und ein P2P Netzwerk zu errichten, in dem sich die Geräte konstant über den gegenwärtigen Spielstand austauschen. Daraus resultiert jedoch ein sehr kompliziertes Protokoll zur Synchronisierung, insbesondere weil ein Gerät mitten im Spiel die Verbindung verlieren könnte. Stattdessen wurde eine simplere Client-Server Architektur gewählt, in der Clients lediglich Informationen sammeln und diese an den Server weiterreichen. Der Server wertet sie aus und gibt Informationen über den Spielstand an die Clients zurück. Durch diese Architektur werden viele potenzielle Logikfehler, die sich durch konkurrente Nachrichten ergeben, eliminiert.
+
+Die Clients und der Server verwenden zur Kommunikation WLAN. Dies ist die naheliegendste Lösung, die Technik ist zuverlässig und Verbindungsprobleme werden größtenteils durch den TCP/IP Stack des Betriebssystems gelöst. Um ein weitaufspannendes Feld zu errichten wäre es notwendig mehrere Access Points (AP) zu errichten, die sich mit Roaming austauschen. Es wurde allerdings entschieden, dass dies den Rahmen des Projekts sprengen würde und es wurde der Einfachheit halber entschieden, den Server auch gleichzeitig als AP einzusetzen, womit theoretisch ein Spielfeld unterstützt wird, dass mehrere Räume umspannt.
+
+Für den Server wurde ebenfalls ein Raspberry Pi (Model B+) verwendet, ein Desktop PC wäre jedoch genauso geeignet gewesen. Der Raspi wurde verwendet, weil es für die Entwicklung praktisch war einen Minicomputer zu haben, der leicht zu transportieren ist und als WLAN AP verwendet werden kann.
+
+### Das Spiel
+
+Zuvor wurde die grundlegende Infrastruktur beschrieben, mit der Informationen über Abschüsse ausgetauscht werden können. Das allein reicht für das Spiel noch nicht aus, weil die Spieler eine Möglichkeit brauchen eine Übersicht über den Spielstand zu behaupten. Dafür gibt es zwei Ansätze die verfolgt wurde: Eine Anzeige auf jedem Gerät über den Status des Spielers und eine Anzeige für den Server über den aktuellen Spielstand.
+
+Die Anzeige für die Spielgeräte wurde mit LEDs gelöst, die mit verschiedenen Farben anzeigen, ob ein anderer Spiel getroffen wurde, ob man unverwandbar ist, etc. Dies ist eine billige Möglichkeit, die durch die GPIO Anschlüsse der Raspberry Pis unterstützt wird.
+
+Die Anzeige des Servers wurde mit einer Website umgesetzt die tabellarische das Scoreboard anzeigt. Die Webseite soll auf einem oder mehreren Bildschirmen dargestellt werden, die auf das gesammte Spielfeld verteilt werden.
+
+In diesen Entscheidung spiegelt sich wieder, dass Spieler regelmäßig erfahren wollen, ob sie noch im Spiel sind oder ob sie einen anderen Spieler getroffen haben. Daher muss es eine Möglichkeit geben die entsprechende Anzeige sehr schnell und einfach zu überprüfen. Der aktuelle Spielstand muss seltener angesehen werden, daher ist es in Ordnung, wenn der Spieler einige Sekunden braucht, um auf die Website zu schauen.
+
+Letztendlich muss auch auf Fairness geachtet werden, daher ist es wichtig dass die Fähigkeit andere Spieler abzuschießen limitiert ist. Dies muss auf mehrere Weisen geschehen:
+
+ 1. Die Streuung von Abschüssen muss eingeschränkt sein. Dies wurde gelöst, indem Strohhalme über die LEDs gestülpt wurden, die das Aussenden des Signals in eine bestimmte Richtung lenken.
+ 2. Ein Spieler darf nicht konstant schießen, es muss also eine Art Abklingzeit geben. Dafür wurde an den Geräten ein Button angebracht, sodass das Gerät nur schießt, wenn der Button gedrückt wurde und nicht mehr schießen kann, bis er wieder losgelassen wurde.
+ 3. Damit ein Spieler nicht mehrmals hintereinander getroffen werden kann, gibt es bei vielen Spielmodi eine kurze Unverwundbarkeitszeit, nachdem ein Spieler getroffen wurde. In dieser Zeit hat der getroffene die Möglichkeit sich so zu positionieren, dass er nicht erneut getroffen wird.
+
+### Die Spielmodi
 
 ## Komponenten
 
