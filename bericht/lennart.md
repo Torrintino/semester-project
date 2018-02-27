@@ -89,6 +89,14 @@ Letztendlich muss auch auf Fairness geachtet werden, daher ist es wichtig dass d
 
 ### Die Spielmodi
 
+Es wurde entschieden, dass die Spielelogik möglichst vom Backend getrennt sein soll. Deswegen wurde sie in Form von LUA Skripts gekapselt und wird vom Server eingebunden. Die Schnittstelle zwischen diesen beiden Komponenten ist ein Informationsaustausch. Der Server gibt Spielparameter und Abschussinformationen an LUA weiter und die Spielelogik gibt die resultieren Auswirkung auf den Spielstand zurück, damit dieser auf der Website und den Geräten angezeigt werden kann.
+
+Als zu spielendes Netzwerkprotokoll haben wir eine vereinfachte Version von Bittorrent gewählt. Diese Wahl fiel unter anderem, da dieses Original auch in der Realität spielerische Elemente bietet. So gibt es im Netzwerk etwa Teilnehmer, die möglichst viel Datenvolumen von anderen beziehen wollen, ohne selber eine entsprechende Upload-Bandbreite anzubieten. Dieses Element der Fairness sollte eine zentrale Komponente im Spiel sein.
+
+Tatsächlich wurden mehrere Spielmodi implementiert. Dies geschah aus verschiedenen Gründen:
+ 1. Es zwang uns eine modulare Architektur zu errichten, die völlig unabhängig vom gewählten Spielmodus funktioniert. Dadurch habe wir eine garantierte Flexibiltät Änderungen an Spielmodi vornehmen zu können.
+ 2. Die Spielmodi haben eine unterschiedliche Reichhaltigkeit an Funktionen. Dies ist nützlich für das Debugging, weil somit gezielt Features getestet und gewisse Rahmenbedingungen je nach Spielmodus vernachlässigt werden können.
+
 ## Komponenten
 
 Aus der Anforderungsanalyse ergeben sich drei abstrakte Komponenten:
@@ -98,7 +106,7 @@ Aus der Anforderungsanalyse ergeben sich drei abstrakte Komponenten:
 
 Es handelt sich hierbei, um ein System mit mehreren Schichten, wobei jede Schicht Dienste für die darüberliegende Schicht anbietet. Man kann feststellen, dass die Trennung der Komponenten nicht sauber ist. Es ist zum Beispiel unklar, wo die hardwarebasierte Infrastruktur in die softwarebasierte übergeht, etwa bei Netzwerkprotokollen.
 
-Bei der Arbeit am Semesterprojekt haben wir den Komponenten entsprechend die Teilnehmer in drei Gruppen eingeteilt, welche abgekürzt als "Hardware", "Services" und "Spielelogik" bezeichnet werden.
+Bei der Arbeit am Semesterprojekt haben wir den Komponenten entsprechend die Teilnehmer in drei Gruppen eingeteilt, welche abgekürzt als "Hardware", "Services" und "Spielelogik" bezeichnet werden. In den folgenden Abschnitten werden die jeweiligen Gruppenmitglieder aufgezählt und die Arbeitsergebnisse derselben erläutert. 
 
 ### Hardware
 
