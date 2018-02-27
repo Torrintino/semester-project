@@ -110,9 +110,27 @@ Bei der Arbeit am Semesterprojekt haben wir den Komponenten entsprechend die Tei
 
 ### Hardware
 
+Mitglieder und Aufgaben:
+ * Kevin Cornelius (Schaltungen, Spielgeräte)
+ * Lennart Weiß (Installation, Betriebssystemkonfiguration)
+ * Manuel Radatz (API und Spielanzeige)
+ * Rafael Robert Hadamik (Infrarottreiber, Spielgeräte)
+
 ### Services
 
+Mitglieder und Aufgaben:
+ * Angelina Jellinek (Design der Website)
+ * Jan Arne Sparka (Integration von LUA und Server)
+ * Kevin Marc Trogant (Integration von Hardware und Server)
+ * Pascal Jochman (Website Backend)
+ * Tim Sikatzki (Website Backend)
+
 ### Spielelogik
+
+Mitglieder und Aufgaben:
+ * David Bachorska
+ * Dennis Ness
+ * Tom Kieseling
 
 ## Zusammenfassung
 
