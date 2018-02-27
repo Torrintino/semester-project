@@ -113,8 +113,20 @@ Bei der Arbeit am Semesterprojekt haben wir den Komponenten entsprechend die Tei
 Mitglieder und Aufgaben:
  * Kevin Cornelius (Schaltungen, Spielgeräte)
  * Lennart Weiß (Installation, Betriebssystemkonfiguration)
- * Manuel Radatz (API und Spielanzeige)
+ * Manuel Radatz (API, Spielanzeige)
  * Rafael Robert Hadamik (Infrarottreiber, Spielgeräte)
+
+#### Betriebssysteminstallation
+
+Dieser Abschnitt erläutert, wie die Grundinstallation auf den Spielgeräten und dem Server vorgenommen wird. Für diese Aufgabe war Lennart Weiß verantwortlich.
+
+#### Netzwerkkonfiguration
+
+Dieser Abschnitt erläutert die Netzwerkinfrastruktur des Projekts. Für diese Aufgabe war Lennart Weiß verantwortlich.
+
+#### Installation des Projekts
+
+Dieser Abschnitt erläutert, wie die einzelnen Komponenten des Projekts auf die Geräte verteilt werden. Für diese Aufgabe war Lennart Weiß verantwortlich.
 
 ### Services
 
@@ -134,6 +146,16 @@ Mitglieder und Aufgaben:
 
 ## Zusammenfassung
 
+Im Abschnitt zur Systemarchitektur wurde unser Plan vorgestellt, mit dem wir die Aufgabenstellung lösen wollten. In diesem Kapitel wird erläutert, welche Teile dieses Plan tatsächlich umgesetzt wurden und diskutiert inwieweit diese Lösung die Aufgabe erfüllt.
+
 ### Auswertung
 
+Es gibt zwei Sichten darauf, wieviel von der geplanten Architektur umgesetzt wurden: zum einen die Implentierung der einzelnen Komponenten, zum anderen die Integration derselben. Um eine technische Machbarkeit der Lösung zu demonstrieren, reicht es aus mit Unit Tests die Funktionalität der Einzelkomponenten zu beweisen. Allerdings war als Endprodukt ein Spiel gefordert, für dieses ist notwendig, dass die Integration reibungslos funktioniert. Das heißt, ein beliebiger externer Spieler kann das System verwenden ohne Kenntnisse über deren interne Funktionsweise zu haben.
+
+Die einzelnen Komponenten die geplant waren wurde alle implementiert und zumindest teilweise getestet. Die Spielelogikgruppe konnte mit einem Simulator demonstrieren, dass die einzelnen Spielmodi das erwartete Verhalten generieren und die Hardwaregruppe konnte mit Stubs demonstrieren, dass Infrarot Abschüsse an den Services Client durchgereicht werden und LED Events korrekt angezeigt werden. Die Servicesgruppe hat die Funktionalität der Website demonstriert, indem sie manuell Einträge in die Datenbank hinzufügten und bestätigten, dass jene Änderungen auf der Website übernommen werden.
+
+Die Integration der Komponenten ist unvollständig. Es lässt sich nachweisen, dass der Server mit LUA kommuniziert, allerdings lassen Logs darauf schließen, dass Parameter in der falschen Reihenfolge an LUA weitergegeben werden. Die Website zu Server Integration über die Datenbank funktioniert für einfache Spielmodi, bei komplexeren bringen allerdings Deadlocks von Mutex Objekten den Server zum Absturz. Es kam außerdem zu diversen Fehlern bei Zugriffen des Servers auf die Datenbank. Der Server und der Client können sich miteinander verbinden und Abschussinformationen werden ausgetauscht. Allerdings ist die Verbindung selbst teilweise instabil und die Clients verlieren die Verbindung oder können sich nicht erneut verbinden. Diese Problem machen derzeit einen Neustart der Systemd Units auf allen Geräten notwendig, wenn ein neues Spiel gestartet wird. Die Verbindung der Client/Server Programme mit Systemd ist noch instabil, es dauert teilweise Minuten bis eine Unit gestoppt werden kann. Die Hardware API ist in der Lage zuverlässig Abschussinformationen an den Client weiterzugeben. Allerdings werden derzeit keine LED Events an die Hardware API gesendet. Die Integration der Hardware API mit der darunter liegenden Hardware und Systemd ist stabil und verursacht keine Probleme.
+
 ### Ausblick
+
+Aus dem letzten Abschnitt geht hervor, dass ein Spiel bis zu einem gewissen Punkt demonstriert werden kann, jedoch ist ein ausgereiftes Spiel noch nicht möglich, von Spaß kann nicht die Rede sein. Die geplante Architektur erfüllt jedoch die Aufgabenstellung und sie wurde größtenteils umgesetzt. Viele der genannten Probleme könnten nach einigen Tagen Bugfixing behoben werden und sobald die Integration der Komponenten stabil ist kann ein richtiges Spiel gespielt werden. Ob man dabei auch Spaß hätte bleibt offen, dies lässt sich mit einem Simulator nicht demonstrieren und wahrscheinlich wären viele weitere Tests notwendig, bis das Produkt ausgereift und tauglich für die Allgemeinheit wäre.
