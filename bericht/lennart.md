@@ -120,6 +120,16 @@ Mitglieder und Aufgaben:
 
 Dieser Abschnitt erläutert, wie die Grundinstallation auf den Spielgeräten und dem Server vorgenommen wird. Für diese Aufgabe war Lennart Weiß verantwortlich.
 
+Der Server ist ein Raspberry Pi Model B+. Er hat zwei physikalische Netzwerkinterfaces: WLAN und Ethernet. Aufgrund der geringen Größe lässt er sich leicht überall hin transportieren. Für ein Spiel benötigt er lediglich eine Stromversorgung, um als internetfähiger Access Point zu dienen braucht darüber hinaus einen Ethernet Uplink, über dem er per DHCP eine IP Adresse beziehen kann und Internetzugang hat. Zum Debugging sind darüber hinaus Bildschirm und Tastatur nützlich.
+
+Auf dem Server ist Raspbian Lite installiert. Das Gerät lässt sich auch durch einen beliebigen anderen PC austauschen, dass besagte Netzwerkschnittstellen besitzt und auf dem Debian installiert werden kann (was den meisten gängigen Prozessorarchitekturen möglich ist). Raspbian wurde vor allem wegen seiner weiten Verbreitung gewählt und Stabilität gewählt. Für Probleme bei der Serverinstallation kann im Regelfall eine Suche in Debianforen und ähnlichem eine Lösung gefunden und auf Raspbian übertragen werden.
+
+Der Server ist im wesentlichen ein Wifi Access Point und Router. Die Clients können sich mit ihm über WLAN verbinden und bekommen über DHCP eine IP Adresse, behalten jedoch ihren Hostname. Der Server fungiert als DNS Server, daher können sich die Geräte untereinander mit dem Hostname ansprechen. Die IP Adressen sind nicht statisch und im gesamten Projekt soll generell mit den Hostnames gearbeitet werden. Damit wird eine Abstraktion geschaffen, die es ermöglicht die Netzwerkkonfiguration zu verändern, ohne das entsprechende Änderungen an den Applikationen vorgenommen werden müssen.
+
+Die Routerfunktionalität wurde vor allem deswegen implementiert, weil die Clients über das Internet Pakete und Updates beziehen müssen. Wenn der Router einen entsprechenden Internetuplink besitzt, leitet er die Pakete der Clients nach außen durch und umgekehrt. Durch den Einsatz von NAS benötigt der Server nur eine eigene IP Adresse, aber keine für die Clients. Das Arbeiten und Debuggen am Server und den Clients macht es oft notwendig, dass sich der Entwickler im WLAN Netz einloggt. Daher ist es ein nützlicher Nebeneffekt, dass er weiterhin auf das Internet zugreifen kann, wenn er mit dem Netzwerk verbunden ist. Damit der Server sowohl lokale als auch globale URIs auflösen kann, muss er auf dem Client als Nameserver hinzugefügt werden. Er fungiert als DNS Cache, Anfragen an externe Ressourcen werden an einen anderen Nameserver weitergeleitet.
+
+Auf dem Server ist ein Puppetmaster eingerichtet. Damit kann genau festgelegt werden, welche Software auf die Clients verteilt werden soll und die Installation kann automatisiert werden. Für jeden Client muss auf dem Server ein Zertifikat signiert werden, dieser manuelle Schritt wird jedoch nur einmal bei der Erstinstallation des Client vorgenommen.
+
 #### Netzwerkkonfiguration
 
 Dieser Abschnitt erläutert die Netzwerkinfrastruktur des Projekts. Für diese Aufgabe war Lennart Weiß verantwortlich.
