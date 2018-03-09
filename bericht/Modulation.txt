@@ -1,59 +1,58 @@
 Um die einzelnen Spieler zu unterscheiden, war es notwendig, dass sie unterschiedliche
 Informationen aussenden, um sie eindeutig im Spielkontext zu identifizieren.
 Wir hatten 3 verschiedene Ideen wie man diese Informationen modelieren kann, um sie schnell und 
-korrekt zu übertragen.
+korrekt zu Ã¼bertragen.
 Dabei war die Grundlage, dass jede gesendete Information in eine eindeutige Abfolge von 2
-verschiedenen Zuständen, im Folgenden als Zustand 0 (kurz: 0) bzw. Zustand 1 (kurz: 1)
-bezeichnet, übersetzt wird und dann diese Abfolge von Zuständen gesendet wird.
-Diese Abfolge von Zuständen musste ebenfalls modeliert werden, um das Gebot der Korrektheit zu
-erfüllen, da ein einfaches Absenden der Information ,mit Signal an = 1 und Signal aus = 0, sehr
-rauschanfällig wäre.
-Desweiteren wollten wir auf Selbstkorrigierende Codes verzichten, um eine möglichst schnelle und
+verschiedenen ZustÃ¤nden, im Folgenden als Zustand 0 (kurz: 0) bzw. Zustand 1 (kurz: 1)
+bezeichnet, Ã¼bersetzt wird und dann diese Abfolge von ZustÃ¤nden gesendet wird.
+Diese Abfolge von ZustÃ¤nden musste ebenfalls modeliert werden, um das Gebot der Korrektheit zu
+erfÃ¼llen, da ein einfaches Absenden der Information ,mit Signal an = 1 und Signal aus = 0, sehr
+rauschanfÃ¤llig wÃ¤re.
+Desweiteren wollten wir auf Selbstkorrigierende Codes verzichten, um eine mÃ¶glichst schnelle und
 genaue Treffererkennung zu schaffen, um zu verhindern, dass wenn 2 Spieler nahezu gleichzeitig
-schießen, dass der Spieler der zuerst schießt, den Treffer nicht gewertet bekommt, da sein Schuss
+schieÃŸen, dass der Spieler der zuerst schieÃŸt, den Treffer nicht gewertet bekommt, da sein Schuss
 erst korrigiert werden musste, wohingegen der Schuss des langsameren Spielers zuerst gewertet
 wird, da sein Schuss keine Korrektur hatte.
-Dazu hatten wir 3 Ideen, wie man diese Modulation umsetzen könnte:
+Dazu hatten wir 3 Ideen, wie man diese Modulation umsetzen kÃ¶nnte:
 
-	1. Man gibt Zustand 1 und Zustand 0 unterschiedliche Längen von einem Signal mit festen 
+	1. Man gibt Zustand 1 und Zustand 0 unterschiedliche LÃ¤ngen von einem Signal mit festen 
 	   Pausen dazwischen.
- 
-	2. Man modeliert die Zustände über Signalflanken.
-	3. Man gibt beiden Zuständen die gleiche Signalzeit, aber unterschiedliche Pausen zwischen
+	2. Man modeliert die ZustÃ¤nde Ã¼ber Signalflanken.
+	3. Man gibt beiden ZustÃ¤nden die gleiche Signalzeit, aber unterschiedliche Pausen zwischen
 	   den einzelnen Signalen.
 
 
 
 Idee 1: Der Vorteil der ersten Idee ist, dass sie sehr simpel zu implementieren ist.
 
-	Der Nachteil ist jedoch, dass sie von den 3 Ideen am stärksten rauschanfällig ist und somit
+	Der Nachteil ist jedoch, dass sie von den 3 Ideen am stÃ¤rksten rauschanfÃ¤llig ist und somit
  	die geringste Reichweite bietet.
 
 
-Idee 2: Der Vorteile hier bestehen darin, dass sie sehr einfach zu implementieren wäre, wenn man
- 	den Treiber von Grund auf selbst schreibt, und dass sie die schnellste Übertragung von allen
+Idee 2: Der Vorteile hier bestehen darin, dass sie sehr einfach zu implementieren wÃ¤re, wenn man
+ 	den Treiber von Grund auf selbst schreibt, und dass sie die schnellste Ãœbertragung von allen
  	bietet.
 
-	Der größte Nachteil besteht jedoch darin, dass diese Idee selber sehr rauschanfällig
- 	ist, da Flanken in der Theorie überspielt werden könnten.
+	Der grÃ¶ÃŸte Nachteil besteht jedoch darin, dass diese Idee selber sehr rauschanfÃ¤llig
+ 	ist, da Flanken in der Theorie Ã¼berspielt werden kÃ¶nnten.
 
-Idee 3: Der Vorteil besteht hier darin, dass die wenigste Rauschanfälligkeit besteht, da man, mit
- 	genügend großen Unterschieden zwischen den Pausen bei den beiden Zuständen, sehr
- 	großzügig sein kann, was noch als Treffer gilt.
+Idee 3: Der Vorteil besteht hier darin, dass die wenigste RauschanfÃ¤lligkeit besteht, da man, mit
+ 	genÃ¼gend groÃŸen Unterschieden zwischen den Pausen bei den beiden ZustÃ¤nden, sehr
+ 	groÃŸzÃ¼gig sein kann, was noch als Treffer gilt.
 
-	Ein weiterer Vorteil war, dass man bereits Geräte im Haus hatte, die genauso funktionieren,
- 	was Tests am Anfang stark vereinfacht hatte und dafür gesorgt hat, das Troubleshooting
- 	später ebenfalls leichter war.
+	Ein weiterer Vorteil war, dass man bereits GerÃ¤te im Haus hatte, die genauso funktionieren,
+ 	was Tests am Anfang stark vereinfacht hatte und dafÃ¼r gesorgt hat, das Troubleshooting
+ 	spÃ¤ter ebenfalls leichter war.
 
 	An Nachteilen ist hier aufzulisten, dass es von den 3 Ideen am schwierigsten zu
- 	implementieren gewesen wäre und das es die langsamste Variante für die
- 	Informationsübertragung ist.
+ 	implementieren gewesen wÃ¤re und das es die langsamste Variante fÃ¼r die
+ 	InformationsÃ¼bertragung ist.
 
 
 
-Am Ende hatten wir uns für Idee 3 entschieden, da die Informationspakete klein genug sind, dass
-die Geschwindigkeit nicht leidet. Außerdem haben wir das Problem mit der Implementation
+Am Ende hatten wir uns fÃ¼r Idee 3 entschieden, da die Informationspakete klein genug sind, dass
+die Geschwindigkeit nicht leidet. AuÃŸerdem haben wir das Problem mit der Implementation
 dadurch umgangen, dass man den Open-Source-Treiber Lirc benutzt hat, sodass man nicht den
-Treiber selber schreiben musste, sondern nur über die Lircbibliothek mit dem Treiber
-kommunizieren musste. Der Vorteile eines externen Testgerätes war dann, den Vorteilen der anderen
-beiden Varianten stark überlegen.
+Treiber selber schreiben musste, sondern nur Ã¼ber die Lircbibliothek mit dem Treiber
+kommunizieren musste. Der Vorteile eines externen TestgerÃ¤tes war dann, den Vorteilen der anderen
+beiden Varianten stark Ã¼berlegen.
