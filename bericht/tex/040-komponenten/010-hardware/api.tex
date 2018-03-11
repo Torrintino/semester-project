@@ -13,11 +13,11 @@ Dabei werden Strings im Format von Google Protocol Buffers übertragen, denen je
 Nachrichten-ID und Nachrichtenlänge vorangestellt ist.
 Durch die Verwendung von Protocol Buffers ist es möglich, dass die verschiedenen Komponenten in
 unterschiedliche Programmiersprachen geschrieben werden können.
-Dieser Flexibilität und einer besseren Wartbarkeit, die neben relligiösen Gründen die Anlässe für
+Dieser Flexibilität und einer besseren Wartbarkeit, die neben religiösen Gründen die Anlässe für
 die Verwendung von Unix-Sockets und Google Protocol Buffers waren, stehen auf der anderen Seite ein
 größerer Kommunikationsoverhead gegenüber.
 Wegen der Rechenleistung der Raspberry Pis fällt dieser Overhead kaum ins Gewicht.
-Da wir die gewonne Flexibilität jedoch nicht genutzt haben und beide Komponenten in C++14
+Da wir die gewonnene Flexibilität jedoch nicht genutzt haben und beide Komponenten in C++14
 geschrieben sind, ist der Overhead letztendlich unnötig.
 Rückblickend wäre es auch einfacher gewesen, wenn die Hardware-Komponente auf den Clients direkt
 mit der Services-Komponente auf dem Server kommuniziert hätte, da wir uns später für eine
@@ -44,20 +44,20 @@ die die Kommunikation über die Socket-API abstrahieren.
 Dazu gehört auch das Puffern von unvollständigen empfangenen Nachrichten.
 Alternativ hätte man auch bestehende Bibliotheken wie boost verwenden können, die ebenfalls eine
 C++-Schnittstelle für die Netzwerkkommunikation zur Verfügung gestellt hätten.
-Dafür hätte man sich in diese Bibliothek erstmal einarbeiten müssen und da Manuel Radatz, der diese
+Dafür hätte man sich zuerst in diese Bibliothek einarbeiten müssen und da Manuel Radatz, der diese
 Komponente geschrieben hat, bereits Erfahrungen mit der C-Socket-API hatte, wäre das aufwendiger
 gewesen als die Implementierung der Wrapperklassen, weshalb sie am Ende nicht genutzt wurde.
 Da diese Wrapperklassen am Ende stabil liefen, war diese Entscheidung auch richtig.
 
 Eine weitere Klasse (\texttt{InterfaceToServices}) abstrahiert die Kommunikation mit dem
 Services-Client.
-Sie ist vorallem dafür zuständig, dass diese Kommunikation stabil bleibt und nach einem
+Sie ist hauptsächlich dafür zuständig, dass diese Kommunikation stabil bleibt und nach einem
 Verbindungsabbruch (z.B. wenn der Services-Client abgestürzt ist) wieder hergestellt wird.
-Bei dem Empfang von Nachrichten werden die zuvor von der \texttt{main()}-Funktion gesetetzten
+Bei dem Empfang von Nachrichten werden die zuvor von der \texttt{main()}-Funktion gesetzten
 Callback-Funktionen aufgerufen.
 
 Für die LED-Ansteuerung empfängt die Hardware-API vom Services-Client Nachrichten, in denen kodiert
-ist, welches Ereignis wann und wielange angezeigt werden soll.
+ist, welches Ereignis wann und wie lange angezeigt werden soll.
 Die Ereignisse, die übertragen werden, sind:
 \begin{itemize}
   \item
@@ -140,8 +140,8 @@ Die dadurch entstehende Latenz von bis zu 0,5 Millisekunden ist so niedrig, dass
 Auswirkungen auf das Spiel haben sollte.
 Wird der Button gedrückt, werden auch nicht in jeder Iteration IR-Daten gesendet.
 Dies würde zu einer Überbeanspruchung der IR-LED führen.
-Stattdessen werden ab dem Moment, in dem der Button runtergedrückt wird, nur alle 100 Millisekunden
-IR-Daten an den IR-Treiber übergeben.
+Stattdessen werden ab dem Moment, in dem der Button heruntergedrückt wird, nur alle 100
+Millisekunden IR-Daten an den IR-Treiber übergeben.
 
 Neben diesem regulären Ablauf wurden auch zahlreiche Features zum Testen implementiert, welche über
 Programmparameter ein- oder ausgeschaltet werden können.
