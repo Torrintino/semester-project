@@ -1,0 +1,86 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{a4}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{datetime}
+
+\hypersetup{
+    bookmarksnumbered,
+    colorlinks=true, % set true if you want colored links
+    linktoc=all,     % set to all if you want both sections and subsections linked
+    linkcolor=blue,  % choose some color if you want links to stand out
+    pdftitle={Semesterprojekt Kommunizierende System – Abschlussbericht},
+    pdfauthor={David Bachorska, Kevin Cornelius, Rafael Robert Hadamik, Angelina Jellinek,
+               Pascal Jochmann, Tom Kieseling, Dennis Ness, Manuel Radatz, Tim Sikatzki,
+               Jan Arne Sparka, Kevin Marc Trogant, Lennart Weiß}
+}
+
+\renewcommand\labelitemi{\scriptsize$\bullet$}
+
+\begin{document}
+\sloppy
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand\headrulewidth{0pt}
+\cfoot{\color{red} Rev.: PDF-Dokument erstellt am {\today} um {\currenttime} Uhr \\ % TODO
+       (Dieser Hinweis sollte vor der Abgabe noch entfernt werden!)} % TODO
+
+\begin{center}
+  \noindent \textbf{\LARGE \center Semesterprojekt \\ „Kommunizierende Systeme“}
+  
+  \vspace{0.3cm}
+  
+  \noindent \textbf{\LARGE \center „Lasertag – Nerd Style“}
+  
+  \vspace{1cm}
+  
+  \noindent \textbf{\large Wintersemester 2017/2018}
+  
+  \vspace{0.5cm}
+  
+  \noindent \textbf{\large Humboldt-Universität zu Berlin \\ Lehrstuhl für Technische Informatik}
+  
+  \vspace{1cm}
+  
+  \noindent \textbf{\LARGE Abschlussbericht}
+  
+  \vspace{2cm}
+  \noindent
+  \textbf{\large Teilnehmer:} \\
+  David Bachorska \\
+  Kevin Cornelius \\
+  Rafael Robert Hadamik \\
+  Angelina Jellinek \\
+  Pascal Jochmann \\
+  Tom Kieseling \\
+  Dennis Ness \\
+  Manuel Radatz \\
+  Tim Sikatzki \\
+  Jan Arne Sparka \\
+  Kevin Marc Trogant \\
+  Lennart Weiß
+\end{center}
+
+\pagebreak
+
+\cfoot{Seite \thepage \hspace{1pt} von \pageref*{LastPage}}
+
+\tableofcontents
+\pagebreak
+
+\include{./010-einleitung/einleitung}
+
+\include{./020-anforderungsanalyse/anforderungsanalyse}
+
+\include{./030-systemarchitektur/systemarchitektur}
+
+\include{./040-komponenten/komponenten}
+
+\include{./050-zusammenfassung/zusammenfassung}
+
+\end{document}

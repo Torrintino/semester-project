@@ -1,0 +1,28 @@
+\section{Komponenten}
+
+Aus der Anforderungsanalyse ergeben sich drei abstrakte Komponenten:
+\begin{enumerate}
+  \item
+    die Spielgeräte und hardwarebasierte Infrastruktur
+  \item
+    Kommunikation der Spielgeräte und softwareseitige Infrastruktur
+  \item
+    das Entwerfen eines Spielkonzepts und die Umsetzung in Software
+\end{enumerate}
+Es handelt sich hierbei um ein System mit mehreren Schichten, wobei jede Schicht Dienste für die
+darüberliegende Schicht anbietet.
+Man kann feststellen, dass die Trennung der Komponenten nicht sauber ist.
+Es ist zum Beispiel unklar, wo die hardwarebasierte Infrastruktur in die softwarebasierte übergeht,
+etwa bei Netzwerkprotokollen.
+
+Bei der Arbeit am Semesterprojekt haben wir den Komponenten entsprechend die Teilnehmer in drei
+Gruppen eingeteilt, welche abgekürzt als „\hyperref[hardware]{Hardware}“,
+„\hyperref[services]{Services}“ und „\hyperref[spielelogik]{Spielelogik}“ bezeichnet werden.
+In den folgenden Abschnitten werden die jeweiligen Gruppenmitglieder aufgezählt und die
+Arbeitsergebnisse derselben erläutert.
+
+\input{./040-komponenten/010-hardware/hardware}
+
+\input{./040-komponenten/020-services/services}
+
+\input{./040-komponenten/030-spielelogik/spielelogik}

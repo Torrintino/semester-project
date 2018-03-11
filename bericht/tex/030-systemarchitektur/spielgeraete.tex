@@ -1,0 +1,47 @@
+\subsection{Die Spielgeräte}
+
+Wie oben bereits beschrieben, war für das Nachbilden von Lasertag eine drahtlose Übertragungsmethode
+notwendig, die möglichst zuverlässig ist.
+Im realen Lasertag wird dafür Infrarot verwendet und es werden LEDs benutzt, um den Abschuss
+darzustellen.
+Auch in diesem Projekt fiel die Wahl auf Infrarot.
+Es ist im Gegensatz zu Laser nicht schädlich für die Augen und es können über eine größere Distanz
+zielgerichtet gesendet werden.
+Es gibt kostengünstige Komponenten wie LEDs und Sensoren, sowie Open Source Treiber für die
+Modellierung für Daten.
+Es reicht nicht aus, einfach nur zu erkennen, dass man getroffen wurde, weil es für die Spielregeln
+notwendig ist zu wissen, von welchem Spieler der Schuss kam.
+Diese Notwendigkeit ergibt sich daraus, das zwei Systeme die über das Netzwerk kommunizieren, dazu
+in der Lage sein müssen sich eindeutig zu identifizieren.
+Daher war es sehr nützlich, dass über Infrarot Daten versendet werden können, wie zum Beispiel bei
+Fernbedienungen.
+
+Die gegenseitige Identifizierung wurde so gelöst, dass das Spielgerät eines Spielers beim Abschuss
+eine ID versendet.
+Wenn der Sensor eines Spielers diese ID empfängt, weiß das Gerät von wem der Schuss kam und es weiß
+ebenso seine eigene ID.
+Daher hat es eine Information der Form: Spieler X hat Spieler Y getroffen.
+
+Als Gerät fiel die Wahl auf den Raspberry Pi Model Zero W. Die Entscheidung wurde getroffen, weil
+ein leichter, stromsparender Computer benötigt wurde, der freiprogrammierbar ist und mit
+Infrarotkomponenten erweitert werden kann.
+Für den kabellosen Betrieb werden Powerbanks verwendet, um die Geräte mit Strom zu versorgen.
+
+Als zu spielendes Netzwerkprotokoll haben wir eine vereinfachte Version von Bittorrent gewählt.
+Diese Wahl fiel unter anderem, da dieses Original auch in der Realität spielerische Elemente bietet.
+So gibt es im Netzwerk etwa Teilnehmer, die möglichst viel Datenvolumen von anderen beziehen wollen,
+ohne selber eine entsprechende Upload-Bandbreite anzubieten.
+Dieses Element der Fairness sollte eine zentrale Komponente im Spiel sein.
+
+Tatsächlich wurden mehrere Spielmodi implementiert.
+Dies geschah aus verschiedenen Gründen:
+\begin{enumerate}
+  \item
+    Es zwang uns eine modulare Architektur zu errichten, die völlig unabhängig vom gewählten
+    Spielmodus funktioniert.
+    Dadurch habe wir eine garantierte Flexibiltät, Änderungen an Spielmodi vornehmen zu können.
+  \item
+    Die Spielmodi haben eine unterschiedliche Reichhaltigkeit an Funktionen.
+    Dies ist nützlich für das Debugging, weil somit gezielt Features getestet und gewisse
+    Rahmenbedingungen je nach Spielmodus vernachlässigt werden können.
+\end{enumerate}

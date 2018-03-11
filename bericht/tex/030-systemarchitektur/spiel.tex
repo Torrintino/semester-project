@@ -1,0 +1,40 @@
+\subsection{Das Spiel}
+Zuvor wurde die grundlegende Infrastruktur beschrieben, mit der Informationen über Abschüsse
+ausgetauscht werden können.
+Das allein reicht für das Spiel noch nicht aus, weil die Spieler eine Möglichkeit brauchen eine
+Übersicht über den Spielstand zu behaupten.
+Dafür gibt es zwei Ansätze die verfolgt wurde: Eine Anzeige auf jedem Gerät über den Status des
+Spielers und eine Anzeige für den Server über den aktuellen Spielstand.
+
+Die Anzeige für die Spielgeräte wurde mit LEDs gelöst, die mit verschiedenen Farben anzeigen, ob ein
+anderer Spiel getroffen wurde, ob man unverwandbar ist, etc. Dies ist eine preiswerte Möglichkeit,
+die durch die GPIO Anschlüsse der Raspberry Pis unterstützt wird.
+
+Die Anzeige des Servers wurde mit einer Website umgesetzt die tabellarische das Scoreboard anzeigt.
+Die Webseite soll auf einem oder mehreren Bildschirmen dargestellt werden, die auf das gesammte
+Spielfeld verteilt werden.
+
+In diesen Entscheidung spiegelt sich wieder, dass Spieler regelmäßig erfahren wollen, ob sie noch im
+Spiel sind oder ob sie einen anderen Spieler getroffen haben. Daher muss es eine Möglichkeit geben
+die entsprechende Anzeige sehr schnell und einfach zu überprüfen. Der aktuelle Spielstand muss
+seltener angesehen werden, daher ist es in Ordnung, wenn der Spieler einige Sekunden braucht, um auf
+die Website zu schauen.
+
+Letztendlich muss auch auf Fairness geachtet werden.
+Daher ist es wichtig, dass die Fähigkeit andere Spieler abzuschießen limitiert ist.
+Dies muss auf mehrere Weisen geschehen:
+\begin{enumerate}
+  \item
+    Die Streuung von Abschüssen muss eingeschränkt sein.
+    Dies wurde gelöst, indem Strohhalme über die LEDs gestülpt wurden, die das Aussenden des Signals
+    in eine bestimmte Richtung lenken.
+  \item
+    Ein Spieler darf nicht konstant schießen, es muss also eine Art Abklingzeit geben.
+    Dafür wurde an den Geräten ein Button angebracht, sodass das Gerät nur schießt, wenn der Button
+    gedrückt wurde und nicht mehr schießen kann, bis er wieder losgelassen wurde.
+  \item
+    Damit ein Spieler nicht mehrmals hintereinander getroffen werden kann, gibt es bei vielen
+    Spielmodi eine kurze Unverwundbarkeitszeit, nachdem ein Spieler getroffen wurde.
+    In dieser Zeit hat der getroffene die Möglichkeit sich so zu positionieren, dass er nicht erneut
+    getroffen wird.
+\end{enumerate}

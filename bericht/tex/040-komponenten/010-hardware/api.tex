@@ -1,0 +1,171 @@
+\subsubsection{Die Hardware-API}
+
+Dieser Abschnitt erklärt die Komponente, die für die Kommunikation zwischen der Hardware-Komponente
+und der Services-Komponente zuständig ist.
+Für diese Aufgabe war Manuel Radatz verantwortlich.
+
+Wir haben uns dafür entschieden, dass die Hardware-Komponente und die Services-Komponente jeweils
+verschiedene Programme darstellen.
+Die Kommunikation erfolgt somit \textit{nicht} beispielsweise dadurch, dass von der
+Services-Komponente eine Bibliothek verwendet wird, die die Hardware-Komponente bereitstellt,
+sondern über Unix-Sockets.
+Dabei werden Strings im Format von Google Protocol Buffers übertragen, denen jeweils ein Header mit
+Nachrichten-ID und Nachrichtenlänge vorangestellt ist.
+Durch die Verwendung von Protocol Buffers ist es möglich, dass die verschiedenen Komponenten in
+unterschiedliche Programmiersprachen geschrieben werden können.
+Dieser Flexibilität und einer besseren Wartbarkeit, die neben relligiösen Gründen die Anlässe für
+die Verwendung von Unix-Sockets und Google Protocol Buffers waren, stehen auf der anderen Seite ein
+größerer Kommunikationsoverhead gegenüber.
+Wegen der Rechenleistung der Raspberry Pis fällt dieser Overhead kaum ins Gewicht.
+Da wir die gewonne Flexibilität jedoch nicht genutzt haben und beide Komponenten in C++14
+geschrieben sind, ist der Overhead letztendlich unnötig.
+Rückblickend wäre es auch einfacher gewesen, wenn die Hardware-Komponente auf den Clients direkt
+mit der Services-Komponente auf dem Server kommuniziert hätte, da wir uns später für eine
+Client-Server-Architektur entschieden hatten.
+Würde man das Projekt noch weiterentwickeln, könnte die jetzige Architektur allerdings noch von
+Vorteil sein.
+
+Die API besteht aus einem in C++14 geschriebenen Programm, welches auf allen Clients, jedoch nicht
+auf dem Server läuft.
+C++ war für diese Aufgabe sehr gut geeignet.
+Die Sprache hat einen sehr geringen Overhead und bietet die notwendige Flexibilität.
+Hauptsächlich erfolgte diese Entscheidung jedoch wegen bereits vorhandenen Programmierkenntnissen
+in dieser Sprache.
+Die Entscheidung für die Version C++14 beruht einfach darauf, dass dies die höchste Version ist, die
+die GCC-Version, die Raspbian zur Verfügung stellt, unterstützt.
+Die API kommuniziert nach oben mit dem Services-Client über Unix-Sockets und Protocol Buffers.
+Nach unten kommuniziert sie mit dem Infrarot-Treiber, indem dessen Source-Code bei der Kompilierung
+der API direkt eingebunden wird, und sie spricht die LEDs und den Button direkt über wiringPi an.
+
+Für die Kommunikation nach oben wird die Socket-API der C-Standardbibliothek genutzt.
+Für die Einbettung in C++ und der Nutzbarkeit nach dem in dieser Sprache üblichen RAII-Prinzip,
+wurden für die Unix-Sockets und die TCP-Kommunikation der Testprogramme Wrapperklassen geschrieben,
+die die Kommunikation über die Socket-API abstrahieren.
+Dazu gehört auch das Puffern von unvollständigen empfangenen Nachrichten.
+Alternativ hätte man auch bestehende Bibliotheken wie boost verwenden können, die ebenfalls eine
+C++-Schnittstelle für die Netzwerkkommunikation zur Verfügung gestellt hätten.
+Dafür hätte man sich in diese Bibliothek erstmal einarbeiten müssen und da Manuel Radatz, der diese
+Komponente geschrieben hat, bereits Erfahrungen mit der C-Socket-API hatte, wäre das aufwendiger
+gewesen als die Implementierung der Wrapperklassen, weshalb sie am Ende nicht genutzt wurde.
+Da diese Wrapperklassen am Ende stabil liefen, war diese Entscheidung auch richtig.
+
+Eine weitere Klasse (\texttt{InterfaceToServices}) abstrahiert die Kommunikation mit dem
+Services-Client.
+Sie ist vorallem dafür zuständig, dass diese Kommunikation stabil bleibt und nach einem
+Verbindungsabbruch (z.B. wenn der Services-Client abgestürzt ist) wieder hergestellt wird.
+Bei dem Empfang von Nachrichten werden die zuvor von der \texttt{main()}-Funktion gesetetzten
+Callback-Funktionen aufgerufen.
+
+Für die LED-Ansteuerung empfängt die Hardware-API vom Services-Client Nachrichten, in denen kodiert
+ist, welches Ereignis wann und wielange angezeigt werden soll.
+Die Ereignisse, die übertragen werden, sind:
+\begin{itemize}
+  \item
+    Spieler wurde getroffen und ist unverwundbar – mit der Information, wie lange der Spieler
+    unverwundbar ist
+  \item
+    Spieler hat einen anderen Spieler getroffen – optional mit der Information, wie lange das dem
+    Spieler angezeigt werden soll
+  \item
+    Spiel startet – mit der Information, wann das Spiel startet und wie lange das Spiel läuft
+  \item
+    Spiel endet – mit der Information wann
+  \item
+    Spieler tot
+  \item
+    letztes Leben
+\end{itemize}
+Nicht alle Ereignisse werden in allen Spielmodi genutzt.
+So gibt es beispielsweise Spielmodi, in dem es das Konzept von „Leben“ nicht gibt.
+Das Ereignis „Spiel endet“ ist auch nur dann notwendig, wenn bei dem Ereignis „Spiel startet“ nicht
+übertragen wurde, wie lange das Spiel läuft.
+
+Wir haben jeweils eine rote, eine gelbe und eine grüne LED, die wie auf einer Ampel angeordnet sind.
+Für Menschen mit Rot-Grün-Schwäche könnte man Prototypen bauen, bei dem die grüne LED durch eine
+blaue LED ersetzt wird.
+Mit diesen LEDs werden die verschiedenen Ereignisse kodiert.
+Läuft kein Spiel und ist auch kein Spiel angekündigt, so leuchten alle LEDs der Reihe nach auf.
+Dadurch können defekte, sowie nicht- oder falsch-angeschlossene LEDs schon direkt nach dem
+Einschalten der Spielgeräte erkannt werden.
+Wird ein Spiel angekündigt, so fangen alle LEDs synchron an zu blinken.
+10 Sekunden vor dem Spielstart blinkt dann nur noch die rote LED und 4 Sekunden davor schalten die
+LEDs, analog zu einer deutschen Ampel, von rot über rot-gelb auf grün.
+Die grüne LED zeigt an, dass das Spiel läuft.
+Neigt sich das Spiel dem Ende zu, fängt die grüne LED 64 Sekunden vorher langsam an zu blinken und
+blinkt bis zum Ende des Spiels immer schneller.
+Nach dem Spielende kehren die LEDs zum initialen Zustand zurück.
+Wenn das Spiel läuft, zeigt das Blinken der roten LED an, wenn man getroffen wurde und unverwundbar
+ist.
+Auch sie wird immer schneller, wenn die Zeit der Unverwundbarkeit abläuft.
+Zeigt die LED Dauerrot, dann ist man tot.
+In diesem Zustand ist es auch nicht mehr möglich, andere Spieler abzuschießen, d.h. der IR-Sender
+wird deaktiviert.
+Die gelbe LED zeigt an, dass man einen anderen Spieler getroffen hat.
+Das letzte Leben wird dadurch angezeigt, dass die rote und die gelbe LED etwa alle 2 Sekunden für
+100 Millisekunden synchron aufleuchten.
+
+Ursprünglich wollten wir anstelle von LEDs ganze Displays verwenden, um auch individuelle
+Informationen als Text anzeigen zu können.
+Neben des begrenzten Budgets und der Tatsache, dass Informationen dieser Art auch auf der Webseite
+angezeigt werden können, war auch die begrenzte Zeit ein Grund dafür, dass wir diese Idee verworfen
+haben.
+
+Die LED-Ansteuerung erfolgt ebenfalls in einer eigenen Klasse namens \texttt{LEDEventStatus}.
+Diese ruft direkt Funktionen von wiringPi auf, verwaltet alle Daten, die zur korrekten
+LED-Ansteuerung notwendig sind (auch die Timer) und interpretiert als Eingabe das von Services
+empfangene Zahlentripel.
+
+Der Status des Button wird direkt in der \texttt{main()}-Funktion durch Aufrufe der
+wiringPi-Funktionen abgefragt.
+
+Die \texttt{main()}-Funktion besteht abgesehen von der Initialisierung aus einer Schleife, die erst
+dann beendet wird, wenn das Programm \texttt{SIGTERM} empfängt.
+Dort besteht jede Iteration aus:
+\begin{itemize}
+  \item
+    das Abfragen, ob Nachrichten vom Services-Client angekommen sind, welche dann auch durch das
+    Aufrufen von Callback-Funktionen interpretiert werden,
+  \item
+    die Aktualisierung des LED-Status,
+  \item
+    die Abfrage des Buttons, ob dieser gedrückt wird, wobei in diesem Fall die eigene Client-ID an
+    den IR-Sender gesendet wird und
+  \item
+    das Abfragen des IR-Sensors, ob Daten empfangen wurden sowie die Weiterleitung dieser an den
+    Services-Client.
+\end{itemize}
+Danach wartet das Programm 0,5 Millisekunden, um die CPU-Auslastung gering und folglich die
+Temperatur des Prozessors niedrig zu halten und die Lebensdauer des Akkumulators zu erhöhen.
+Die dadurch entstehende Latenz von bis zu 0,5 Millisekunden ist so niedrig, dass sie keine spürbaren
+Auswirkungen auf das Spiel haben sollte.
+Wird der Button gedrückt, werden auch nicht in jeder Iteration IR-Daten gesendet.
+Dies würde zu einer Überbeanspruchung der IR-LED führen.
+Stattdessen werden ab dem Moment, in dem der Button runtergedrückt wird, nur alle 100 Millisekunden
+IR-Daten an den IR-Treiber übergeben.
+
+Neben diesem regulären Ablauf wurden auch zahlreiche Features zum Testen implementiert, welche über
+Programmparameter ein- oder ausgeschaltet werden können.
+Ist kein Button vorhanden, so besteht die Möglichkeit, dass ohne Unterbrechung alle 500
+Millisekunden die eigene Client-ID an der IR-Sender gesendet wird.
+Ist kein IR-Empfänger funktionsfähig, wird das Programm auf anderer Hardware ausgeführt oder soll
+die Kommunikation mit dem Services-Client getestet werden, gibt es zusätzlich einen automatischen
+und einen manuellen Testmodus.
+Im automatischen Testmodus werden regelmäßig zufällige Daten an den Services-Client gesendet, als
+wären sie von dem IR-Sensor empfangen worden.
+Im manuellen Testmodus kann man manuell Testdaten eingeben, die gesendet werden sollen.
+In beiden Testmodi wird der LED-Status auch auf der Konsole ausgegeben.
+Dadurch sind Tests auch ziemlich einfach in virtuellen Umgebungen ohne die Hardware möglich.
+
+Außerdem wurden Stubs implementiert, welche den Services-Client ersetzen können, sodass auch
+andersherum die Hardware ohne Services getestet werden kann.
+Dazu gehört ein Stub, der LED-Daten an die Hardware-API sendet und ein Paar von Stubs, von denen
+einer auf den Clients und einer auf dem Server läuft, der alle empfangenden IR-Daten auf dem Server
+ausgibt.
+
+Die Hardware-API läuft im fertigen System als Daemon.
+Sie kann aber auch als gewöhnliches Programm gestartet werden, was zum Testen auch notwendig ist.
+
+Der build-Prozess erfolgt durch eine einzige Makefile.
+Wegen der Einfachheit des Programms und der Tatsache, dass die Programme gezielt für ein bestimmtes
+System entwickelt worden sind, wäre die Nutzung von cmake oder des GNU Build Systems überflüssig.
+

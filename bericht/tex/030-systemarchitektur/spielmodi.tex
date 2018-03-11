@@ -1,0 +1,27 @@
+\subsection{Die Spielmodi}
+
+Es wurde entschieden, dass die Spielelogik möglichst vom Backend getrennt sein soll.
+Deswegen wurde sie in Form von LUA-Skripts gekapselt und wird vom Server eingebunden.
+Die Schnittstelle zwischen diesen beiden Komponenten ist ein Informationsaustausch.
+Der Server gibt Spielparameter und Abschussinformationen an LUA weiter und die Spielelogik gibt die
+resultieren Auswirkung auf den Spielstand zurück, damit dieser auf der Website und den Geräten
+angezeigt werden kann.
+
+Als zu spielendes Netzwerkprotokoll haben wir eine vereinfachte Version von Bittorrent gewählt.
+Diese Wahl fiel unter anderem, da dieses Original auch in der Realität spielerische Elemente bietet.
+So gibt es im Netzwerk etwa Teilnehmer, die möglichst viel Datenvolumen von anderen beziehen wollen,
+ohne selber eine entsprechende Upload-Bandbreite anzubieten.
+Dieses Element der Fairness sollte eine zentrale Komponente im Spiel sein.
+
+Tatsächlich wurden mehrere Spielmodi implementiert.
+Dies geschah aus verschiedenen Gründen:
+\begin{enumerate}
+  \item
+    Es zwang uns eine modulare Architektur zu errichten, die völlig unabhängig vom gewählten
+    Spielmodus funktioniert.
+    Dadurch habe wir eine garantierte Flexibiltät, Änderungen an Spielmodi vornehmen zu können.
+  \item
+    Die Spielmodi haben eine unterschiedliche Reichhaltigkeit an Funktionen.
+    Dies ist nützlich für das Debugging, weil somit gezielt Features getestet und gewisse
+    Rahmenbedingungen je nach Spielmodus vernachlässigt werden können.
+\end{enumerate}

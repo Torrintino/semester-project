@@ -1,0 +1,25 @@
+\subsection{Netzwerkarchitektur}
+Informationen über Abschüsse müssen eine entsprechende Auswirkung auf den Spielstand haben.
+Eine Option dafür wäre, dieselbe Applikation auf jedem Gerät zu installieren und ein P2P Netzwerk zu
+errichten, in dem sich die Geräte konstant über den gegenwärtigen Spielstand austauschen.
+Daraus resultiert jedoch ein sehr kompliziertes Protokoll zur Synchronisierung, insbesondere weil
+ein Gerät mitten im Spiel die Verbindung verlieren könnte.
+Stattdessen wurde eine simplere Client-Server Architektur gewählt, in der Clients lediglich
+Informationen sammeln und diese an den Server weiterreichen.
+Der Server wertet sie aus und gibt Informationen über den Spielstand an die Clients zurück.
+Durch diese Architektur werden viele potenzielle Logikfehler, die sich durch konkurrente Nachrichten
+ergeben, eliminiert.
+
+Die Clients und der Server verwenden zur Kommunikation WLAN. Dies ist die naheliegendste Lösung, die
+Technik ist zuverlässig und Verbindungsprobleme werden größtenteils durch den TCP/IP Stack des
+Betriebssystems gelöst.
+Um ein weitaufspannendes Feld zu errichten, wäre es notwendig mehrere Access Points (AP) zu
+errichten, die sich mit Roaming austauschen.
+Es wurde allerdings entschieden, dass dies den Rahmen des Projekts sprengen würde und es wurde der
+Einfachheit halber entschieden, den Server auch gleichzeitig als AP einzusetzen, womit theoretisch
+ein Spielfeld unterstützt wird, dass mehrere Räume umspannt.
+
+Für den Server wurde ebenfalls ein Raspberry Pi (Model B+) verwendet, ein Desktop PC wäre jedoch
+genauso geeignet gewesen.
+Der Raspi wurde verwendet, weil es für die Entwicklung praktisch war einen Minicomputer zu haben,
+der leicht zu transportieren ist und als WLAN AP verwendet werden kann.

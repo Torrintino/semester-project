@@ -1,0 +1,25 @@
+\subsubsection{Installation des Projekts}
+
+Dieser Abschnitt erläutert, wie die einzelnen Komponenten des Projekts auf die Geräte verteilt
+werden.
+Für diese Aufgabe war Lennart Weiß verantwortlich.
+
+Der gesamte Source Code für den verschiedenen Komponenten befindet sich in einem Git repository.
+Um die neueste Version des Projekts auf die Geräte zu verteilen, wird auf dem Server ein Skript
+aufgerufen, welches zuerst die einzelnen Komponenten kompiliert und die erforderlichen Dateien
+installiert.
+
+Dies sind die Komponenten die installiert werden müssen: services-server, services-website, mysql
+auf dem Server und services-client, hardware-api und lirc auf dem Client.
+Dabei sind mysql und lirc externe Komponenten, die anderen wurden von uns entwickelt.
+
+Für jede Komponente wird eine Systemd Unit definiert und entweder auf dem Server, oder auf allen
+Clients verteilt.
+Es ist erwünscht, dass die verschiedenen Services nach dem Systemstart automatisch gestartet werden
+und mit Systemd können Abhängigkeiten und die richtige Reihenfolge festgelegt werden.
+Auf den Clients ist services-client von hardware-api abhängig und letzteres von lircd.
+Auf dem Server hängt services-server von services-website und diese wiederum von mysql ab.
+Die Prozesse werden also durch das Betriebssystem verwaltet und sollte einer abstürzen, lassen sich
+die Logs mit journalctl nachlesen.
+Das verwalten vieler Prozesse auf mehreren Geräten lässt sich somit besser handhaben.
+
