@@ -1,7 +1,7 @@
 \subsubsection{Die Hardware-API}
 
-Dieser Abschnitt erklärt die Komponente, die für die Kommunikation zwischen der Hardware-Komponente
-und der Services-Komponente zuständig ist.
+Dieser Abschnitt erklärt den Teil der Hardware-Komponente, die für die Kommunikation mit der
+Services-Komponente sowie der Ansteuerung des Buttons und der LEDs zuständig ist.
 Für diese Aufgabe war Manuel Radatz verantwortlich.
 
 Wir haben uns dafür entschieden, dass die Hardware-Komponente und die Services-Komponente jeweils
@@ -81,7 +81,7 @@ Das Ereignis „Spiel endet“ ist auch nur dann notwendig, wenn bei dem Ereigni
 übertragen wurde, wie lange das Spiel läuft.
 
 Wir haben jeweils eine rote, eine gelbe und eine grüne LED, die wie auf einer Ampel angeordnet sind.
-Für Menschen mit Rot-Grün-Schwäche könnte man Prototypen bauen, bei dem die grüne LED durch eine
+Für Menschen mit Rot-Grün-Schwäche könnte man Prototypen bauen, bei denen die grüne LED durch eine
 blaue LED ersetzt wird.
 Mit diesen LEDs werden die verschiedenen Ereignisse kodiert.
 Läuft kein Spiel und ist auch kein Spiel angekündigt, so leuchten alle LEDs der Reihe nach auf.
@@ -105,10 +105,14 @@ Das letzte Leben wird dadurch angezeigt, dass die rote und die gelbe LED etwa al
 100 Millisekunden synchron aufleuchten.
 
 Ursprünglich wollten wir anstelle von LEDs ganze Displays verwenden, um auch individuelle
-Informationen als Text anzeigen zu können.
+Informationen als Text oder eine Karte des Spielfeldes mit allen Mitspielern anzeigen zu können.
 Neben des begrenzten Budgets und der Tatsache, dass Informationen dieser Art auch auf der Webseite
 angezeigt werden können, war auch die begrenzte Zeit ein Grund dafür, dass wir diese Idee verworfen
 haben.
+Auch die Karte wurde nicht umgesetzt, da für die zuverlässige und genaue Positionsermittlung eines
+Spielers in geschlossenen Räumen diverse Probleme zeit- und kostenintensiv gelöst werden müssten und
+dies jenseits unserer Möglichkeiten in diesem Projekt gewesen wäre.
+(Trotzdem wurde zunächst sehr viel Zeit in diese Idee investiert.)
 
 Die LED-Ansteuerung erfolgt ebenfalls in einer eigenen Klasse namens \texttt{LEDEventStatus}.
 Diese ruft direkt Funktionen von wiringPi auf, verwaltet alle Daten, die zur korrekten
@@ -146,26 +150,26 @@ Millisekunden IR-Daten an den IR-Treiber übergeben.
 Neben diesem regulären Ablauf wurden auch zahlreiche Features zum Testen implementiert, welche über
 Programmparameter ein- oder ausgeschaltet werden können.
 Ist kein Button vorhanden, so besteht die Möglichkeit, dass ohne Unterbrechung alle 500
-Millisekunden die eigene Client-ID an der IR-Sender gesendet wird.
-Ist kein IR-Empfänger funktionsfähig, wird das Programm auf anderer Hardware ausgeführt oder soll
-die Kommunikation mit dem Services-Client getestet werden, gibt es zusätzlich einen automatischen
-und einen manuellen Testmodus.
+Millisekunden die eigene Client-ID an den IR-Sender gesendet wird.
+Wenn kein IR-Empfänger funktionsfähig ist, das Programm auf anderer Hardware ausgeführt wird oder
+nur die Kommunikation mit dem Services-Client getestet werden soll, gibt es zusätzlich einen
+automatischen und einen manuellen Testmodus.
 Im automatischen Testmodus werden regelmäßig zufällige Daten an den Services-Client gesendet, als
-wären sie von dem IR-Sensor empfangen worden.
+wären diese von dem IR-Sensor empfangen worden.
 Im manuellen Testmodus kann man manuell Testdaten eingeben, die gesendet werden sollen.
 In beiden Testmodi wird der LED-Status auch auf der Konsole ausgegeben.
 Dadurch sind Tests auch ziemlich einfach in virtuellen Umgebungen ohne die Hardware möglich.
 
 Außerdem wurden Stubs implementiert, welche den Services-Client ersetzen können, sodass auch
-andersherum die Hardware ohne Services getestet werden kann.
-Dazu gehört ein Stub, der LED-Daten an die Hardware-API sendet und ein Paar von Stubs, von denen
-einer auf den Clients und einer auf dem Server läuft, der alle empfangenden IR-Daten auf dem Server
-ausgibt.
+andersherum die Hardware ohne Services getestet oder demonstriert werden kann.
+Dazu gehört ein Stub, der LED-Ereignisse an die Hardware-API sendet und ein Paar von Stubs, von
+denen einer auf den Clients und einer auf dem Server läuft, der alle empfangenden IR-Daten auf dem
+Server ausgibt.
 
 Die Hardware-API läuft im fertigen System als Daemon.
 Sie kann aber auch als gewöhnliches Programm gestartet werden, was zum Testen auch notwendig ist.
 
 Der build-Prozess erfolgt durch eine einzige Makefile.
 Wegen der Einfachheit des Programms und der Tatsache, dass die Programme gezielt für ein bestimmtes
-System entwickelt worden sind, wäre die Nutzung von cmake oder des GNU Build Systems überflüssig.
-
+System entwickelt worden sind, wäre die Nutzung von cmake oder des GNU Build Systems überflüssig
+gewesen.
