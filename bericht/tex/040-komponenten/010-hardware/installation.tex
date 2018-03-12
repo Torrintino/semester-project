@@ -23,3 +23,20 @@ Die Prozesse werden also durch das Betriebssystem verwaltet und sollte einer abs
 die Logs mit journalctl nachlesen.
 Das verwalten vieler Prozesse auf mehreren Geräten lässt sich somit besser handhaben.
 
+Um die benötigten Binaries zu kompilieren wird die benötigte Version aus dem Git-Repository gepullt.
+Dann wird ein Skript aufgerufen, welches in die verschiedenen Ordner der Komponenten geht und
+Makefiles aufruft.
+Diese erzeugen dann die erfordlichen Dateien.
+Wenn die auf dem Server benötigt werden, werden sie direkt in \texttt{/usr/bin} oder
+\texttt{/usr/lib} kopiert, je nachdem welchen Zweck sie erfüllen.
+Die entsprechenden Systemd Units werden dann neu gestartet.
+Werden die Dateien auf den Clients benötigt, werden sie in das Puppet Code Verzeichnis kopiert.
+Wurden diese Dateien noch nicht zuvor verwendet, muss darüber hinaus noch die Konfiguration von
+Puppet angepasst werden.
+Die Verteilung wird dann über Puppet automatisiert.
+
+Es gibt auch einige Dateien, die verteilt werden müssen und nicht kompiliert werden müssen.
+Die Website wird einfach vom Git Verzeichnis als Ordner nach \texttt{/usr/bin/services-website}
+kopiert.
+Die Systemd Unit startet Flask und der Pfad der Flask Applikation wird exportiert.
+Die Spielmodi werden ebenfalls aus Git heruntergeladen und nach \texttt{/var/lib/spielmodi} kopiert.
