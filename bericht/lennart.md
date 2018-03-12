@@ -124,15 +124,22 @@ Der Server ist ein Raspberry Pi Model B+. Er hat zwei physikalische Netzwerkinte
 
 Auf dem Server ist Raspbian Lite installiert. Das Gerät lässt sich auch durch einen beliebigen anderen PC austauschen, dass besagte Netzwerkschnittstellen besitzt und auf dem Debian installiert werden kann (was den meisten gängigen Prozessorarchitekturen möglich ist). Raspbian wurde vor allem wegen seiner weiten Verbreitung gewählt und Stabilität gewählt. Für Probleme bei der Serverinstallation kann im Regelfall eine Suche in Debianforen und ähnlichem eine Lösung gefunden und auf Raspbian übertragen werden.
 
-Der Server ist im wesentlichen ein Wifi Access Point und Router. Die Clients können sich mit ihm über WLAN verbinden und bekommen über DHCP eine IP Adresse, behalten jedoch ihren Hostname. Der Server fungiert als DNS Server, daher können sich die Geräte untereinander mit dem Hostname ansprechen. Die IP Adressen sind nicht statisch und im gesamten Projekt soll generell mit den Hostnames gearbeitet werden. Damit wird eine Abstraktion geschaffen, die es ermöglicht die Netzwerkkonfiguration zu verändern, ohne das entsprechende Änderungen an den Applikationen vorgenommen werden müssen.
-
-Die Routerfunktionalität wurde vor allem deswegen implementiert, weil die Clients über das Internet Pakete und Updates beziehen müssen. Wenn der Router einen entsprechenden Internetuplink besitzt, leitet er die Pakete der Clients nach außen durch und umgekehrt. Durch den Einsatz von NAS benötigt der Server nur eine eigene IP Adresse, aber keine für die Clients. Das Arbeiten und Debuggen am Server und den Clients macht es oft notwendig, dass sich der Entwickler im WLAN Netz einloggt. Daher ist es ein nützlicher Nebeneffekt, dass er weiterhin auf das Internet zugreifen kann, wenn er mit dem Netzwerk verbunden ist. Damit der Server sowohl lokale als auch globale URIs auflösen kann, muss er auf dem Client als Nameserver hinzugefügt werden. Er fungiert als DNS Cache, Anfragen an externe Ressourcen werden an einen anderen Nameserver weitergeleitet.
-
 Auf dem Server ist ein Puppetmaster eingerichtet. Damit kann genau festgelegt werden, welche Software auf die Clients verteilt werden soll und die Installation kann automatisiert werden. Für jeden Client muss auf dem Server ein Zertifikat signiert werden, dieser manuelle Schritt wird jedoch nur einmal bei der Erstinstallation des Client vorgenommen.
+
+Für die möglichst schnelle Installation der Spielgeräte wurde ein Image mit
+Raspbian vorbereitet, in dem eine deutsche Lokalisierung mit englischer Sprache
+eingestellt wurde und ein Puppet Client installiert ist. Außerdem wurde die WLAN SSID und das Passwort eingerichtet und der Client verbindet sich nach dem Boot Vorgang automatisch per wpa_supplicant mit dem Server.  Um den Kopiervorgang zu beschleunigen, wurde das Image auf die minimale Größe (ca. 2G) gehalten. Dadurch kann das Image in wenigen Minuten auf eine SD Karte geschrieben und in den neuen Raspberry Pi eingesetzt werden. Außerdem kann die SD Karte eine beliebige Größe haben.
+
+Um den Installationsvorgang zu beenden, muss auf man sich per SSH auf dem Client einloggen. Per raspi-config wird das Filesystem auf die maximale Größe eingestellt und der Hostname eingestellt. Dieser ist `client-x`, wobei x die Client ID bezeichnet, welche vorher eindeutig an jedes Gerät vergeben wird. Die Geräte sind entsprechend beschriftet, damit sie identifiziert werden können. Schließlich werden mit Puppet alle benötigten Komponenten installiert und der Client ist einsatzbereit.
 
 #### Netzwerkkonfiguration
 
 Dieser Abschnitt erläutert die Netzwerkinfrastruktur des Projekts. Für diese Aufgabe war Lennart Weiß verantwortlich.
+
+Der Server ist im wesentlichen ein Wifi Access Point und Router. Die Clients können sich mit ihm über WLAN verbinden und bekommen über DHCP eine IP Adresse, behalten jedoch ihren Hostname. Der Server fungiert als DNS Server, daher können sich die Geräte untereinander mit dem Hostname ansprechen. Die IP Adressen sind nicht statisch und im gesamten Projekt soll generell mit den Hostnames gearbeitet werden. Damit wird eine Abstraktion geschaffen, die es ermöglicht die Netzwerkkonfiguration zu verändern, ohne das entsprechende Änderungen an den Applikationen vorgenommen werden müssen.
+
+Die Routerfunktionalität wurde vor allem deswegen implementiert, weil die Clients über das Internet Pakete und Updates beziehen müssen. Wenn der Router einen entsprechenden Internetuplink besitzt, leitet er die Pakete der Clients nach außen durch und umgekehrt. Durch den Einsatz von NAS benötigt der Server nur eine eigene IP Adresse, aber keine für die Clients. Das Arbeiten und Debuggen am Server und den Clients macht es oft notwendig, dass sich der Entwickler im WLAN Netz einloggt. Daher ist es ein nützlicher Nebeneffekt, dass er weiterhin auf das Internet zugreifen kann, wenn er mit dem Netzwerk verbunden ist. Damit der Server sowohl lokale als auch globale URIs auflösen kann, muss er auf dem Client als Nameserver hinzugefügt werden. Er fungiert als DNS Cache, Anfragen an externe Ressourcen werden an einen anderen Nameserver weitergeleitet.
+
 
 #### Installation des Projekts
 
@@ -144,7 +151,9 @@ Dies sind die Komponenten die installiert werden müssen: services-server, servi
 
 Für jede Komponente wird eine Systemd Unit definiert und entweder auf dem Server, oder auf allen Clients verteilt. Es ist erwünscht, dass die verschiedenen Services nach dem Systemstart automatisch gestartet werden und mit Systemd können Abhängigkeiten und die richtige Reihenfolge festgelegt werden. Auf den Clients ist services-client von hardware-api abhängig und letzteres von lircd. Auf dem Server hängt services-server von services-website und diese wiederum von mysql ab. Die Prozesse werden also durch das Betriebssystem verwaltet und sollte einer abstürzen, lassen sich die Logs mit journalctl nachlesen. Dass verwalten vieler Prozesse auf mehreren Geräten lässt sich somit besser handhaben.
 
+Um die benötigten Binaries zu kompilieren wird die benötigte Version aus dem Git Repository gepullt. Dann wird ein Skript aufgerufen, welches in die verschiedenen Ordner der Komponenten geht und Makefiles aufruft. Diese erzeugen dann die erfordlichen Dateien. Wenn die auf dem Server benötigt werden, werden sie direkt in /usr/bin oder /usr/lib kopiert, je nachdem welchen Zweck sie erfüllen. Die entsprechenden Systemd Units werden dann neu gestartet. Werden die Dateien auf den Clients benötigt, werden sie in das Puppet Code Verzeichnis kopiert. Wurden diese Dateien noch nicht zuvor verwendet, muss darüber hinaus noch die Konfiguration von Puppet angepasst werden. Die Verteilung wird dann über Puppet automatisiert.
 
+Es gibt auch einige Dateien die verteilt werden müssen und nicht kompiliert werden müssen. Die Website wird einfach vom Git Verzeichnis als Ordner nach /usr/bin/services-website kopiert. Die Systemd Unit startet Flask und der Pfad der Flask Applikation wird exportiert. Die Spielmodi werden ebenfalls aus Git heruntergeladen und nach /var/lib/spielmodi kopiert.
 
 ### Services
 
