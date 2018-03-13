@@ -1,0 +1,67 @@
+\subsubsection{API zu Services Komponente}
+Als grundsätzliche Designentscheidung verwendet jeder Spielmodus ein eigenes Lua Skript.
+Dies ist sinnvoll, da sich die Spielmodi teils massiv unterscheiden, denn es gibt z.B. je nach
+Spielmodus vollkommen verschiedenen Start- und Siegbedingungen. Somit muss es
+zwischen der Spiellogik und der Services Komponente klar sein, welches Lua Skript bzw.
+Spielmodus gerade gespielt wird. Dieses Problem wird gelöst durch die Art und Weise, wie
+ein Lua Skript in C++ eingebunden wird.
+
+Denn die API zu der Services Komponente nutzt die von Lua bereitgestellte C++ API. Somit
+ist es problemlos möglich, sowohl Funktionen von C++ heraus in den Lua Skripten
+aufzurufen, als auch von den Lua Skripten aus C++ Funktionen aufzurufen. Hier wurden
+beide Richtungen genutzt und gebraucht, wobei über das gesamte Spiel und auch der
+Anzahl der Funktionen hinweggesehen die meisten Aufrufe von den Lua Skripten zu den C++ Funktionen laufen.
+
+Die Entwicklung der API ging stark einher mit der Entwicklung des Simulators, da dieser die
+API verwendet. Es war also erforderlich möglichst schnell eine stabile API zu haben, um mit
+der Entwicklung der Spielmodi beginnen zu können. Aufgrund dieser frühen Festlegung
+blieb zwar die grundlegende API im Laufe der Entwicklung erhalten, hat aber einige
+Erweiterungen erfahren.
+
+Um einen Überblick über die API zu erhalten, werden hier nun die drei Hauptbestandteile,
+die die API abdeckt, erläutert: Die Spielinitialisierung, der normale Spielablauf und zum
+Schluss das Spielende.
+Wie bereits erwähnt, läuft die meiste Kommunikation von den Lua Skripten zu der Services
+Komponente. Ausnahmen bilden hier der Start des Spiels, wenn die Zeit einer Runde abläuft
+und wenn ein Spieler einen anderen Spieler trifft. Ein Großteil der Funktionen der API
+beschäftigt sich mit der Initialisierung des Spiels. Dazu werden eine Reihe von
+Spielparametern abgefragt, wie z.B. die Anzahl der Spieler, die Rundendauer oder auch die
+Zeit der Unverwundbarkeit eines Spielers. Diese Informationen werden in den
+entsprechenden Lua Skripten verarbeitet und weitere Funktionen in C++ werden zur
+Dateiverwaltung aufgerufen.
+Ein gutes Beispiel dafür ist die Festlegung der Anzahl der Dateifragmente jedes Spielers.
+Um diese Aufgabe zu bewältigen wird zunächst über die API die Anzahl der Spieler
+abgefragt. Dann wird ebenfalls über die API der C++ Komponente mitgeteilt, wie viele
+Dateifragmente jeder Spieler maximal besitzen kann. Anschließend bestimmt das Lua
+Skript, welcher Spieler welche Dateifragmente besitzt. Diese Information wird dann
+ebenfalls über die API an die C++ Komponente übergeben.
+
+Nachdem die Spielinitialisierung abgeschlossen ist, wird das Spiel von der C++ Komponente
+aus gestartet. Von nun an besteht die Hauptaufgabe der API darin, auf das Aufrufen der
+shootPlayer(source, target) Funktion zu warten. Sobald ein Schuss von der Hardware
+ausgelöst und von der Services Komponente vorverarbeitet wurde, wird diese shootPlayer
+Funktion aufgerufen. Diese Funktion ist der Hauptteil eines jeden Lua Skripts, dann hier
+wird entschieden, ob der Schuss zulässig war, z.B. ob der Gegner überhaupt verwundbar ist,
+aber auch wer wie viel Punkte und/oder Dateifragmente erhält. Deshalb ist diese Funktion
+recht komplex und enthält letztendlich die gesamte Logik eines Spielmodus.
+
+Grundsätzlich gibt es zwei Möglichkeiten, wie ein Spiel enden kann und somit auch wie die
+API genutzt wird: 1.) Nach einem Abschuss tritt eine beliebige Siegbedingung ein und es
+werden entsprechende C++ Funktionen von dem Lua Skript aufgerufen, um das Ende des
+Spiel zu signalisieren und die Auswertung des Gewinners zu starten. 2.) Es läuft ein Zeitlimit
+ab. In diesem Fall ruft ein Timer aus der C++ Komponente heraus eine spezielle Lua Callback Funktion auf. Diese spezielle Funktion hält dann das Spiel an und ruft weitere Funktionen auf. Diese zweite Variante ist ein gutes Beispiel für eine Erweiterung der API, die sich sehr gut in die bestehende API integrieren lassen hat.
+
+Es stellt sich also die Frage, inwiefern Verbesserungen an der API und allen davon unmittelbar betrofenen Bestandteilen möglich gewesen wären. Letztendlich ist die API sehr umfassend geworden und deckt alle Funktionalitäten ab, die für die Spielmodi notwendig sind. Allerdings verwendet die API auch sehr viele sehr kleinteilige Funktionen, die zu größeren, umfassenderen Funktionen zusammengefasst werden könnten. Dadurch wäre die API übersichtlicher geworden, ohne an Funktionalität und Flexibilität einzubüßen.
+Eine weitere Verbesserungsmöglichkeit setzt nicht direkt bei der API an, sondern bei den
+Funktionen innerhalb der Lua Skripte. Dort hätte man für eine bessere Übersicht mehr
+Funktionen auslagern können und auch von dem Konzept abrücken können, immer nur ein
+Skript für einen Spielmodus zu verwenden. Denn dadurch wären die Skripte noch sehr viel
+modularer gestaltbar gewesen. Dies alles wäre der Übersicht zugute gekommen und hätte
+beim Debugging helfen können.
+
+Die grundsätzliche Entwicklung der API wurde gemeinsam von allen drei Mitgliedern der
+Spiellogik Gruppe durchgeführt. Die erste Umsetzung der API in Form des Simulators
+geschah durch Dennis Ness. Im Verlaufe des Projekts wurden jedoch eine Reihe von
+Erweiterungen von David Bachorska (z.B. Teamhandling) und Tom Kieseling (z.B.
+Teamzuweisung von Lua aus) zu der API hinzugefügt. Allerdings gab es auch Erweiterungen
+der API, die von Personen der Services Gruppe ausgingen. So hat z.B. Jan Arne Sparka eine Erweiterung zur Ansteuerung der LEDs hinzugefügt.
