@@ -1,11 +1,12 @@
 \subsubsection{Die Hardware-API}
 
-Dieser Abschnitt erklärt den Teil der Hardware-Komponente, die für die Kommunikation mit der
-Services-Komponente sowie der Ansteuerung des Buttons und der LEDs zuständig ist.
+Dieser Abschnitt erklärt den Teil der Hardware-Komponente, der für die Kommunikation mit der
+Services-Komponente sowie für die Ansteuerung des Buttons und der LEDs zuständig ist.
 Für diese Aufgabe war Manuel Radatz verantwortlich.
 
 Wir haben uns dafür entschieden, dass die Hardware-Komponente und die Services-Komponente jeweils
 verschiedene Programme darstellen.
+Auf jeden Client laufen daher die Prozesse \texttt{services-client} und \texttt{hardware-api}.
 Die Kommunikation erfolgt somit \textit{nicht} beispielsweise dadurch, dass von der
 Services-Komponente eine Bibliothek verwendet wird, die die Hardware-Komponente bereitstellt,
 sondern über Unix-Sockets.
@@ -25,23 +26,29 @@ Client-Server-Architektur entschieden hatten.
 Würde man das Projekt noch weiterentwickeln, könnte die jetzige Architektur allerdings noch von
 Vorteil sein.
 
-Die API besteht aus einem in C++14 geschriebenen Programm, welches auf allen Clients, jedoch nicht
-auf dem Server läuft.
+Die Hardware-API besteht aus dem in C++14 geschriebenen Programm \texttt{hardware-api}, das auf
+allen Clients, jedoch nicht auf dem Server läuft.
 C++ war für diese Aufgabe sehr gut geeignet.
 Die Sprache hat einen sehr geringen Overhead und bietet die notwendige Flexibilität.
 Hauptsächlich erfolgte diese Entscheidung jedoch wegen bereits vorhandenen Programmierkenntnissen
 in dieser Sprache.
-Die Entscheidung für die Version C++14 beruht einfach darauf, dass dies die höchste Version ist, die
-die GCC-Version, die Raspbian zur Verfügung stellt, unterstützt.
-Die API kommuniziert nach oben mit dem Services-Client über Unix-Sockets und Protocol Buffers.
+Die Entscheidung für die Version C++14 beruht darauf, dass dies die höchste Version ist, die von der
+GCC-Version, die Raspbian zur Verfügung stellt, unterstützt wird.
+Die API kommuniziert nach oben mit \texttt{services-client} über Unix-Sockets und Protocol Buffers.
 Nach unten kommuniziert sie mit dem Infrarot-Treiber, indem dessen Source-Code bei der Kompilierung
-der API direkt eingebunden wird, und sie spricht die LEDs und den Button direkt über wiringPi an.
+der \texttt{hardware-api} direkt eingebunden wird, und sie spricht die LEDs und den Button direkt
+über wiringPi an.
 
-Für die Kommunikation nach oben wird die Socket-API der C-Standardbibliothek genutzt.
-Für die Einbettung in C++ und der Nutzbarkeit nach dem in dieser Sprache üblichen RAII-Prinzip,
-wurden für die Unix-Sockets und die TCP-Kommunikation der Testprogramme Wrapperklassen geschrieben,
-die die Kommunikation über die Socket-API abstrahieren.
+Für die Kommunikation nach oben wird die Socket-API der POSIX-C-Bibliothek genutzt.
+Für die Einbettung in C++ und die Nutzbarkeit nach dem in dieser Sprache üblichen RAII-Prinzip
+wurden für die Unix-Sockets die Wrapperklassen \texttt{CSocketWrapper}, \texttt{UnixReceiver} und
+\texttt{UnixSender} geschrieben, die die Kommunikation über die Socket-API abstrahieren.
 Dazu gehört auch das Puffern von unvollständigen empfangenen Nachrichten.
+Außerdem dient die Klasse \texttt{FileDeleter} dazu, dass die für die Kommunikation über
+Unix-Sockets notwendigen Dateien nach dem Beenden des Programms implizit gelöscht werden.
+Die Klassen \texttt{TCPConnection}, \texttt{TCPServer} und \texttt{TCPClient} erfüllen dieselbe
+Aufgabe für die TCP-Kommunikation, die für die später beschriebenen Testprogramme
+\hyperref[client-stub-und-server-stub]{\texttt{client-stub} und \texttt{server-stub}} notwendig ist.
 Alternativ hätte man auch bestehende Bibliotheken wie boost verwenden können, die ebenfalls eine
 C++-Schnittstelle für die Netzwerkkommunikation zur Verfügung gestellt hätten.
 Dafür hätte man sich zuerst in diese Bibliothek einarbeiten müssen und da Manuel Radatz, der diese
@@ -49,15 +56,16 @@ Komponente geschrieben hat, bereits Erfahrungen mit der C-Socket-API hatte, wär
 gewesen als die Implementierung der Wrapperklassen, weshalb sie am Ende nicht genutzt wurde.
 Da diese Wrapperklassen am Ende stabil liefen, war diese Entscheidung auch richtig.
 
-Eine weitere Klasse (\texttt{InterfaceToServices}) abstrahiert die Kommunikation mit dem
-Services-Client.
+Eine weitere Klasse (\texttt{InterfaceToServices}) abstrahiert die Kommunikation mit
+\texttt{services-client}.
 Sie ist hauptsächlich dafür zuständig, dass diese Kommunikation stabil bleibt und nach einem
-Verbindungsabbruch (z.B. wenn der Services-Client abgestürzt ist) wieder hergestellt wird.
-Bei dem Empfang von Nachrichten werden die zuvor von der \texttt{main()}-Funktion gesetzten
+Verbindungsabbruch (z.B. wenn \texttt{services-client} abgestürzt ist oder zu Testzwecken beendet
+wird) wieder hergestellt wird.
+Bei dem Empfangen von Nachrichten werden die zuvor von der \texttt{main()}-Funktion gesetzten
 Callback-Funktionen aufgerufen.
 
-Für die LED-Ansteuerung empfängt die Hardware-API vom Services-Client Nachrichten, in denen kodiert
-ist, welches Ereignis wann und wie lange angezeigt werden soll.
+Für die LED-Ansteuerung empfängt die Hardware-API von \texttt{services-client} Nachrichten, in denen
+mit 3 ganzen Zahlen kodiert ist, welches Ereignis wann und wie lange angezeigt werden soll.
 Die Ereignisse, die übertragen werden, sind:
 \begin{itemize}
   \item
@@ -76,7 +84,7 @@ Die Ereignisse, die übertragen werden, sind:
     letztes Leben
 \end{itemize}
 Nicht alle Ereignisse werden in allen Spielmodi genutzt.
-So gibt es beispielsweise Spielmodi, in dem es das Konzept von „Leben“ nicht gibt.
+So gibt es beispielsweise Spielmodi, in denen es das Konzept von „Leben“ nicht gibt.
 Das Ereignis „Spiel endet“ ist auch nur dann notwendig, wenn bei dem Ereignis „Spiel startet“ nicht
 übertragen wurde, wie lange das Spiel läuft.
 
@@ -112,31 +120,32 @@ haben.
 Auch die Karte wurde nicht umgesetzt, da für die zuverlässige und genaue Positionsermittlung eines
 Spielers in geschlossenen Räumen diverse Probleme zeit- und kostenintensiv gelöst werden müssten und
 dies jenseits unserer Möglichkeiten in diesem Projekt gewesen wäre.
-(Trotzdem wurde zunächst sehr viel Zeit in diese Idee investiert.)
+(Trotzdem wurde zunächst viel Zeit in diese Idee investiert.)
 
 Die LED-Ansteuerung erfolgt ebenfalls in einer eigenen Klasse namens \texttt{LEDEventStatus}.
 Diese ruft direkt Funktionen von wiringPi auf, verwaltet alle Daten, die zur korrekten
-LED-Ansteuerung notwendig sind (auch die Timer) und interpretiert als Eingabe das von Services
-empfangene Zahlentripel.
+LED-Ansteuerung notwendig sind (auch die Timer) und interpretiert als Eingabe das von
+\texttt{services-client} empfangene Zahlentripel.
 
-Der Status des Button wird direkt in der \texttt{main()}-Funktion durch Aufrufe der
+Der Status des Buttons wird direkt in der \texttt{main()}-Funktion durch Aufrufe der
 wiringPi-Funktionen abgefragt.
 
 Die \texttt{main()}-Funktion besteht abgesehen von der Initialisierung aus einer Schleife, die erst
-dann beendet wird, wenn das Programm \texttt{SIGTERM} empfängt.
+dann verlassen wird, wenn das Programm \texttt{SIGTERM} empfängt oder eine Exception auftritt, die
+auf größere Probleme hindeutet.
 Dort besteht jede Iteration aus:
 \begin{itemize}
   \item
-    das Abfragen, ob Nachrichten vom Services-Client angekommen sind, welche dann auch durch das
-    Aufrufen von Callback-Funktionen interpretiert werden,
+    das Abfragen, ob Nachrichten von \texttt{services-client} angekommen sind, welche dann auch
+    durch das Aufrufen von Callback-Funktionen interpretiert werden,
   \item
     die Aktualisierung des LED-Status,
   \item
     die Abfrage des Buttons, ob dieser gedrückt wird, wobei in diesem Fall die eigene Client-ID an
     den IR-Sender gesendet wird und
   \item
-    das Abfragen des IR-Sensors, ob Daten empfangen wurden sowie die Weiterleitung dieser an den
-    Services-Client.
+    das Abfragen des IR-Sensors, ob Daten empfangen wurden sowie die Weiterleitung dieser an
+    \texttt{services-client}.
 \end{itemize}
 Danach wartet das Programm 0,5 Millisekunden, um die CPU-Auslastung gering und folglich die
 Temperatur des Prozessors niedrig zu halten und die Lebensdauer des Akkumulators zu erhöhen.
@@ -152,19 +161,22 @@ Programmparameter ein- oder ausgeschaltet werden können.
 Ist kein Button vorhanden, so besteht die Möglichkeit, dass ohne Unterbrechung alle 500
 Millisekunden die eigene Client-ID an den IR-Sender gesendet wird.
 Wenn kein IR-Empfänger funktionsfähig ist, das Programm auf anderer Hardware ausgeführt wird oder
-nur die Kommunikation mit dem Services-Client getestet werden soll, gibt es zusätzlich einen
+nur die Kommunikation mit \texttt{services-client} getestet werden soll, gibt es zusätzlich einen
 automatischen und einen manuellen Testmodus.
-Im automatischen Testmodus werden regelmäßig zufällige Daten an den Services-Client gesendet, als
-wären diese von dem IR-Sensor empfangen worden.
+Im automatischen Testmodus werden regelmäßig zufällige Daten an \texttt{services-client} gesendet,
+als wären diese von dem IR-Sensor empfangen worden.
 Im manuellen Testmodus kann man manuell Testdaten eingeben, die gesendet werden sollen.
 In beiden Testmodi wird der LED-Status auch auf der Konsole ausgegeben.
 Dadurch sind Tests auch ziemlich einfach in virtuellen Umgebungen ohne die Hardware möglich.
 
-Außerdem wurden Stubs implementiert, welche den Services-Client ersetzen können, sodass auch
+\phantomsection\label{client-stub-und-server-stub}
+Außerdem wurden Stubs implementiert, welche \texttt{services-client} ersetzen können, sodass auch
 andersherum die Hardware ohne Services getestet oder demonstriert werden kann.
-Dazu gehört ein Stub, der LED-Ereignisse an die Hardware-API sendet und ein Paar von Stubs, von
-denen einer auf den Clients und einer auf dem Server läuft, der alle empfangenden IR-Daten auf dem
-Server ausgibt.
+Dazu gehört der Stub \texttt{led-trigger}, mit dem man manuell LED-Ereignisse an die
+\texttt{hardware-api} senden kann sowie das Paar von Stubs \texttt{client-stub} und
+\texttt{server-stub}, von denen einer auf den Clients und einer auf dem Server läuft, der alle
+empfangenen IR-Daten in Echtzeit auf dem Server ausgibt, was das ansonsten erforderliche
+Nachschauen in Log-Dateien beim Debuggen erspart.
 
 Die Hardware-API läuft im fertigen System als Daemon.
 Sie kann aber auch als gewöhnliches Programm gestartet werden, was zum Testen auch notwendig ist.
