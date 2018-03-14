@@ -39,3 +39,15 @@ Der Server ist über die \href{https://dev.mysql.com/doc/connector-c/en/connecto
 
 Diese Schnittstelle ist in einem C++ Singleton gekapselt \texttt{DatabaseConnection}, die Methoden für alle Anfragen
 bereitstellt die der Server stellen muss (bswp \texttt{get\_runnable\_games()}).
+
+\subsubsection{LUA API (services)}
+
+Um Spielmodi zu beschreiben und sauber von den anderen Komponenten abzutrennen brauchten wir eine API. Die erste Entscheidung war zwischen LUA, c-Code und einer eigenen DSL um Spiellogik zu benutzen. Da unsere Spiellogikgruppe die Entscheidung für LUA traf und sogar schon einen funktionierenden Simulator für Spiele in sehr schneller sukzession herausbrachte, war diese Entscheidung für uns damit schnell getroffen.
+
+Die LUA API auf services Seite war sehr schwierig einzubauen. Die erste Option war es die API als Singleton bereitzustellen, dies stellte sich aber sehr schnell als schlechter Ansatz heraus, da der Start einer weiteren Runde hierdurch zu einem komplizierten und unschönen Hack geworden wäre. Daher und da wir die Architektur für potentiel mehrere Spiele die Parallel laufen offen halten wollten, entschieden wir uns für den jetztigen Ansatz, die API läuft in einem eigenen Thread. 
+
+Der Logik-Thread sammelt sich erstmal die relevanten Spieldaten zusammen, initialisiert dann die Felder auf welche LUA zugreift und geht dann in eine Event Loop über. In dieser Gameloop wird zuerst überprüft ob Schussnachrichten durchgereicht wurden, welche wiederum an LUA weitergereicht werden. Danach werden alle potentiellen Timer weitergetickt um die vergangene Zeit. Als letzte wird noch abgeprüft ob der Server uns ein AskedToExit Event schickt, welches mit Aufräumen und beenden des Spiels quittiert wird.
+
+Der Hauptteil der API Arbeit auf der service Seite war die vorhandene Spiellogik API (den Simulator) an die real genutzte Hardware und Software anzubinden. Der Großteil der Input/Output Operationen wurde über unser Datenbankconnection Singleton umgeleitet. Das Scoreboard wird dabei permanent mitgeführt, wodurch Erweiterungen, wie z.B. spielerseitige Displays denkbar sind und was uns die Probleme von Score Serialisierung ignorieren lässt, da dieser sowieso von der Datenbank serialisiert wird. Da dann letztendlich die Relevanz eines Timers für LUA Skripte aufkam, welcher nicht den Logik-Thread vom Arbeiten abhält, haben wir einen einfachen Timer entwickelt der mit Funktionen Callbacks arbeitet. Die letzte Erweiterung der API war das hinzufügen der LED Events und der Abstraktion dieser in Funktionen, die Teil der LUA API wurden.
+
+Die services Seite der LUA API hatte als Hauptproblem, das sie aufgrund der sehr zentralen Stellung (Verknüpfung von 3 Komponenten), sehr viele Abhängigkeiten hatte und sehr schwierig zu testen war. Dies ist dem Projekt letztendlich zum Verhängnis geworden, da wir in der Interaktion dieser Vier Komponenten ein Fehler haben, den wir bisher noch nicht lokalisieren konnten. Das Debugging ist auf Grund von LUA auch nur sehr begrenzt möglich und wird uns noch einiges an Aufwand einbringen.
