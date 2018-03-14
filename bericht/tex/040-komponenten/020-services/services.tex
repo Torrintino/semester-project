@@ -14,5 +14,28 @@ Mitglieder und Aufgaben:
   \item
     Tim Sikatzki (Website Backend)
 \end{itemize}
-TODO
-% TODO
+\subsubsection{Netzwerkkommunikation}
+
+Die gesamte Netzwerkkommunikation zwischen Clients und Server ist mit der BSD Socket API implementiert.
+Dabei kommunizieren Clients und Server über TCP Sockets.
+Als Alternative kam Googles gRPC in Frage. Dieses wurde verworfen, weil:
+\begin{itemize}
+    \item gRPC erlaubt Kommunikation nur in eine Richtung. Der Server kann nur dann Nachrichten an den Client verschicken,  wenn ein Request eingegangen ist.
+    \item gRPC erlaubt nur einen Nachrichtentypen pro Kommunikationsrichtung. Da wir mehrere verschiedene Nachrichtentypen benötigen, hätten wir das Konzept eines Unions in gRPC nachbilden müssen.
+\end{itemize}
+Es wäre möglich gewesen Bibliotheken, zum Beispiel \href{http://think-async.com/Asio/WebHome}{boost.asio}, die eine einfachere Schnittstelle anbieten zu verwenden. Da wir zu dem Zeitpunkt, an dem wir entschieden haben die Socket API direkt zu verwenden, noch nicht genau wussten wie die Netzwerkkommunikation funktionieren würde, wollten wir uns möglichst viele Optionen offen halten. Außerdem hatten wir im Verlauf der Entwicklung mehrmals Probleme mit inkompatiblen Bibliotheksversionen, entweder durch andere APIs oder - wesentlich lästiger - durch unterschiedliches Verhalten. Deshalb waren wir später sehr zurückhaltend beim Einführen neuer Abhängigkeiten.
+
+Das Nachrichtenformat ist mittels Google Protocol Buffers umgesetzt. Da Protocol Buffers selbst keine Möglichkeit
+implementiert um aus einem empfangenem Byte-String den Nachrichtentyp zu rekonstruieren, wird vor jeder Nachricht
+ein Header verschickt der den Nachrichtentyp und die Länge der Nachricht in Bytes enthält.
+
+Der Server nutzt zur Verarbeitung von eingehenden Nachrichten die Bibliothek libevent. Die Bibliothek ruft
+beim Empfang von Nachrichten eine callback Funktion auf, in der die Logik zum Parsen eingehender Nachrichten
+implementiert ist. Dies ermöglicht es ohne zu blockieren Nachrichten von verschiedenen Sockets zu empfangen.
+
+\subsubsection{Datenbankanbindung}
+
+Der Server ist über die \href{https://dev.mysql.com/doc/connector-c/en/connector-c-introduction.html}{mysql c connector} Schnittstelle an die MySQL Datenbank angebunden. Die Schnittstelle bietet eine relativ simple API: Zuerst verbindet sich das Programm mit dem MySQL Datenbankserver (entweder über TCP oder über Unix Sockets) und dann können beliebige SQL Anfragen als String an den Datenbankserver geschickt werden, der daraufhin Zeilenweise die Ergebnisse zurückliefert.
+
+Diese Schnittstelle ist in einem C++ Singleton gekapselt \texttt{DatabaseConnection}, die Methoden für alle Anfragen
+bereitstellt die der Server stellen muss (bswp \texttt{get\_runnable\_games()}).
