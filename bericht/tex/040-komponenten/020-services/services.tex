@@ -42,7 +42,7 @@ bereitstellt die der Server stellen muss (bswp \texttt{get\_runnable\_games()}).
 
 \subsubsection{LUA API (services)}
 
-Um Spielmodi zu beschreiben und sauber von den anderen Komponenten abzutrennen brauchten wir eine API. Die erste Entscheidung war zwischen LUA, c-Code und einer eigenen DSL um Spiellogik zu benutzen. Da unsere Spiellogikgruppe die Entscheidung für LUA traf und sogar schon einen funktionierenden Simulator für Spiele in sehr schneller sukzession herausbrachte, war diese Entscheidung für uns damit schnell getroffen.
+Um Spielmodi zu beschreiben und sauber von den anderen Komponenten abzutrennen brauchten wir eine API. Die erste Entscheidung war zwischen LUA, c-Code und einer eigenen Spielmodus-DSL. Da unsere Spiellogikgruppe die Entscheidung für LUA traf und sogar schon einen funktionierenden Simulator für Spiele in sehr schneller sukzession herausbrachte, war diese Entscheidung für uns damit schnell getroffen.
 
 Die LUA API auf services Seite war sehr schwierig einzubauen. Die erste Option war es die API als Singleton bereitzustellen, dies stellte sich aber sehr schnell als schlechter Ansatz heraus, da der Start einer weiteren Runde hierdurch zu einem komplizierten und unschönen Hack geworden wäre. Daher und da wir die Architektur für potentiel mehrere Spiele die Parallel laufen offen halten wollten, entschieden wir uns für den jetztigen Ansatz, die API läuft in einem eigenen Thread. 
 
