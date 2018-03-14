@@ -2,32 +2,33 @@
 
 Bereits die Forderung, dass das Spiel Lasertag nachgebildet werden soll, hatte weitreichende
 Konsequenzen.
-Wie im original muss jeder Spieler ein Gerät bekommen, mit dem er andere Spiel abschießen kann und
+Wie im Original muss jeder Spieler ein Gerät bekommen, mit dem er andere Spieler abschießen kann und
 entsprechend muss ein Abschuss detektiert werden.
 Die Spieler sollen dabei möglichst mobil und frei beweglich sein.
-Daraus resultiert, dass irgendeine Form von Sender/Empfänger Kombination verwendet werden muss.
+Daraus resultiert, dass irgendeine Form von Sender-Empfänger-Kombination verwendet werden muss.
 
 Implizit war auch der Spielspaß eine Anforderung.
-Dies ist weniger eine technische Anforderung, es verlangt eher, dass die technische Funktionsweise
-des Systems nicht nur demonstriert werden kann, sondern auch ausgereift und zuverlässig ist.
+Dies ist weniger eine technische Anforderung.
+Es verlangt eher, dass die technische Funktionsweise des Systems nicht nur demonstriert werden kann,
+sondern auch ausgereift und zuverlässig ist.
 Das Spiel sollte so aufbereitet sein, dass jemand mit möglichst wenig Vorkenntnissen ein intuitives
 Verständnis entwickeln kann.
 Da das Spiel als „Lasertag Nerd Style“ bezeichnet wird, können von der primären Zielgruppe zumindest
 grundlegende Vorkenntnisse zu Netzwerkpotokollen erwartet werden. Dennoch muss das P2P-Protokoll der
 Wahl in die Form eines spielgerechten Regelwerks transformiert werden.
 
-Es wurden keine genaueren Anforderungen an die Spielgeräte gestellt, daher kann sich das Team eine
-beliebige Architektur aussuchen, die das Spiel unterstützt.
+Es wurden keine genaueren Anforderungen an die Spielgeräte gestellt.
+Daher kann sich das Team eine beliebige Architektur aussuchen, die das Spiel unterstützt.
 Um den Spielspaß zu gewärleisten, muss jedoch die Übertragung von Treffern zuverlässig sein und die
 Geräte sollten möglichst handlich und leicht zu bedienen sein.
-Die Spieler brauchen insbesondere eine Möglichkeit Feedback darüber zu erlangen, ob sie einen
+Die Spieler brauchen insbesondere eine Möglichkeit, Feedback darüber zu erlangen, ob sie einen
 Spieler getroffen haben und wie das Spiel derzeit verläuft. Auch gilt, dass eine möglichst bequeme
 Lösung für den Spieler den Spaß unterstützt.
 
 Aus den Anforderungen für Bequemlichkeit ergibt sich, dass drahtlose Kommunikationsmethoden
-verwendendet werden sollten und die Spielgeräte über Akkumulatoren betrieben werden sollten.
-Die Sensoren sollten entweder am Spielgerät befestigt sein, oder es sollte möglichst einfach am
-Körper anbringbar und robust sein.
+verwendet und die Spielgeräte über Akkumulatoren betrieben werden sollten.
+Die Sensoren sollten entweder am Spielgerät befestigt oder möglichst einfach am Körper anbringbar
+und robust sein.
 
 Da drahtlose Kommunikation verwendet wird und das Spiel möglichst reibungslos ablaufen soll, muss
 insbesondere bedacht werden, dass es zu Störungen kommen könnte und somit Informationen verloren
@@ -35,4 +36,5 @@ gehen.
 Es ist also notwendig, dass die Geräte von einem unzuverlässigen Übertragungskanal ausgehen und mit
 daraus resultierenden Problemen umgehen können.
 Es ist außerdem zu beachten, dass es zu Schwierigkeiten mit konkurrierenden Prozessen kommen kann,
-weil z.B. Signal X schneller als Signal Y empfangen wurde, obwohl Signal Y früher abgeschickt wurde.
+weil z.B. Signal $X$ schneller als Signal $Y$ empfangen wurde, obwohl Signal $Y$ früher abgeschickt
+wurde.
