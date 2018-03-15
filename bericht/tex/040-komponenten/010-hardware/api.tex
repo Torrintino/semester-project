@@ -34,8 +34,9 @@ Hauptsächlich erfolgte diese Entscheidung jedoch wegen bereits vorhandenen Prog
 in dieser Sprache.
 Die Entscheidung für die Version C++14 beruht darauf, dass dies die höchste Version ist, die von der
 GCC-Version, die Raspbian zur Verfügung stellt, unterstützt wird.
+
 Die API kommuniziert nach oben mit \texttt{services-client} über Unix-Sockets und Protocol Buffers.
-Nach unten kommuniziert sie mit dem Infrarot-Treiber, indem dessen Source-Code bei der Kompilierung
+Nach unten kommuniziert sie mit dem Infrarot-Treiber, indem dessen Quellcode bei der Kompilierung
 der \texttt{hardware-api} direkt eingebunden wird, und sie spricht die LEDs und den Button direkt
 über wiringPi an.
 
@@ -65,7 +66,7 @@ Bei dem Empfangen von Nachrichten werden die zuvor von der \texttt{main()}-Funkt
 Callback-Funktionen aufgerufen.
 
 Für die LED-Ansteuerung empfängt die Hardware-API von \texttt{services-client} Nachrichten, in denen
-mit 3 ganzen Zahlen kodiert ist, welches Ereignis wann und wie lange angezeigt werden soll.
+mit drei ganzen Zahlen kodiert ist, welches Ereignis wann und wie lange angezeigt werden soll.
 Die Ereignisse, die übertragen werden, sind:
 \begin{itemize}
   \item
@@ -77,7 +78,7 @@ Die Ereignisse, die übertragen werden, sind:
   \item
     Spiel startet – mit der Information, wann das Spiel startet und wie lange das Spiel läuft
   \item
-    Spiel endet – mit der Information wann
+    Spiel endet – mit der Information, wann
   \item
     Spieler tot
   \item
@@ -88,9 +89,68 @@ So gibt es beispielsweise Spielmodi, in denen es das Konzept von „Leben“ nic
 Das Ereignis „Spiel endet“ ist auch nur dann notwendig, wenn bei dem Ereignis „Spiel startet“ nicht
 übertragen wurde, wie lange das Spiel läuft.
 
-Wir haben jeweils eine rote, eine gelbe und eine grüne LED, die wie auf einer Ampel angeordnet sind.
-Für Menschen mit Rot-Grün-Schwäche könnte man Prototypen bauen, bei denen die grüne LED durch eine
-blaue LED ersetzt wird.
+\phantomsection\label{led-anzeige}
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.29\textwidth}
+    \includegraphics[width=\textwidth,keepaspectratio]
+                    {./040-komponenten/010-hardware/led-default.png}
+    \caption{\label{fig:led-init}}
+  \end{subfigure}
+  \hspace{0.1\textwidth}
+  \begin{subfigure}[b]{0.46\textwidth}
+    \includegraphics[width=\textwidth,keepaspectratio]{./040-komponenten/010-hardware/led-start.png}
+    \caption{\label{fig:led-start}}
+  \end{subfigure}
+  
+  \begin{subfigure}[b]{0.08\textwidth}
+    \includegraphics[width=\textwidth,keepaspectratio]{./040-komponenten/010-hardware/led-green.png}
+    \caption{\label{fig:led-green}}
+  \end{subfigure}
+  \hspace{0.03\textwidth}
+  \begin{subfigure}[b]{0.08\textwidth}
+    \includegraphics[width=\textwidth,keepaspectratio]
+                    {./040-komponenten/010-hardware/led-green-blink.png}
+    \caption{\label{fig:led-green-blink}}
+  \end{subfigure}
+  \hspace{0.03\textwidth}
+  \begin{subfigure}[b]{0.08\textwidth}
+    \includegraphics[width=\textwidth,keepaspectratio]
+                    {./040-komponenten/010-hardware/led-red-blink.png}
+    \caption{\label{fig:led-red-blink}}
+  \end{subfigure}
+  \hspace{0.03\textwidth}
+  \begin{subfigure}[b]{0.08\textwidth}
+    \includegraphics[width=\textwidth,keepaspectratio]{./040-komponenten/010-hardware/led-red.png}
+    \caption{\label{fig:led-red}}
+  \end{subfigure}
+  \hspace{0.03\textwidth}
+  \begin{subfigure}[b]{0.08\textwidth}
+    \includegraphics[width=\textwidth,keepaspectratio]
+                    {./040-komponenten/010-hardware/led-yellow.png}
+    \caption{\label{fig:led-yellow}}
+  \end{subfigure}
+  \hspace{0.03\textwidth}
+  \begin{subfigure}[b]{0.08\textwidth}
+    \includegraphics[width=\textwidth,keepaspectratio]
+                    {./040-komponenten/010-hardware/led-red-yellow-blink.png}
+    \caption{\label{fig:led-red-yellow-blink}}
+  \end{subfigure}
+  \caption{LED-Zustände \\ \small
+           \textbf{(\subref*{fig:led-init})} Initialer Zustand
+           \textbf{(\subref*{fig:led-start})} Spielstart
+           \textbf{(\subref*{fig:led-green})} Spiel läuft
+           \textbf{(\subref*{fig:led-green-blink})} Spielende naht \\
+           \textbf{(\subref*{fig:led-red-blink})} wurde getroffen (unverwundbar)
+           \textbf{(\subref*{fig:led-red})} tot
+           \textbf{(\subref*{fig:led-yellow})} hat getroffen
+           \textbf{(\subref*{fig:led-red-yellow-blink})} letztes Leben}
+  \label{fig:leds}
+\end{figure}
+Jedes Spielgerät hat jeweils eine rote, eine gelbe und eine grüne LED, die wie auf einer Ampel
+angeordnet sind.
+Für Menschen mit Rot-Grün-Schwäche könnte man auch Prototypen bauen, bei denen die grüne LED durch
+eine blaue LED ersetzt wird.
 Mit diesen LEDs werden die verschiedenen Ereignisse kodiert.
 Läuft kein Spiel und ist auch kein Spiel angekündigt, so leuchten alle LEDs der Reihe nach auf.
 Dadurch können defekte, sowie nicht- oder falsch-angeschlossene LEDs schon direkt nach dem
@@ -102,7 +162,7 @@ Die grüne LED zeigt an, dass das Spiel läuft.
 Neigt sich das Spiel dem Ende zu, fängt die grüne LED 64 Sekunden vorher langsam an zu blinken und
 blinkt bis zum Ende des Spiels immer schneller.
 Nach dem Spielende kehren die LEDs zum initialen Zustand zurück.
-Wenn das Spiel läuft, zeigt das Blinken der roten LED an, wenn man getroffen wurde und unverwundbar
+Wenn das Spiel läuft, zeigt das Blinken der roten LED an, dass man getroffen wurde und unverwundbar
 ist.
 Auch sie wird immer schneller, wenn die Zeit der Unverwundbarkeit abläuft.
 Zeigt die LED Dauerrot, dann ist man tot.
@@ -111,6 +171,7 @@ wird deaktiviert.
 Die gelbe LED zeigt an, dass man einen anderen Spieler getroffen hat.
 Das letzte Leben wird dadurch angezeigt, dass die rote und die gelbe LED etwa alle 2 Sekunden für
 100 Millisekunden synchron aufleuchten.
+Alle LED-Zustände sind zur Übersicht auch in \cref{fig:leds} dargestellt.
 
 Ursprünglich wollten wir anstelle von LEDs ganze Displays verwenden, um auch individuelle
 Informationen als Text oder eine Karte des Spielfeldes mit allen Mitspielern anzeigen zu können.
@@ -173,13 +234,14 @@ Dadurch sind Tests auch ziemlich einfach in virtuellen Umgebungen ohne die Hardw
 Außerdem wurden Stubs implementiert, welche \texttt{services-client} ersetzen können, sodass auch
 andersherum die Hardware ohne Services getestet oder demonstriert werden kann.
 Dazu gehört der Stub \texttt{led-trigger}, mit dem man manuell LED-Ereignisse an die
-\texttt{hardware-api} senden kann sowie das Paar von Stubs \texttt{client-stub} und
+\texttt{hardware-api} senden kann, sowie das Paar von Stubs \texttt{client-stub} und
 \texttt{server-stub}, von denen einer auf den Clients und einer auf dem Server läuft, der alle
 empfangenen IR-Daten in Echtzeit auf dem Server ausgibt, was das ansonsten erforderliche
 Nachschauen in Log-Dateien beim Debuggen erspart.
 
-Die Hardware-API läuft im fertigen System als Daemon.
-Sie kann aber auch als gewöhnliches Programm gestartet werden, was zum Testen auch notwendig ist.
+Das Programm \texttt{hardware-api} läuft im fertigen System als Daemon.
+Es kann aber auch als gewöhnliches Programm gestartet werden, was zum interaktiven Testen auch
+notwendig ist.
 
 Der build-Prozess erfolgt durch eine einzige Makefile.
 Wegen der Einfachheit des Programms und der Tatsache, dass die Programme gezielt für ein bestimmtes
