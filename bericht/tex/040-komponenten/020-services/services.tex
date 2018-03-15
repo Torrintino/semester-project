@@ -51,3 +51,7 @@ Der Logik-Thread sammelt sich erstmal die relevanten Spieldaten zusammen, initia
 Der Hauptteil der API Arbeit auf der service Seite war die vorhandene Spiellogik API (den Simulator) an die real genutzte Hardware und Software anzubinden. Der Großteil der Input/Output Operationen wurde über unser Datenbankconnection Singleton umgeleitet. Das Scoreboard wird dabei permanent mitgeführt, wodurch Erweiterungen, wie z.B. spielerseitige Displays denkbar sind und was uns die Probleme von Score Serialisierung ignorieren lässt, da dieser sowieso von der Datenbank serialisiert wird. Da dann letztendlich die Relevanz eines Timers für LUA Skripte aufkam, welcher nicht den Logik-Thread vom Arbeiten abhält, haben wir einen einfachen Timer entwickelt der mit Funktionen Callbacks arbeitet. Die letzte Erweiterung der API war das hinzufügen der LED Events und der Abstraktion dieser in Funktionen, die Teil der LUA API wurden.
 
 Die services Seite der LUA API hatte als Hauptproblem, das sie aufgrund der sehr zentralen Stellung (Verknüpfung von 3 Komponenten), sehr viele Abhängigkeiten hatte und sehr schwierig zu testen war. Dies ist dem Projekt letztendlich zum Verhängnis geworden, da wir in der Interaktion dieser Vier Komponenten ein Fehler haben, den wir bisher noch nicht lokalisieren konnten. Das Debugging ist auf Grund von LUA auch nur sehr begrenzt möglich und wird uns noch einiges an Aufwand einbringen.
+
+\subsubsection{Website}
+
+Unsere Website bildet das Herzstück in der Interaktion zwischen dem Nutzer und der Software. Sie gibt 
