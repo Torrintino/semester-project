@@ -1,12 +1,12 @@
-Um die einzelnen Spieler zu unterscheiden, war es notwendig, dass sie unterschiedliche
+Um die einzelnen Spieler zu unterscheiden war es notwendig, dass sie unterschiedliche
 Informationen aussenden, um sie eindeutig im Spielkontext zu identifizieren.
-Wir hatten 3 verschiedene Ideen wie man diese Informationen modelieren kann, um sie schnell und 
+Wir hatten drei verschiedene Ideen, wie man diese Informationen modelieren kann, um sie schnell und 
 korrekt zu übertragen.
 Dabei war die Grundlage, dass jede gesendete Information in eine eindeutige Abfolge von 2
 verschiedenen Zuständen, im Folgenden als Zustand 0 (kurz: 0) bzw. Zustand 1 (kurz: 1)
 bezeichnet, übersetzt wird und dann diese Abfolge von Zuständen gesendet wird.
-Diese Abfolge von Zuständen musste ebenfalls modeliert werden, um das Gebot der Korrektheit zu
-erfüllen, da ein einfaches Absenden der Information ,mit Signal an = 1 und Signal aus = 0, sehr
+Diese Abfolge von Zuständen musste ebenfalls modelliert werden, um das Gebot der Korrektheit zu
+erfüllen, da ein einfaches Absenden der Information, mit Signal an = 1 und Signal aus = 0, sehr
 rauschanfällig wäre.
 Desweiteren wollten wir auf Selbstkorrigierende Codes verzichten, um eine möglichst schnelle und
 genaue Treffererkennung zu schaffen, um zu verhindern, dass wenn 2 Spieler nahezu gleichzeitig
@@ -41,10 +41,10 @@ Idee 3: Der Vorteil besteht hier darin, dass die wenigste Rauschanfälligkeit be
  	großzügig sein kann, was noch als Treffer gilt.
 
 	Ein weiterer Vorteil war, dass man bereits Geräte im Haus hatte, die genauso funktionieren,
- 	was Tests am Anfang stark vereinfacht hatte und dafür gesorgt hat, das Troubleshooting
+ 	was Tests am Anfang stark vereinfacht hatte und dafür gesorgt hat, das eine Fehlerbehebung
  	später ebenfalls leichter war.
 
-	An Nachteilen ist hier aufzulisten, dass es von den 3 Ideen am schwierigsten zu
+	An Nachteilen ist hier aufzulisten, dass es von den 3 Ideen am Schwierigsten zu
  	implementieren gewesen wäre und das es die langsamste Variante für die
  	Informationsübertragung ist.
 

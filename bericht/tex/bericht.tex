@@ -6,6 +6,10 @@
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
+\usepackage{graphicx}
+\usepackage[labelfont=bf]{caption}
+\usepackage[labelfont=bf]{subcaption}
+\usepackage[nameinlink]{cleveref}
 \usepackage{datetime}
 \usepackage{graphicx}
 \hypersetup{
@@ -21,10 +25,26 @@
 
 \renewcommand\labelitemi{\raisebox{0.4ex}{\tiny$\bullet$}}
 
+% Die folgenden 2 Befehle sind mehr oder weniger von tex.stackexchange.com...
+\crefdefaultlabelformat{#2\textbf{#1}#3}
+
+\addto\captionsngerman{
+    % Second argument is singular, third is plural
+    \crefname{figure}{Abb.}{Abb.}
+    \Crefname{figure}{Abb.}{Abb.}
+    \crefname{table}{Tab.}{Tab.}
+    \Crefname{table}{Tab.}{Tab.}
+}
+
 % Unsere Namen bitte nicht trennen:
 \hyphenation{David Bachorska Kevin Cornelius Rafael Robert Hadamik Angelina Jellinek Pascal Jochmann
              Tom Kieseling Dennis Ness Manuel Radatz Tim Sikatzki Jan Arne Sparka Marc Trogant
              Lennart Weiß}
+
+% Korrektur bzw. Verbesserung falscher oder unschöner Worttrennungen
+\hyphenation{ge-star-tet In-for-ma-tion In-for-ma-tionen Im-ple-men-ta-tion Kom-mu-ni-ka-tion
+             Raspbian Lite Systemd Wireless Sensor Network wiringPi mit-ei-nan-der Quell-code Code
+             Timers}
 
 \begin{document}
 \sloppy
