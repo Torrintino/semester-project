@@ -1,12 +1,12 @@
-Das Spiel stellt uns mehrere Anforderung für die Übertragung.
+Das Spiel stellt uns mehrere Anforderung fÃ¼r die Ãœbertragung.
 
-Die Übertragung musste offensichtlich Kabellos sein. Außerdem musste sie richtbar sein, sodass man
-auch zielen muss und nicht nur die Reaktionsgeschwindigkeit zählt. Außerdem hat es einen Vorteil, 
-wenn die Informationsübertragung leicht blockbar ist, sodass man interessante Hinderniss bauen kann,
-ohne zu teuer zu werden, wenn man diese aufstellt. Außerdem darf die Übertragung keinen Schaden an 
+Die Ãœbertragung musste offensichtlich Kabellos sein. AuÃŸerdem musste sie richtbar sein, sodass man
+auch zielen muss und nicht nur die Reaktionsgeschwindigkeit zÃ¤hlt. AuÃŸerdem hat es einen Vorteil, 
+wenn die InformationsÃ¼bertragung leicht blockbar ist, sodass man interessante Hindernisse bauen kann,
+ohne zu teuer zu werden, wenn man diese aufstellt. AuÃŸerdem darf die Ãœbertragung keinen Schaden an 
 den Spielern anrichten.
 
-An Informationsübertragung kamen wir auf 4 Ideen:
+An InformationsÃ¼bertragung kamen wir auf 4 Ideen:
  
 	1. Bluetooth
 
@@ -18,9 +18,9 @@ An Informationsübertragung kamen wir auf 4 Ideen:
 
 Da Bluetooth und Wlan schwer zu richten bzw. zu blocken sind, haben wir diese beiden Idee schnell
 verworfen.
-Laser und Ir haben beide sehr ähnliche Eigenschaften, da beide eine Form von Strahlung sind.
+Laser und Ir haben beide sehr Ã¤hnliche Eigenschaften, da beide eine Form von Strahlung sind.
 Da
  jedoch Ir wesentlich weniger Schadenspotential besitzt als Laser, zum Beispiel, wenn man genau auf
-die Augen zielt, haben wir uns am Ende für Ir entschieden, da wir hier die Kontrolle haben, es so
+die Augen zielt, haben wir uns am Ende fÃ¼r Ir entschieden, da wir hier die Kontrolle haben, es so
  einzustellen, dass nie eine hohes Schadenspotential erreicht wird.
 
