@@ -40,7 +40,8 @@ Der Thread für die Kommunikation führt in einer Endlosschleife folgende Schrit
     \item Zurück zu 1.
 \end{enumerate}
 
-Das Nachrichtenformat ist mittels Google Protocol Buffers umgesetzt. Da Protocol Buffers selbst keine Möglichkeit
+Das Nachrichtenformat ist mittels Google Protocol Buffers, Googles Lösung der Datenformatserialisierung umgesetzt. Dies ist eine sehr simple Lösung der Frage, wie wir die Nachrichten einheitlich und verständlich strukturieren. Protocol Buffers ist dabei im Vergleich zu den betrachteten alternativen wie XML am simpelsten mit dem wenigsten Overhead, während es trotzdem unseren Anforderungen genügt.\\
+ Da Protocol Buffers jedoch selbst keine Möglichkeit
 implementiert um aus einem empfangenem Byte-String den Nachrichtentyp zu rekonstruieren, wird vor jeder Nachricht
 ein Header verschickt der den Nachrichtentyp und die Länge der Nachricht in Bytes enthält.
 Die Nachrichten selbst können einfach mittels der Protocol-Buffers Bibliothek zu entsprechenden C++ Objekte geparst werden, die dann Nachrichtenfelder als \glqq Getter- und Setter-Funktionen\grqq \, verfügbar machen.
