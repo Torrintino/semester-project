@@ -4,21 +4,32 @@ Dieser Abschnitt erläutert, wie die Grundinstallation auf den Spielgeräten und
 vorgenommen wird.
 Für diese Aufgabe war Lennart Weiß verantwortlich.
 
-Der Server ist ein Raspberry Pi Model B+.
-Er hat zwei physikalische Netzwerkinterfaces: WLAN und Ethernet.
-Aufgrund der geringen Größe lässt er sich leicht überall hin transportieren.
-Für ein Spiel benötigt er lediglich eine Stromversorgung, um als internetfähiger Access Point zu
-dienen braucht darüber hinaus einen Ethernet Uplink, über dem er per DHCP eine IP Adresse beziehen
-kann und Internetzugang hat.
-Zum Debugging sind darüber hinaus Bildschirm und Tastatur nützlich.
+Der Server wurde auf einem Raspberry Pi Model B+ eingerichtet. Strenggenommen
+sind für den Server nur Strom und ein Wifi Netzwerk absolut erforderlich. Per
+Wifi kann der Server als Access Point dienen und der Administrator kann sich mit
+SSH auf dem Gerät einloggen und Änderungen vornehmen. Das gewählte Gerät bringt
+allerdings noch einige Funktionen mit, welche die Wartung erleichtern. Der
+zusätzliche Ethernetanschluss wird genutzt, um ihn mit einem Netzwerk zu
+verbinden, dass ihm eine DHCP Adresse zuweist und Internetzugang gewährt. 
+Dadurch können der Server, sowie alle mit dem Wifi Netzwerk verbundenen Geräte
+Pakete aus dem Internet herunterladen. Sollte aus etwaigen Gründen das Wifi
+Netzwerk abstürzen, kann man den Server über HDMI an einen Bildschirm
+anschließen und mit einer USB Tastatur warten. Sollte ein Bootvorgang nicht
+mehr möglich sein, kann man einfach die SD Karte entfernen und auf einem anderen
+Gerät das Dateisystem überprüfen und reparieren. Natürlich hätte man als Server
+auch einen gewöhnlichen Desktop PC verwenden können, dieser lässt sich jedoch
+nicht so leicht transportieren. Der kleine und leichte Raspberry Pi eignet sich
+also besser für den Fall, dass es kein festgelegtes Spielfeld gibt.
 
-Auf dem Server ist Raspbian Lite installiert.
-Das Gerät lässt sich auch durch einen beliebigen anderen PC austauschen, dass besagte
-Netzwerkschnittstellen besitzt und auf dem Debian installiert werden kann (was den meisten gängigen
-Prozessorarchitekturen möglich ist).
-Raspbian wurde vor allem wegen seiner weiten Verbreitung und Stabilität gewählt.
-Für Probleme bei der Serverinstallation kann im Regelfall eine Suche in Debianforen und ähnlichem
-eine Lösung gefunden und auf Raspbian übertragen werden.
+Auf dem Server ist Raspbian Lite installiert. Raspbian wurde vor allem wegen 
+seiner weiten Verbreitung und Stabilität gewählt. Für Probleme bei der 
+Serverinstallation kann im Regelfall eine Suche in Debianforen und ähnlichem
+eine Lösung gefunden und auf Raspbian übertragen werden. Außerdem ist das
+Angebot an Paketen sehr umfangreich. Die Lite Version wurde gewählt, weil eine
+grafische Oberfläche für den Betrieb nicht notwendig ist und die gesamte
+Installation und Wartung des Geräts über die Kommandozeile erledigt wird.
+Durch den Verzicht auf die grafische Oberfläche und weitere unnötige Pakete
+werden Ressourcen gespart und es gibt weniger Angriffsfläche für Fehlfunktionen.
 
 Auf dem Server ist ein Puppetmaster eingerichtet.
 Damit kann genau festgelegt werden, welche Software auf die Clients verteilt werden soll und die
