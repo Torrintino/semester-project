@@ -10,22 +10,22 @@ Wifi kann der Server als Access Point dienen und der Administrator kann sich mit
 SSH auf dem Gerät einloggen und Änderungen vornehmen. Das gewählte Gerät bringt
 allerdings noch einige Funktionen mit, welche die Wartung erleichtern. Der
 zusätzliche Ethernetanschluss wird genutzt, um ihn mit einem Netzwerk zu
-verbinden, dass ihm eine DHCP Adresse zuweist und Internetzugang gewährt. 
-Dadurch können der Server, sowie alle mit dem Wifi Netzwerk verbundenen Geräte
-Pakete aus dem Internet herunterladen. Sollte aus etwaigen Gründen das Wifi
-Netzwerk abstürzen, kann man den Server über HDMI an einen Bildschirm
-anschließen und mit einer USB Tastatur warten. Sollte ein Bootvorgang nicht
-mehr möglich sein, kann man einfach die SD Karte entfernen und auf einem anderen
+verbinden, das ihm eine DHCP-Adresse zuweist und Internetzugang gewährt. 
+Dadurch können der Server sowie alle mit dem Wifi-Netzwerk verbundenen Geräte
+Pakete aus dem Internet herunterladen. Sollte aus etwaigen Gründen das Wifi-Netzwerk
+abstürzen, kann man den Server über HDMI an einen Bildschirm
+anschließen und mit einer USB-Tastatur warten. Sollte ein Bootvorgang nicht
+mehr möglich sein, kann man einfach die SD-Karte entfernen und auf einem anderen
 Gerät das Dateisystem überprüfen und reparieren. Natürlich hätte man als Server
-auch einen gewöhnlichen Desktop PC verwenden können, dieser lässt sich jedoch
+auch einen gewöhnlichen Desktop-PC verwenden können, dieser lässt sich jedoch
 nicht so leicht transportieren. Der kleine und leichte Raspberry Pi eignet sich
 also besser für den Fall, dass es kein festgelegtes Spielfeld gibt.
 
 Auf dem Server ist Raspbian Lite installiert. Raspbian wurde vor allem wegen 
 seiner weiten Verbreitung und Stabilität gewählt. Für Probleme bei der 
-Serverinstallation kann im Regelfall eine Suche in Debianforen und ähnlichem
+Serverinstallation kann im Regelfall durch eine Suche in Debianforen und ähnlichem
 eine Lösung gefunden und auf Raspbian übertragen werden. Außerdem ist das
-Angebot an Paketen sehr umfangreich. Die Lite Version wurde gewählt, weil eine
+Angebot an Paketen sehr umfangreich. Die Lite-Version wurde gewählt, weil eine
 grafische Oberfläche für den Betrieb nicht notwendig ist und die gesamte
 Installation und Wartung des Geräts über die Kommandozeile erledigt wird.
 Durch den Verzicht auf die grafische Oberfläche und weitere unnötige Pakete
@@ -34,22 +34,23 @@ werden Ressourcen gespart und es gibt weniger Angriffsfläche für Fehlfunktione
 Auf dem Server ist ein Puppetmaster eingerichtet.
 Damit kann genau festgelegt werden, welche Software auf die Clients verteilt werden soll und die
 Installation kann automatisiert werden.
-Für jeden Client muss auf dem Server ein Zertifikat signiert werden, dieser manuelle Schritt wird
-jedoch nur einmal bei der Erstinstallation des Client vorgenommen.
+Für jeden Client muss auf dem Server ein Zertifikat signiert werden.
+Dieser manuelle Schritt wird jedoch nur einmal bei der Erstinstallation des Clients vorgenommen.
 Für die möglichst schnelle Installation der Spielgeräte wurde ein Image mit Raspbian vorbereitet, in
 dem eine deutsche Lokalisierung mit englischer Sprache eingestellt wurde und ein Puppet Client
 installiert ist.
 Außerdem wurde die WLAN SSID und das Passwort eingerichtet und der Client verbindet sich nach dem
-Boot Vorgang automatisch per wpa\_supplicant mit dem Server.
-Um den Kopiervorgang zu beschleunigen, wurde das Image auf die minimale Größe (ca. 2G) gehalten.
-Dadurch kann das Image in wenigen Minuten auf eine SD Karte geschrieben und in den neuen Raspberry
+Boot-Vorgang automatisch per \texttt{wpa\_supplicant} mit dem Server.
+Um den Kopiervorgang zu beschleunigen, wurde das Image auf die minimale Größe (ca. 2 Gigabyte)
+gehalten.
+Dadurch kann das Image in wenigen Minuten auf eine SD-Karte geschrieben und in den neuen Raspberry
 Pi eingesetzt werden.
-Außerdem kann die SD Karte eine beliebige Größe haben.
+Außerdem kann die SD-Karte eine beliebige Speicherkapazität haben.
 
 Um den Installationsvorgang zu beenden, muss auf man sich per SSH auf dem Client einloggen.
-Per raspi-config wird das Filesystem auf die maximale Größe eingestellt und der Hostname
-eingestellt.
-Dieser ist ‚\texttt{client-x}‘, wobei \texttt{x} die Client ID bezeichnet, welche vorher eindeutig
+Per \texttt{raspi-config} wird das Filesystem auf die maximale Größe eingestellt und der Hostname
+festgelegt.
+Dieser ist „\texttt{client-x}“, wobei \texttt{x} die Client ID bezeichnet, welche vorher eindeutig
 an jedes Gerät vergeben wird.
 Die Geräte sind entsprechend beschriftet, damit sie identifiziert werden können.
 Schließlich werden mit Puppet alle benötigten Komponenten installiert und der Client ist
