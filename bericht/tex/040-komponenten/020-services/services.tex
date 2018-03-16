@@ -14,10 +14,11 @@ Mitglieder und Aufgaben:
   \item
     Tim Sikatzki (Website Backend)
 \end{itemize}
-\subsubsection{Netzwerkkommunikation}
 
-Die gesamte Netzwerkkommunikation zwischen Clients und Server ist mit der BSD Socket API implementiert.
-Dabei kommunizieren Clients und Server über TCP Sockets.
+\subsubsection{Kommunikation}
+
+Der Spielserver \texttt{services-server} nutzt einen eigenen Thread für die Kommunikation mit den Clients und
+der Webseite. Clients und Server kommunizieren über BSD Sockets.
 Als Alternative kam Googles gRPC in Frage. Dieses wurde verworfen, weil:
 \begin{itemize}
     \item gRPC erlaubt Kommunikation nur in eine Richtung. Der Server kann nur dann Nachrichten an den Client verschicken,  wenn ein Request eingegangen ist.
@@ -25,20 +26,30 @@ Als Alternative kam Googles gRPC in Frage. Dieses wurde verworfen, weil:
 \end{itemize}
 Es wäre möglich gewesen Bibliotheken, zum Beispiel \href{http://think-async.com/Asio/WebHome}{boost.asio}, die eine einfachere Schnittstelle anbieten zu verwenden. Da wir zu dem Zeitpunkt, an dem wir entschieden haben die Socket API direkt zu verwenden, noch nicht genau wussten wie die Netzwerkkommunikation funktionieren würde, wollten wir uns möglichst viele Optionen offen halten. Außerdem hatten wir im Verlauf der Entwicklung mehrmals Probleme mit inkompatiblen Bibliotheksversionen, entweder durch andere APIs oder - wesentlich lästiger - durch unterschiedliches Verhalten. Deshalb waren wir später sehr zurückhaltend beim Einführen neuer Abhängigkeiten.
 
+An die Datenbank ist der Server über die \href{https://dev.mysql.com/doc/connector-c/en/connector-c-introduction.html}{mysql c connector} Schnittstelle angebunden. Die Schnittstelle bietet eine relativ simple API: Zuerst verbindet sich das Programm mit dem MySQL Datenbankserver (entweder über TCP oder über Unix Sockets) und dann können beliebige SQL Anfragen als String an den Datenbankserver geschickt werden, der daraufhin Zeilenweise die Ergebnisse zurückliefert.
+Diese Schnittstelle ist in einem C++ Singleton gekapselt \texttt{DatabaseConnection}, die Methoden für alle Anfragen
+bereitstellt die der Server stellen muss (bswp \texttt{get\_runnable\_games()}). \newline
+\newline
+Der Thread für die Kommunikation führt in einer Endlosschleife folgende Schritte aus:
+\begin{enumerate}
+    \item Falls sich neue Clients verbunden haben: Lege die passenden Datenstrukturen an und setze den Status des Clients in der Datenbank auf verbunden.
+    \item Hole eine Liste noch nicht beendeter Spiele von der Datenbank. Falls neue dazu gekommen sind, lege ein entsprechendes Objekt an.
+    \item Frage den aktuellen Zustand aller Spiele die dem Server bekannt sind ab. Falls ein Spiel gestartet wurde, starte den entsprechenden Thread für die LUA API des Spiels.
+    \item Sende den Spiellogik-Threadd aller neu beendeten Spiele eine Nachricht die diese dazu auffordert sich zu beenden.
+    \item Empfange und Parse Nachrichten von Clients. (Siehe weiter unten)
+    \item Zurück zu 1.
+\end{enumerate}
+
 Das Nachrichtenformat ist mittels Google Protocol Buffers umgesetzt. Da Protocol Buffers selbst keine Möglichkeit
 implementiert um aus einem empfangenem Byte-String den Nachrichtentyp zu rekonstruieren, wird vor jeder Nachricht
 ein Header verschickt der den Nachrichtentyp und die Länge der Nachricht in Bytes enthält.
+Die Nachrichten selbst können einfach mittels der Protocol-Buffers Bibliothek zu entsprechenden C++ Objekte geparst werden, die dann Nachrichtenfelder als \glqq Getter- und Setter-Funktionen\grqq \, verfügbar machen.
 
-Der Server nutzt zur Verarbeitung von eingehenden Nachrichten die Bibliothek libevent. Die Bibliothek ruft
-beim Empfang von Nachrichten eine callback Funktion auf, in der die Logik zum Parsen eingehender Nachrichten
-implementiert ist. Dies ermöglicht es ohne zu blockieren Nachrichten von verschiedenen Sockets zu empfangen.
+Die Kommunikation mit der Hardware-Komponente läuft über einen eigene Komponente (\texttt{services-client}) die auf den Spielgeräten ausgeführt wird. Diese empfängt Nachrichten von der Hardware-Schnittstelle über einen Unix-Socket, wandelt diese in das Services-Interne Format um und sendet sie dann über einen TCP Socket an den Server. Außerdem kümmert sich die Komponente darum in regelmäßigen Abständen (ca. 5 Sekunden) eine kurze \glqq Keep-Alive\grqq \, Nachricht an den Server zu senden um zu signalisieren das der Client noch verbunden ist und am Spielbetrieb teilnimmt.
 
-\subsubsection{Datenbankanbindung}
+Da für ein Lasertag das Treffen von anderen Spielern von relativ hoher Bedeutung ist, soll hier noch kurz ausgeführt werden, was aus Sicht der Services-Komponente passiert wenn ein Spieler einen anderen trifft.
 
-Der Server ist über die \href{https://dev.mysql.com/doc/connector-c/en/connector-c-introduction.html}{mysql c connector} Schnittstelle an die MySQL Datenbank angebunden. Die Schnittstelle bietet eine relativ simple API: Zuerst verbindet sich das Programm mit dem MySQL Datenbankserver (entweder über TCP oder über Unix Sockets) und dann können beliebige SQL Anfragen als String an den Datenbankserver geschickt werden, der daraufhin Zeilenweise die Ergebnisse zurückliefert.
-
-Diese Schnittstelle ist in einem C++ Singleton gekapselt \texttt{DatabaseConnection}, die Methoden für alle Anfragen
-bereitstellt die der Server stellen muss (bswp \texttt{get\_runnable\_games()}).
+TODO
 
 \subsubsection{LUA API (services)}
 
