@@ -35,8 +35,9 @@ in dieser Sprache.
 Die Entscheidung für die Version C++14 beruht darauf, dass dies die höchste Version ist, die von der
 GCC-Version, die Raspbian zur Verfügung stellt, unterstützt wird.
 
-Die API kommuniziert nach oben mit \texttt{services-client} über Unix-Sockets und Protocol Buffers.
-Nach unten kommuniziert sie mit dem Infrarot-Treiber, indem dessen Quellcode bei der Kompilierung
+Das Programm kommuniziert nach oben mit \texttt{services-client} über Unix-Sockets und Protocol
+Buffers.
+Nach unten kommuniziert es mit dem Infrarot-Treiber, indem dessen Quellcode bei der Kompilierung
 der \texttt{hardware-api} direkt eingebunden wird, und sie spricht die LEDs und den Button direkt
 über wiringPi an.
 
@@ -92,46 +93,46 @@ Das Ereignis „Spiel endet“ ist auch nur dann notwendig, wenn bei dem Ereigni
 \phantomsection\label{led-anzeige}
 \begin{figure}
   \centering
-  \begin{subfigure}[b]{0.29\textwidth}
+  \begin{subfigure}[b]{0.22\textwidth}
     \includegraphics[width=\textwidth,keepaspectratio]
                     {./040-komponenten/010-hardware/led-default.png}
     \caption{\label{fig:led-init}}
   \end{subfigure}
   \hspace{0.1\textwidth}
-  \begin{subfigure}[b]{0.46\textwidth}
+  \begin{subfigure}[b]{0.40\textwidth}
     \includegraphics[width=\textwidth,keepaspectratio]{./040-komponenten/010-hardware/led-start.png}
     \caption{\label{fig:led-start}}
   \end{subfigure}
   
-  \begin{subfigure}[b]{0.08\textwidth}
+  \begin{subfigure}[b]{0.06\textwidth}
     \includegraphics[width=\textwidth,keepaspectratio]{./040-komponenten/010-hardware/led-green.png}
     \caption{\label{fig:led-green}}
   \end{subfigure}
   \hspace{0.03\textwidth}
-  \begin{subfigure}[b]{0.08\textwidth}
+  \begin{subfigure}[b]{0.06\textwidth}
     \includegraphics[width=\textwidth,keepaspectratio]
                     {./040-komponenten/010-hardware/led-green-blink.png}
     \caption{\label{fig:led-green-blink}}
   \end{subfigure}
   \hspace{0.03\textwidth}
-  \begin{subfigure}[b]{0.08\textwidth}
+  \begin{subfigure}[b]{0.06\textwidth}
     \includegraphics[width=\textwidth,keepaspectratio]
                     {./040-komponenten/010-hardware/led-red-blink.png}
     \caption{\label{fig:led-red-blink}}
   \end{subfigure}
   \hspace{0.03\textwidth}
-  \begin{subfigure}[b]{0.08\textwidth}
+  \begin{subfigure}[b]{0.06\textwidth}
     \includegraphics[width=\textwidth,keepaspectratio]{./040-komponenten/010-hardware/led-red.png}
     \caption{\label{fig:led-red}}
   \end{subfigure}
   \hspace{0.03\textwidth}
-  \begin{subfigure}[b]{0.08\textwidth}
+  \begin{subfigure}[b]{0.06\textwidth}
     \includegraphics[width=\textwidth,keepaspectratio]
                     {./040-komponenten/010-hardware/led-yellow.png}
     \caption{\label{fig:led-yellow}}
   \end{subfigure}
   \hspace{0.03\textwidth}
-  \begin{subfigure}[b]{0.08\textwidth}
+  \begin{subfigure}[b]{0.06\textwidth}
     \includegraphics[width=\textwidth,keepaspectratio]
                     {./040-komponenten/010-hardware/led-red-yellow-blink.png}
     \caption{\label{fig:led-red-yellow-blink}}
@@ -157,8 +158,12 @@ Dadurch können defekte, sowie nicht- oder falsch-angeschlossene LEDs schon dire
 Einschalten der Spielgeräte erkannt werden.
 Wird ein Spiel angekündigt, so fangen alle LEDs synchron an zu blinken.
 10 Sekunden vor dem Spielstart blinkt dann nur noch die rote LED und 4 Sekunden davor schalten die
-LEDs, analog zu einer deutschen Ampel, von rot über rot-gelb auf grün.
+LEDs, analog zu einer deutschen Straßenverkehrsampel, von rot über rot-gelb auf grün.
 Die grüne LED zeigt an, dass das Spiel läuft.
+Dies mag zwar kompliziert klingen, ist aber doch sehr intuitiv, denn solange die grüne LED nicht
+leuchtet, weiß jeder, dass das Spiel noch nicht läuft, und wenn nach rot rot-gelb kommt, weiß jeder
+aus Erfahrung, dass als nächstes grün kommt.
+
 Neigt sich das Spiel dem Ende zu, fängt die grüne LED 64 Sekunden vorher langsam an zu blinken und
 blinkt bis zum Ende des Spiels immer schneller.
 Nach dem Spielende kehren die LEDs zum initialen Zustand zurück.
