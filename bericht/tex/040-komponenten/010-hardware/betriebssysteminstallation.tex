@@ -5,7 +5,7 @@ vorgenommen wird.
 Für diese Aufgabe war Lennart Weiß verantwortlich.
 
 Der Server wurde auf einem Raspberry Pi Model B+ eingerichtet. Strenggenommen
-sind für den Server nur Strom und ein Wifi Netzwerk absolut erforderlich. Per
+sind für den Server nur Strom und eine Wifi Netzwerkschnittstelle absolut erforderlich. Per
 Wifi kann der Server als Access Point dienen und der Administrator kann sich mit
 SSH auf dem Gerät einloggen und Änderungen vornehmen. Das gewählte Gerät bringt
 allerdings noch einige Funktionen mit, welche die Wartung erleichtern. Der
@@ -31,28 +31,35 @@ Installation und Wartung des Geräts über die Kommandozeile erledigt wird.
 Durch den Verzicht auf die grafische Oberfläche und weitere unnötige Pakete
 werden Ressourcen gespart und es gibt weniger Angriffsfläche für Fehlfunktionen.
 
-Auf dem Server ist ein Puppetmaster eingerichtet.
-Damit kann genau festgelegt werden, welche Software auf die Clients verteilt werden soll und die
-Installation kann automatisiert werden.
-Für jeden Client muss auf dem Server ein Zertifikat signiert werden.
-Dieser manuelle Schritt wird jedoch nur einmal bei der Erstinstallation des Clients vorgenommen.
-Für die möglichst schnelle Installation der Spielgeräte wurde ein Image mit Raspbian vorbereitet, in
-dem eine deutsche Lokalisierung mit englischer Sprache eingestellt wurde und ein Puppet Client
-installiert ist.
-Außerdem wurde die WLAN SSID und das Passwort eingerichtet und der Client verbindet sich nach dem
-Boot-Vorgang automatisch per \texttt{wpa\_supplicant} mit dem Server.
-Um den Kopiervorgang zu beschleunigen, wurde das Image auf die minimale Größe (ca. 2 Gigabyte)
-gehalten.
-Dadurch kann das Image in wenigen Minuten auf eine SD-Karte geschrieben und in den neuen Raspberry
-Pi eingesetzt werden.
-Außerdem kann die SD-Karte eine beliebige Speicherkapazität haben.
+Für die Clientgeräte gibt es einen geregelten Installationsprozess. Dies ist
+notwendig, damit die Geräte alle auf dem selben Stand sind. Ist dies nicht
+gegeben, ist die Fehlersuche bei unerwartetem Verhalten ungleich schwerer. Die
+Installation sollte außerdem automatisiert sein, um die Arbeitszeit für das
+Einrichten neuer Spielgeräte möglichst zu reduzieren und etwaige Fehler durch
+manuelle Arbeit an den Geräten auszuschließen.
 
-Um den Installationsvorgang zu beenden, muss auf man sich per SSH auf dem Client einloggen.
-Per \texttt{raspi-config} wird das Filesystem auf die maximale Größe eingestellt und der Hostname
-festgelegt.
-Dieser ist „\texttt{client-x}“, wobei \texttt{x} die Client ID bezeichnet, welche vorher eindeutig
-an jedes Gerät vergeben wird.
-Die Geräte sind entsprechend beschriftet, damit sie identifiziert werden können.
-Schließlich werden mit Puppet alle benötigten Komponenten installiert und der Client ist
-einsatzbereit.
+Der Raspberry Pi Zero W wurde als Standardgerät festgelegt. Für die Installation
+wurde ein Image erstellt, welches eine Minimalbasis darstellt, die den
+restlichen Prozess unterstützt. Hierbei handelt es sich um Raspbian Lite auf dem
+die Lokalisierung auf Deutschland mit englischer Sprache eingestellt wurde, um
+die Wartung zu erleichtern. Das Wifi ist so konfiguriert, dass sich der Client
+beim Systemstart automatisch mit wpa_supplicant zum Coding Tag Netzwerk
+verbindet. Außerdem wurde SSH aktiviert, somit ist es möglich sich auf dem Gerät
+einzuloggen. Der erste Schritt besteht also darin, das Image auf die neue SD
+Karte zu schreiben. Der Client bekommt eine noch nicht vergebene ID, welche
+auf das SD Kartengehäuse mit einem wasserfesten Stift geschrieben wird, damit
+das Gerät auch von außen sofort identifizierbar ist. Das Gerät wird als nächstes
+mit Strom verbunden und es verbindet sich zum Server. Per SSH loggt man sich
+nun ein, dabei muss der Standardhostname 'Client' verwendet werden. Ist dies
+getan wird als erstes der Hostname zu „\texttt{client-x}“ geändert, wobei 
+\texttt{x} die Client ID bezeichnet. Das Image wurde auf eine minimale Größe
+gehalten von etwa 2GB gehalten, um den Schreibprozess zu beschleunigen und
+keine konkrete SD Kartengröße festzulegen. Daher muss die Größe des Dateisystems
+nach dem Kopiervorgang wieder maximiert werden. Die meisten zuvor genannten
+Schritte lassen sich einfach mit \texttt{raspi-config} vornehmen. Für die
+Installation der Projektkomponenten wird wie im Abschnitt "Installation"
+beschrieben Puppet verwendet. Puppet ist bereits im Image installiert, aber
+als zusätzlicher Schritt muss für den Client ein neues Zertifikat erstellt
+werden. Dafür verbindet sich der Puppet Client einmal mit dem Server und das
+neu erstellte Zertifikat wird auf dem Server signiert.
 
