@@ -15,6 +15,14 @@ Mitglieder und Aufgaben:
     Tim Sikatzki (Website Backend)
 \end{itemize}
 
+\subsubsection{Aufbau}
+Das gesamte Netzwerk ist über eine zentrales System realisiert. Die einzelnen 
+Client kommunizieren nicht untereinander sonder alle mit dem Server der die Spielverwaltung übernimmt. 
+Die Einstellungen der Spielparameter und die Darstellung des Punktestandes übernimmt eine Website die auf dem Server läuft. 
+Auf dieser können die Spieler Dinge wie Spieleranzahl und Rundendauer festlegen außerdem meldet 
+die Website dem Server den Start des Spiels. Zuletzt gibt es noch eine Datenbank zur Festhaltung des Punktestandes. 
+Sie wird vom Server aktuell gehalten und von der Website auf einem Scoreboard dargestellt.
+
 \subsubsection{Kommunikation}
 
 Der Spielserver \texttt{services-server} nutzt einen eigenen Thread für die Kommunikation mit den Clients und
