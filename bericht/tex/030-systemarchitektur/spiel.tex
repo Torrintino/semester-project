@@ -10,11 +10,11 @@ Dafür gibt es zwei Ansätze, die verfolgt wurden:
   \item
     eine Anzeige für den Server über den aktuellen Spielstand.
 \end{itemize}
-Die Anzeige für die Spielgeräte wurde mit LEDs realisiert, die \hyperref[led-anzeige]{mit
-verschiedenen Farben anzeigen, ob ein anderer Spieler getroffen wurde, ob man unverwandbar ist,
-etc}.
+Die Anzeige für die Spielgeräte wurde mit LEDs realisiert, die mit verschiedenen Farben anzeigen, ob
+ein anderer Spieler getroffen wurde, ob man unverwandbar ist, etc.
 Dies ist eine preiswerte Möglichkeit, die durch die GPIO-Anschlüsse der Raspberry Pis unterstützt
 wird.
+Mehr zu den LEDs ist im \cref{sec:leds} zu finden.
 
 Die Anzeige des Servers wurde mit einer Website umgesetzt, die tabellarisch das Scoreboard anzeigt.
 Die Webseite soll auf einem oder mehreren Bildschirmen dargestellt werden, die auf das gesammte
@@ -35,10 +35,6 @@ Dies muss auf mehrere Weisen geschehen:
     Die Streuung von Abschüssen muss eingeschränkt sein.
     Dies wurde gelöst, indem Strohhalme über die LEDs gestülpt wurden, die das Aussenden des Signals
     in eine bestimmte Richtung lenken.
-  \item
-    Ein Spieler darf nicht konstant schießen, es muss also eine Art Abklingzeit geben.
-    Dafür wurde an den Geräten ein Button angebracht, sodass das Gerät nur schießt, wenn der Button
-    gedrückt wird.
   \item
     Damit ein Spieler nicht mehrmals hintereinander getroffen werden kann, gibt es bei vielen
     Spielmodi eine kurze Unverwundbarkeitszeit, nachdem ein Spieler getroffen wurde.

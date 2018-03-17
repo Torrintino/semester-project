@@ -2,21 +2,20 @@
 
 Um die einzelnen Spieler zu unterscheiden, war es notwendig, dass sie unterschiedliche
 Informationen aussenden, um sie eindeutig im Spielkontext zu identifizieren.
-Wir hatten 3 verschiedene Ideen, wie man diese Informationen modellieren kann, um sie schnell und 
+Wir hatten drei verschiedene Ideen, wie man diese Informationen modellieren kann, um sie schnell und 
 korrekt zu übertragen.
 Dabei war die Grundlage, dass jede gesendete Information in eine eindeutige Abfolge von 2
-verschiedenen Zuständen, im Folgenden als Zustand 0 (kurz: 0) bzw. Zustand 1 (kurz: 1)
-bezeichnet, übersetzt wird und dann diese Abfolge von Zuständen gesendet wird.
+verschiedenen Zuständen – im Folgenden als Zustand 0 (kurz: 0) bzw. Zustand 1 (kurz: 1)
+bezeichnet – übersetzt wird und dann diese Abfolge von Zuständen gesendet wird.
 Diese Abfolge von Zuständen musste ebenfalls modelliert werden, um das Gebot der Korrektheit zu
-erfüllen, da ein einfaches Absenden der Information mit Signal an $= 1$ und Signal aus $= 0$ sehr
-rauschanfällig wäre.
+erfüllen, da ein einfaches Absenden der Information – mit Signal an $= 1$ und Signal aus $= 0$ –
+sehr rauschanfällig wäre.
 Des Weiteren wollten wir auf selbstkorrigierende Codes verzichten, um eine möglichst schnelle und
-genaue Treffererkennung zu schaffen, und um zu verhindern, dass wenn 2 Spieler nahezu gleichzeitig
-schießen, der Spieler, der zuerst schießt, den Treffer nicht gewertet bekommt, da sein Schuss
-erst korrigiert werden musste, wohingegen der Schuss des langsameren Spielers zuerst gewertet
+genaue Treffererkennung zu schaffen, und um zu verhindern, dass wenn zwei Spieler nahezu
+gleichzeitig schießen, der Spieler, der zuerst schießt, den Treffer nicht gewertet bekommt, da sein
+Schuss erst korrigiert werden musste, wohingegen der Schuss des langsameren Spielers zuerst gewertet
 wird, da sein Schuss keine Korrektur hatte.
-
-Dazu hatten wir 3 Ideen, wie man diese Modulation umsetzen könnte:
+Dazu hatten wir folgende drei Ideen, wie man diese Modulation umsetzen könnte:
 \begin{enumerate}
   \item
     Man gibt Zustand 1 und Zustand 0 unterschiedliche Längen von einem Signal mit festen Pausen
@@ -30,32 +29,29 @@ Dazu hatten wir 3 Ideen, wie man diese Modulation umsetzen könnte:
 
 \paragraph{Idee 1}
 Der Vorteil der ersten Idee ist, dass sie sehr simpel zu implementieren ist.
-
-Der Nachteil ist jedoch, dass sie von den 3 Ideen am stärksten rauschanfällig ist und somit die
+Der Nachteil ist jedoch, dass sie von den drei Ideen am stärksten rauschanfällig ist und somit die
 geringste Reichweite bietet.
 
 \paragraph{Idee 2}
 Die Vorteile hier bestehen darin, dass sie sehr einfach zu implementieren wäre, wenn man den Treiber
 von Grund auf selbst schreibt, und dass sie die schnellste Übertragung von allen bietet.
-
-Der größte Nachteil besteht jedoch darin, dass diese Idee selber sehr rauschanfällig ist, da Flanken
+Der größte Nachteil besteht jedoch darin, dass diese Idee selbst sehr rauschanfällig ist, da Flanken
 in der Theorie überspielt werden könnten.
 
 \paragraph{Idee 3}
-Der Vorteil besteht hier darin, dass die wenigste Rauschanfälligkeit besteht, da man – mit genügend
+Der Vorteil besteht hier darin, dass die geringste Rauschanfälligkeit besteht, da man – mit genügend
 großen Unterschieden zwischen den Pausen bei den beiden Zuständen – sehr großzügig sein kann, was
 noch als Treffer gilt.
 Ein weiterer Vorteil war, dass man bereits Geräte im Haus hatte, die genauso funktionieren, was
-Tests am Anfang stark vereinfacht hatte und sie dafür gesorgt hat, dass das Troubleshooting später
+Tests am Anfang stark vereinfacht hatte und dafür gesorgt hat, dass eine Fehlerbehebung später
 ebenfalls leichter war.
-
-An Nachteilen ist hier aufzulisten, dass es von den 3 Ideen am schwierigsten zu implementieren
+An Nachteilen ist hier aufzulisten, dass es von den drei Ideen am schwierigsten zu implementieren
 gewesen wäre und dass es die langsamste Variante für die Informationsübertragung ist. \\
 
 Am Ende hatten wir uns für Idee 3 entschieden, da die Informationspakete klein genug sind, dass
 die Geschwindigkeit nicht leidet.
 Außerdem haben wir das Problem mit der Implementation dadurch umgangen, dass man den
 Open-Source-Treiber Lirc benutzt hat, sodass man nicht den Treiber selber schreiben musste, sondern
-nur über die Lirc-bibliothek mit dem Treiber kommunizieren musste.
+nur über die Lirc-Bibliothek mit dem Treiber kommunizieren musste.
 Der Vorteil eines externen Testgerätes war dann den Vorteilen der anderen beiden Varianten stark
 überlegen.

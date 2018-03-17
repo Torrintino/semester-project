@@ -46,11 +46,11 @@ implementiert um aus einem empfangenem Byte-String den Nachrichtentyp zu rekonst
 ein Header verschickt der den Nachrichtentyp und die Länge der Nachricht in Bytes enthält.
 Die Nachrichten selbst können einfach mittels der Protocol-Buffers Bibliothek zu entsprechenden C++ Objekte geparst werden, die dann Nachrichtenfelder als \glqq Getter- und Setter-Funktionen\grqq \, verfügbar machen.
 
-Die Kommunikation mit der Hardware-Komponente läuft über einen eigene Komponente (\texttt{services-client}) die auf den Spielgeräten ausgeführt wird. Diese empfängt Nachrichten von der Hardware-Schnittstelle über einen Unix-Socket, wandelt diese in das Services-Interne Format um und sendet sie dann über einen TCP Socket an den Server. Außerdem kümmert sich die Komponente darum in regelmäßigen Abständen (ca. 5 Sekunden) eine kurze \glqq Keep-Alive\grqq \, Nachricht an den Server zu senden um zu signalisieren das der Client noch verbunden ist und am Spielbetrieb teilnimmt.
-
+Die Kommunikation mit der Hardware-Komponente läuft über einen eigene Komponente (\texttt{services-client}) die auf den Spielgeräten ausgeführt wird. Diese empfängt Nachrichten von der Hardware-Schnittstelle über einen Unix-Socket, wandelt diese in das Services-Interne Format um und sendet sie dann über einen TCP Socket an den Server. Außerdem kümmert sich die Komponente darum in regelmäßigen Abständen (ca. 5 Sekunden) eine kurze \glqq Keep-Alive\grqq \, Nachricht an den Server zu senden um zu signalisieren das der Client noch verbunden ist und am Spielbetrieb teilnimmt. \newline \newline
 Da für ein Lasertag das Treffen von anderen Spielern von relativ hoher Bedeutung ist, soll hier noch kurz ausgeführt werden, was aus Sicht der Services-Komponente passiert wenn ein Spieler einen anderen trifft.
 
-TODO
+Zuerst erhält der Client eine Nachricht von der Hardware-API, die mitteilt das der Client getroffen wurde. In der Nachricht ist die ID des Clients enthalten, von der das Gerät getroffen wurde. Die eigene ID erhält der Client beim start. Diese beiden Informationen werden in eine sog. \glqq Hit-Message\grqq \, verpackt und an den Server gesendet. 
+Der Server erhält die Nachricht, parst diese und sucht nach einem Spiel das beide Clients - Schießenden und Getroffenen - enthält. Findet er kein passendes Spiel, wird die Nachricht verworfen. Falls ein passendes Spiel gefunden wurde, werden die Client-IDs zu den entsprechenden Spieler-IDs aufgelöst (die Zuordnung ist pro Spiel eindeutig) und eine passende Nachricht an den entsprechenden Spiel-Thread geschickt.
 
 \subsubsection{LUA API (services)}
 
