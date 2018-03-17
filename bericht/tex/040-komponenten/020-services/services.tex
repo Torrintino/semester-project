@@ -40,13 +40,16 @@ Der Thread für die Kommunikation führt in einer Endlosschleife folgende Schrit
     \item Zurück zu 1.
 \end{enumerate}
 
+Damit Spiel-Ereignisse an den Spieler kommuniziert werden können, kann die Spiellogik Funktionen auf dem Server aufrufen, die dafür sorgen das passende Nachrichten an die Clients gesendet werden. Dazu gibt es einen Nachrichtentyp in dem mittels eines Enums kodierte LED-Befehle enthalten sind. 
+
 Das Nachrichtenformat ist mittels Google Protocol Buffers, Googles Lösung der Datenformatserialisierung umgesetzt. Dies ist eine sehr simple Lösung der Frage, wie wir die Nachrichten einheitlich und verständlich strukturieren. Protocol Buffers ist dabei im Vergleich zu den betrachteten alternativen wie XML am simpelsten mit dem wenigsten Overhead, während es trotzdem unseren Anforderungen genügt.\\
  Da Protocol Buffers jedoch selbst keine Möglichkeit
 implementiert um aus einem empfangenem Byte-String den Nachrichtentyp zu rekonstruieren, wird vor jeder Nachricht
 ein Header verschickt der den Nachrichtentyp und die Länge der Nachricht in Bytes enthält.
 Die Nachrichten selbst können einfach mittels der Protocol-Buffers Bibliothek zu entsprechenden C++ Objekte geparst werden, die dann Nachrichtenfelder als \glqq Getter- und Setter-Funktionen\grqq \, verfügbar machen.
 
-Die Kommunikation mit der Hardware-Komponente läuft über einen eigene Komponente (\texttt{services-client}) die auf den Spielgeräten ausgeführt wird. Diese empfängt Nachrichten von der Hardware-Schnittstelle über einen Unix-Socket, wandelt diese in das Services-Interne Format um und sendet sie dann über einen TCP Socket an den Server. Außerdem kümmert sich die Komponente darum in regelmäßigen Abständen (ca. 5 Sekunden) eine kurze \glqq Keep-Alive\grqq \, Nachricht an den Server zu senden um zu signalisieren das der Client noch verbunden ist und am Spielbetrieb teilnimmt. \newline \newline
+Die Kommunikation mit der Hardware-Komponente läuft über einen eigene Komponente (\texttt{services-client}) die auf den Spielgeräten ausgeführt wird. Diese empfängt Nachrichten von der Hardware-Schnittstelle über einen Unix-Socket, wandelt diese in das Services-Interne Format um und sendet sie dann über einen TCP Socket an den Server. Außerdem kümmert sich die Komponente darum in regelmäßigen Abständen (ca. 5 Sekunden) eine kurze \glqq Keep-Alive\grqq \, Nachricht an den Server zu senden um zu signalisieren das der Client noch verbunden ist und am Spielbetrieb teilnimmt. 
+Eingehende Nachrichten vom Server, zum Beispiel um mittels der auf dem Gerät vorhandenden LEDs Treffer etc. anzuzeigen, werden vom Client empfangen und an die Hardware API weitergeleitet.\newline \newline
 Da für ein Lasertag das Treffen von anderen Spielern von relativ hoher Bedeutung ist, soll hier noch kurz ausgeführt werden, was aus Sicht der Services-Komponente passiert wenn ein Spieler einen anderen trifft.
 
 Zuerst erhält der Client eine Nachricht von der Hardware-API, die mitteilt das der Client getroffen wurde. In der Nachricht ist die ID des Clients enthalten, von der das Gerät getroffen wurde. Die eigene ID erhält der Client beim start. Diese beiden Informationen werden in eine sog. \glqq Hit-Message\grqq \, verpackt und an den Server gesendet. 
