@@ -18,7 +18,9 @@ Ziel gesetzt nicht nur ein stabile Infrastruktur zur Verfügung zu stellen,
 sondern auch den darüberliegenden Schichten Komfort zu bieten, indem
 hardwarenahe Details abstrahiert werden. Dies hat gut funktioniert und hat die
 Kommunikation mit den anderen Gruppen erleichert, weil es nur sehr wenig
-Schnittstellen gab. Die Hardwaregruppe hat außerdem die Installation des 
+Schnittstellen gab. 
+
+Die Hardwaregruppe hat außerdem die Installation des 
 Projekts übernommen, womit sich die Entwickler voll und ganz auf ihre Arbeit
 konzentrieren konnten, ohne sich um die Verteilung der Software kümmern zu
 müssen. Das Netzwerk hat sich als zuverlässig erwiesen, jedoch ist die
@@ -27,6 +29,7 @@ sehr effektive Lösung erwiesen und wir konnten mit den Powerbanks die
 Geräte komplett ohne externe Kabel realisieren. Allerdings sind sie noch sehr
 klobig und die Powerbanks passen nicht rein, wodurch sie die ganze Zeit über
 zusätzlich gehalten werden müssen. Insgesamt sind die Geräte nicht sehr schön.
+
 Die LED's machen das ganze Spiel sehr viel lebendiger, indem sie etwas
 optisches Feedback bieten, jedoch müssen sich neue Spieler erst mit den Codes
 vertraut machen, was vielleicht etwas unintuitiv ist. Die Infrarotübertragung
@@ -46,29 +49,39 @@ von BitTorrent und von Lasertag in den Spielmodi gefunden haben. Die Erstellung
 mehrerer Spielmodi machte es uns zudem möglich, verschiedene Eigenschaften von 
 BitTorrent auf mehrere Spielmodi zu verteilen, um so die Komplexität jedes
 einzelnen Spielmodus für die Spieler möglichst klein zu halten.
+
 Leider haben wir die Spielmodi nur mit dem Simulator und nicht im Praxiseinsatz, 
 also auf einem echten Spielfeld mit echten Spielern, testen können. Dadurch 
 könnten uns Faktoren, die den Spielverlauf in der Praxis beeinflussen und damit
 eventuell Anpassungen an den Annahmen und bspw. Punktzahlen der Spielmodi nötig 
 machen würden, völlig unbekannt geblieben sein.
+
 Besonders für das Balancing von Parametern wie Punktzahlen und die Zuweisung der
 initialen Dateifragmente hätte ein automatisches Testen sinnvoll sein können.
 Andererseits hätten auch bei automatischen Tests Rahmenbedingungen bzw. Testfälle 
 festgelegt werden müssen, die ohne Daten bzw. Erfahrungen aus der Praxis nur schwer 
 realistisch festgelegt hätten werden können.
+\newline
 
-Die Service-Gruppe hatte mehrere sehr unterschiedliche Aufgaben zu bewältigen. Das waren zum einem das entwickeln eines Servers,
-dessen Aufgabe es ist, die Parameter des aktuellen Spieles, basierend auf Hardware und Logik Input zu verwalten.
-Des weiteren musste eine diese Kommunikation zwischen den Service Komponenten und den beiden anderen Gruppen etabliert werden. 
-Zuletzt musste noch ein Weg gefunden werden, dem Spieler zu ermöglichen ein Spiel zu erstellen, zu verwalten und zu starten, sowie den derzeitigen Stand abzufragen.
-Im Großteil konnten diese Aufgaben alle bewältigt werden. Der Server selbst kann das Spiel konstant aufrecht erhalten und auf 
-Input reagieren. Bei Integrationstest zeigte sich jedoch, dass insbesondere Input der Hardwareebene nicht korrekt verarbeitet wird. 
-Auch die Kommunikation über LUA mit der Spiellogik ist größtenteils funktionsfähig.
-Das Problem des Benutzer Inputs konnte relativ simpel über eine Webseite gelöst werden. 
-HTML (und CSS) reichte für die meisten Funktionen dabei aus, für die anderen benötigten Feature könnten JavaScript und 
-Flask ausreichend helfen. Zugunsten von Datenpersistenz und einfacher Implementierung simultaner Spiele kommuniziert die Seite 
-nicht (wie die anderen Komponenten) schlicht über Googles Protocol Buffers sondern schreibt alle eingegebenen Daten in eine MySQL Datenbank.
-Obwohl die Vorteile dieses Systems groß sind hat sich bei dem Versuch der Integration mit dem Server gezeigt, dass viel mehr Probleme 
-auftreten als erwartet, was dazu führte, dass sie zur Endpräsentation nicht komplett einsatzfähig war.
+Die Service-Gruppe hatte mehrere sehr unterschiedliche Aufgaben zu bewältigen. 
+Das waren zum einem das entwickeln eines Servers, dessen Aufgabe es ist, die Parameter des aktuellen Spieles, 
+basierend auf Hardware und Logik Input zu verwalten. Des weiteren musste eine diese Kommunikation zwischen den 
+Service Komponenten und den beiden anderen Gruppen etabliert werden. Zuletzt musste noch ein Weg gefunden werden, 
+dem Spieler zu ermöglichen ein Spiel zu erstellen, zu verwalten und zu starten, sowie den derzeitigen Stand abzufragen.
+
+Im Großteil konnten diese Aufgaben alle bewältigt werden. Der Server selbst kann das Spiel konstant aufrecht erhalten 
+und auf Input reagieren. Die Kommunikation zwischen Client und Server, sowie die Funktionen der LEDs sind vollständig implementiert. 
+Test zeigen zwar, dass alle Komponenten korrekt arbeiten, jedoch konnte mangels Parxistest nicht ausgeschlossen werden, dass unerwartete Probleme auftreten.
+
+ Bei Integrationstest zeigte sich jedoch, dass insbesondere Input der Hardwareebene nicht korrekt verarbeitet wird. 
+ Eine Kommunikation mit der Logik über LUA konnte hergestellt werden und die Daten korrekt vom Server verarbeitet werden, 
+ da jedoch die Ergebnisse nicht korrekt sind, haben wir einen unlokalisierten Bug in der Aufnahme oder Verarbeitung.
+ 
+Das Problem des Benutzer Inputs konnte relativ simpel über eine Webseite gelöst werden. HTML (und CSS) reichte für die 
+meisten Funktionen dabei aus, für die anderen benötigten Feature könnten JavaScript und Flask ausreichend helfen. 
+Zugunsten von Datenpersistenz und einfacher Implementierung simultaner Spiele kommuniziert die Seite nicht (wie die anderen Komponenten) 
+schlicht über Googles Protocol Buffers sondern schreibt alle eingegebenen Daten in eine MySQL Datenbank. Obwohl die Vorteile dieses Systems 
+groß sind hat sich bei dem Versuch der Integration mit dem Server gezeigt, dass viel mehr Probleme auftreten als erwartet, was dazu führte, 
+dass sie zur Endpräsentation nicht komplett einsatzfähig war.
 
 
