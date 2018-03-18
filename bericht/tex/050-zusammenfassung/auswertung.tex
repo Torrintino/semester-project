@@ -15,7 +15,8 @@ Die Spielelogikgruppe konnte mit einem Simulator demonstrieren, dass die einzeln
 Soll-Verhalten aufweisen und die Hardware-Gruppe konnte mit Hilfe eines Treibers demonstrieren, dass
 Infrarotabschüsse an den Services-Client durchgereicht und LED Events korrekt angezeigt werden.
 Die Services-Gruppe hat die Funktionalität der Webseite demonstriert, indem sie manuell Einträge in
-die Datenbank hinzufügten und bestätigten, dass jene Änderungen auf der Webseite übernommen werden.
+die Datenbank hinzufügten und bestätigten, dass jene Änderungen auf der Webseite übernommen werden. 
+Auch grundlegende Client-Server Kommunikation war möglich.
 
 Die Integration der Komponenten ist unvollständig.
 Es lässt sich nachweisen, dass der Server mit LUA kommuniziert.
@@ -26,7 +27,7 @@ komplexeren bringen jedoch Deadlocks von Mutex-Objekten den Server zum Absturz.
 Es kam außerdem zu diversen Fehlern bei Zugriffen des Servers auf die Datenbank.
 Der Services-Server und der Services-Client können sich miteinander verbinden und
 Abschussinformationen werden ausgetauscht.
-Allerdings führt ein Verbindungsverlust des Clients zurzeit noch dazu, dass Der zugehörige Spieler sich 
+Allerdings führt ein Verbindungsverlust des Clients zurzeit noch dazu, dass der zugehörige Spieler sich 
 nicht mehr mit dem Spiel verbinden kann.
 Diese Problem machen derzeit einen Neustart der Systemd-Units auf allen Geräten notwendig, wenn ein
 neues Spiel gestartet wird.
