@@ -50,8 +50,8 @@ Dazu gehört auch das Puffern von unvollständigen empfangenen Nachrichten.
 Außerdem dient die Klasse \texttt{FileDeleter} dazu, dass die für die Kommunikation über
 Unix-Sockets notwendigen Dateien nach dem Beenden des Programms implizit gelöscht werden.
 Die Klassen \texttt{TCPConnection}, \texttt{TCPServer} und \texttt{TCPClient} erfüllen dieselbe
-Aufgabe für die TCP-Kommunikation, die für die später beschriebenen Testprogramme
-\hyperref[client-stub-und-server-stub]{\texttt{client-stub} und \texttt{server-stub}} notwendig ist.
+Aufgabe für die TCP-Kommunikation, die für die \hyperref[client-stub-und-server-stub]{später}
+beschriebenen Testprogramme \texttt{client-stub} und \texttt{server-stub} notwendig ist.
 Alternativ hätte man auch bestehende Bibliotheken wie boost verwenden können, die ebenfalls eine
 C++-Schnittstelle für die Netzwerkkommunikation zur Verfügung gestellt hätten.
 Dafür hätte man sich zuerst in diese Bibliothek einarbeiten müssen und da Manuel Radatz, der diese
@@ -87,13 +87,17 @@ Die Ereignisse, die übertragen werden, sind:
     letztes Leben
 \end{itemize}
 Nicht alle Ereignisse werden in allen Spielmodi genutzt.
-So gibt es beispielsweise Spielmodi, in denen es das Konzept von „Leben“ nicht gibt.
+Wie im vorherigen Abschnitt beschrieben gibt es nicht in allen Spielmodi das Konzept vom
+„letzten Leben“.
 Das Ereignis „Spiel endet“ ist auch nur dann notwendig, wenn bei dem Ereignis „Spiel startet“ nicht
 übertragen wurde, wie lange das Spiel läuft.
+Das ist dann der Fall, wenn zu Beginn des Spiels noch nicht feststeht, wie lange das Spiel überhaupt
+läuft.
+Ein Beispiel dafür ist der Spielmodus „Solo Easy“ (siehe \cref{sec:spielmodi-speziell}).
 
 Die LED-Ansteuerung erfolgt ebenfalls in einer eigenen Klasse namens \texttt{LEDEventStatus}.
 Diese ruft direkt Funktionen von wiringPi auf, verwaltet alle Daten, die zur korrekten
-LED-Ansteuerung notwendig sind (auch die Timer) und interpretiert als Eingabe das von
+LED-Ansteuerung notwendig sind (auch die Timer), und interpretiert als Eingabe das von
 \texttt{services-client} empfangene Zahlentripel.
 
 Der Status des Buttons wird direkt in der \texttt{main()}-Funktion durch Aufrufe der

@@ -1,4 +1,6 @@
 \subsubsection{Spielmodi allgemein}
+\label{sec:spielmodi-allgemein}
+
 Die wichtigste Anforderung seitens des Kunden für die Umsetzung der Spielmodi war, dass eines oder mehrere Ad-Hoc Multi-Hop Netzwerkprotokolle diesen zugrundeliegen sollten. Dabei sollen die Entscheidungen für Interaktionen von den Spielenden möglichst selbst getroffen werden, damit die Spielenden lernen können, wie das jeweils gespielte Netzwerkprotokoll funktioniert. Darüberhinaus war dem Kunden jedoch auch die Spielbarkeit (Fairness, Spannung, Unterhaltung) wichtig. Als Vorbild in diesem Zusammenhang sollte Lasertag dienen. Es war dem Kunden und auch uns dabei klar, dass das Modifikationen am jeweiligen Netzwerkprotokoll erforderlich machen würde.
 
 Als Ideen für die Umsetzung dieser Anforderungen standen zwei grobe Szenarien zur Diskussion: ein Protokoll aus dem Bereich der Wireless Sensor Networks oder der Peer-to-Peer Content Distribution. Nach eingehender Beschäftigung mit einigen Protokollen aus dem Bereich der Wireless Sensor Networks gab es erhebliche Zweifel an der Umsetzbarkeit eines Spiels auf deren Basis unter Berücksichtigung der genannten Spielbarkeitskriterien Spannung und Unterhaltung und nach dem Vorbild von Lasertag. So besteht ein Wireless Sensor Network meist aus vielen Wireless Sensor Nodes, die gut von den Spielenden repräsentiert hätten werden können. Jedoch arbeiten diese Knoten in der Praxis oft zusammen an der Erfüllung eines gemeinsamen Ziels. Wir haben keinen Konkurrenzgedanken, keine egoistischen Motive der einzelnen Netzwerkknoten in Wireless Sensor Networks gesehen, die sich gut zur Umsetzung eines Spiels nach dem Vorbild von Lasertag geeignet hätten. Stattdessen gibt es Ziele in Wireless Sensor Networks wie die Energiesparsamkeit der einzelnen Geräte, deren Umsetzung für uns im Widerspruch zu einem action-geladenen Spiel wie Lasertag standen. Das Spiel auf dieser Basis wäre eher statisch geworden.
@@ -23,7 +25,7 @@ Wir haben dieses Konzept im Prinzip aus denselben Gründen in unsere Spielmodi �
 Allgemein folgen all unsere Spielmodi den folgenden Annahmen. Diese sind größtenteils Vereinfachungen, die die Komplexität des Spiels reduzieren und es damit leichter spielbar machen.
 
 \begin{enumerate}
-\item Jeder Spielende besitzt zum Start ein Dateifragment, welches keiner seiner “Peers” (alle anderen Spielenden) besitzt.
+\item Jeder Spielende besitzt zum Start ein Dateifragment, welches keiner seiner „Peers“ (alle anderen Spielenden) besitzt.
 \item Es geht insgesamt um eine Datei, die in entsprechend viele Dateifragmente zerlegt ist, wie es Spielende im Spiel gibt.
 \item Ziel ist allgemein, bis auf Ausnahmen, die beim entsprechenden Spielmodus beschrieben sind, die eine Datei als Erster vollständig von den Peers zu erhalten.
 \end{enumerate}
