@@ -12,7 +12,7 @@ interne Funktionsweise zu haben.
 Die einzelnen Komponenten, die geplant waren, wurden alle implementiert und zumindest teilweise
 getestet.
 Die Spielelogikgruppe konnte mit einem Simulator demonstrieren, dass die einzelnen Spielmodi das
-Soll-Verhalten generieren und die Hardware-Gruppe konnte mit Stubs demonstrieren, dass
+Soll-Verhalten aufweisen und die Hardware-Gruppe konnte mit Stubs demonstrieren, dass
 Infrarotabschüsse an den Services-Client durchgereicht und LED Events korrekt angezeigt werden.
 Die Services-Gruppe hat die Funktionalität der Webseite demonstriert, indem sie manuell Einträge in
 die Datenbank hinzufügten und bestätigten, dass jene Änderungen auf der Webseite übernommen werden.
@@ -26,8 +26,8 @@ komplexeren bringen jedoch Deadlocks von Mutex-Objekten den Server zum Absturz.
 Es kam außerdem zu diversen Fehlern bei Zugriffen des Servers auf die Datenbank.
 Der Services-Server und der Services-Client können sich miteinander verbinden und
 Abschussinformationen werden ausgetauscht.
-Allerdings ist die Verbindung selbst teilweise instabil und die Clients verlieren die Verbindung
-oder können sich nicht erneut verbinden.
+Allerdings führt ein Verbindungsverlust des Clients zurzeit noch dazu, dass Der zugehörige Spieler sich 
+nicht mehr mit dem Spiel verbinden kann.
 Diese Problem machen derzeit einen Neustart der Systemd-Units auf allen Geräten notwendig, wenn ein
 neues Spiel gestartet wird.
 Die Verbindung der Client/Server-Programme mit Systemd ist noch instabil.
