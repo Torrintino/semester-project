@@ -1,0 +1,85 @@
+Kommunikation mit Lirc
+
+
+
+Lirc lädt sobald man es startet, ein File aus dem es ausliest wie es konfiguriert ist.
+
+Hier ein Beispiel-file:
+
+
+begin remote
+
+  name  12		   	
+  bits           15  		
+  flags SPACE_ENC			 	
+  eps            25
+  aeps          100
+
+  one           364  1739
+  zero          364   690
+  ptrail        364
+
+      begin codes
+          KEY_0                    0x00000000000043A2        
+          KEY_1                    0x0000000000004202        
+          KEY_2                    0x0000000000004102        
+          KEY_3                    0x0000000000004302        
+          KEY_4                    0x0000000000004082       
+          KEY_5                    0x0000000000004282        
+          KEY_6                    0x0000000000004182        
+      end codes
+
+end remote
+
+Der Name der Fernbedienung ist wichtig, falls man mehrere Fernbedienungen im Einsatz hat. Da wir uns aber entschieden haben,
+dass man jeden Tagger einfach als einen Knopf darzustellen, da dass am einfachsten einzustellen ist und keinen Nachteil
+gegenüber den anderen Methoden hat, ist der Name hier egal.
+
+“bits“ gibt an, wie viele verschiedene Bits verschickt werden.
+
+
+
+“Flags“ gibt an, welche Modulationsvariante man benutzt, in dem File hier wird die gleiche Variante angegeben,
+die im Projekt selbst benutzt wird.
+
+
+
+“eps“ gibt an, wie viel relativer Fehler in einem Code auftauchen dürfen, damit ein Code noch als korrkt erkannt wird.
+
+
+
+“aeps“ gibt an, wie viele absolute Fehler pro Bit erlaubt sind.
+
+“one“ und “zero“ geben an, wie eine 1 bzw. eine 0 simuliert werden.
+Die erste Zahl gibt die Sendezeit in Millisekunden an, die zweite Zahl sagt aus, wie viele Millisekunden gewartet wird,
+bis das nächste Bit gesendet wird.
+
+
+
+“ptrail“ gibt an ob und wie lange gesendet werden soll, nachdem das letzte Bit eines Codes gesendet wurde. 
+Dies macht eine 1 von einer 0 auf dem letztem Bit unterscheidbar.
+
+
+
+In dem Bereich nach “begin codes“ steht, welcher Code zu welcher Taste gehört. Dabei haben wir die Tagger-ID mit dem
+entsprechendem Key verbunden, also hat der Tagger mit der ID “1“, den KEY_1 Code zugeordnet. Empfängt also
+jemand KEY_1, wird davon ausgegangen, dass er von dem Tagger mit der ID “1“ getroffen wurde.
+
+
+
+Lirc stellt einem alle Empfangenem Codes auf einem Socket zur Verfügung. Diesen bekommt man beim initialisieren mit der
+ „lirc_init()“ Funktion mitgeteilt.
+
+
+Diese kann man mit der Funktion „lirc_nextcode()“ auslesen und verarbeiten. Da wir nur eine Fernbedienung haben
+und, durch das ID-Matching,nur die Key-Nummer wichtig ist, wird diese an der entsprechenden Stelle ausgelesen und weitergegeben.
+
+
+
+Das Senden der Ids wird mit der „lirc_send_one()“ Funktion realisiert. Hier wird nur die ID des Taggers angegeben
+und welche Fernbedienung benutzt wird.
+
+
+Da viele Sachen normiert sind, da wir viele Funktionalitäten von Lirc nicht nutzen müssen, haben wir Funktionen geschrieben,
+die alle festgesetzten Werte automatisch eintragen, sodass die Hardware-API nur die ID des Taggers weitergeben muss,
+wodurch wir Fehler minimiert haben. Diese Menge an Funktionen wurde von uns intern als “Treiber“ bezeichnet.
