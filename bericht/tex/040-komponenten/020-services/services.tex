@@ -42,7 +42,8 @@ Es wäre möglich gewesen, Bibliotheken, zum Beispiel \href{http://think-async.c
 An die Datenbank ist der Server über die \href{https://dev.mysql.com/doc/connector-c/en/connector-c-introduction.html}{mysql c connector} Schnittstelle angebunden. Die Schnittstelle bietet eine relativ simple API: Zuerst verbindet sich das Programm mit dem MySQL Datenbankserver (entweder über TCP oder über Unix Sockets) und dann können beliebige SQL Anfragen als String an den Datenbankserver geschickt werden, der daraufhin Zeilenweise die Ergebnisse zurückliefert.
 Diese Schnittstelle ist in einem C++ Singleton gekapselt \texttt{DatabaseConnection}, die Methoden für alle Anfragen
 bereitstellt, die der Server stellen muss (bswp \texttt{get\_runnable\_games()}). 
-\newpage
+\newpline
+\newline
 Der Thread für die Kommunikation führt in einer Endlosschleife folgende Schritte aus:
 \begin{enumerate}
     \item Falls sich neue Clients verbunden haben: Lege die passenden Datenstrukturen an und setze den Status des Clients in der Datenbank auf verbunden.
