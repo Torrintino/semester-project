@@ -1,25 +1,26 @@
 \subsubsection{Netzwerkkonfiguration}
+\label{sec:netzwerkkonfiguration}
 
 Dieser Abschnitt erläutert die Netzwerkinfrastruktur des Projekts.
 Für diese Aufgabe war Lennart Weiß verantwortlich.
 
-Die Spielgeräte kommunizieren miteinander über ein WLAN Netzwerk. Die
+Die Spielgeräte kommunizieren miteinander über ein WLAN-Netzwerk. Die
 Netzwerkkonfiguration wird zentral über den Server geregelt. Verglichen mit
-einem P2P-Netzwerk oder Infrastruktur Wifi mit Roaming ist der Administrations-
-aufwand relativ gering und gleichzeitig sind die Verbindungen stabil, solange
+einem P2P-Netzwerk oder Infrastruktur Wifi mit Roaming ist der Administrationsaufwand
+relativ gering und gleichzeitig sind die Verbindungen stabil, solange
 sich die Geräte nah am Server aufhalten.
 
-Um den Server als Access Point zu verwenden wurde das Program hostapd verwendet,
+Um den Server als Access Point zu verwenden, wurde das Program \texttt{hostapd} verwendet,
 welches den Onboard Wifi Chip des Raspberry Pi verwendet, um ein Netzwerk
 aufzuspannen. Diese Chips sind eigentlich dafür gedacht, dass der Raspberry Pi
-selber als Client dient und sich zu einem anderen Netzwerk verbindet. Für lange
-Distanz und hohe Stabilität wäre eine externe Netzwerkkarte mit Antenne
+selber als Client dient und sich zu einem anderen Netzwerk verbindet. Für große
+Distanzen und hohe Stabilität wäre eine externe Netzwerkkarte mit Antenne
 womöglich besser geeignet. Dennoch hat sich in praktischen Versuchen gezeigt,
-dass sich das Coding Tag Netz über mehrere Räume hinweg stabil verwenden lässt
-und ist somit für kleine Spielfelder und technische Demonstrationen vollkommen
-ausreichend.
+dass sich das Coding-Tag-Netz über mehrere Räume hinweg stabil verwenden lässt
+und es somit für kleine Spielfelder und technische Demonstrationen vollkommen
+ausreichend ist.
 
-Mit dem zuvor beschriebenen Netzwerk allein wäre es bereits möglich gewesen
+Mit dem zuvor beschriebenen Netzwerk allein wäre es bereits möglich gewesen,
 das Projekt zu realisieren. Allerdings wurden noch weitere Funktionalitäten
 hinzugefügt, um zum einen die Projektarchitektur zu verbessern und zum anderen
 einen gewissen Komfort zu bieten. Die grundsätzliche Anforderung, die wir uns
@@ -30,43 +31,43 @@ Server nur einmal installiert werden muss, Clients jedoch öfter. Außerdem hat
 der Server mehr Kontrolle und bei Fehlverhalten liegt die Ursache meistens beim
 ihm.
 
-Um DHCP und DNS anbieten zu können, wurde dnsmasq installiert. IP-Adressen
-werden aus dem frei wählbarem Adressraum 10.0.0.0/8 gewählt. Dem Server wurde
-10.0.0.1 vergeben, die Clients erhalten Adressen aus dem Bereich 10.0.1.1 bis
-10.0.1.254. Dies beschränkt die maximale Anzahl an Geräten die am Spiel
+Um DHCP und DNS anbieten zu können, wurde \texttt{dnsmasq} installiert. IP-Adressen
+werden aus dem frei wählbarem Adressraum \texttt{10.0.0.0/8} gewählt. Dem Server wurde
+\texttt{10.0.0.1} vergeben, die Clients erhalten Adressen aus dem Bereich \texttt{10.0.1.1} bis
+\texttt{10.0.1.254}. Dies beschränkt die maximale Anzahl an Geräten die am Spiel
 teilnehmen können, allerdings wurde anfangs mit einer Spielerzahl von ca.
 einem Dutzend gerechnet und falls notwendig lässt sich der Adressbereich einfach
 vergrößern. Anfangs gab es im Projekt ein statisches Mapping zwischen der
-Client ID und der IP Adresse, z.B. wurde client-2 immer 10.0.1.2 vergeben.
-Dies ist nützlich, weil in Logs und dergleichen aus der IP Adresse sofort auf
+Client ID und der IP-Adresse, z.B. wurde \texttt{client-2} immer \texttt{10.0.1.2} vergeben.
+Dies ist nützlich, weil in Logs und dergleichen aus der IP-Adresse sofort auf
 den Client geschlossen werden kann. Allerdings erwies sich dieses Mapping nicht
 als nützlich, weil in der Software nur mit Hostnames gearbeitet wird. Außerdem
-war es notwendig, dass die Mappings von ID zu MAC Adressen in einer Datei
+war es notwendig, dass die Mappings von ID zu MAC-Adressen in einer Datei
 gespeichert werden, was zusätzlichen Aufwand bei der Installation bedeutete.
-Da die statischen Adressen nur wenig zusätzlichen Nutzen bringen werden nun
+Da die statischen Adressen nur wenig zusätzlichen Nutzen bringen, werden nun
 Clients beliebige Adressen aus dem verfügbarem Pool zugewiesen.
 
-Im gesamten Projekt wird niemals direkt mit IP Adressen gearbeitet, auf
-Software Ebene sprechen sich die Geräte gegenseitig mit Hostnames an. Damit
+Im gesamten Projekt wird niemals direkt mit IP-Adressen gearbeitet, auf
+Software-Ebene sprechen sich die Geräte gegenseitig mit Hostnames an. Damit
 können in der Netzwerkschicht Änderungen vorgenommen werden, ohne dass die
 Software entsprechend geändert werden muss. Die Hostnames werden direkt auf
 den Clients gesetzt, dadurch ist bei der Installation eines neuen Gerätes keine
 Änderung am Server notwendig. Damit sich die Geräte gegenseitig mit Hostnames
-ansprechen können, beantwortet der Server DNS Anfragen und gibt die
-erforderliche IP Adresse zurück. Diese kennt der Server, weil er selbst als
+ansprechen können, beantwortet der Server DNS-Anfragen und gibt die
+erforderliche IP-Adresse zurück. Diese kennt der Server, weil er selbst als
 DHCP Server jene Adressen vergeben hat.
 
-Die Geräte, sowie der Server, sollten in der Lage sein sich mit dem Internet
+Die Geräte sowie der Server sollten in der Lage sein, sich mit dem Internet
 zu verbinden, um Pakete herunterladen zu können. Diese Verbindung soll jedoch
 optional sein und für keine Komponente im Projekt wird eine Internetverbindung
 verwendet, sie ist lediglich im Installationsprozess notwendig. Hierfür wird
-die Ethernet Schnittstelle (eth0) des Servers mit einem Uplink verbunden, über
-den per DHCP eine IP Adresse und Zugang zum Internet bezogen werden kann. Die
-Routingregeln sind so eingestellt, dass eth0 die Default Schnittstelle ist und
+die Ethernet-Schnittstelle (\texttt{eth0}) des Servers mit einem Uplink verbunden, über
+den per DHCP eine IP-Adresse und Zugang zum Internet bezogen werden kann. Die
+Routingregeln sind so eingestellt, dass \texttt{eth0} die Default-Schnittstelle ist und
 lediglich Pakete im 10.0.0.0/8 Netzwerk über die WLAN Schnittstelle gesendet
 werden. Damit auch die Client Geräte Internetzugang haben, ist auf dem Server
 IP Forwarding aktiviert und es wird NAT mit einfachem Port Forwarding verwendet,
 damit Pakete von außen die Clients erreichen, ohne dass die Clients selber eine
-IP Adresse in dem Netz brauchen. Damit auch Namen außerhalb des eigenen Netzes
-auflösen können, wird der Server als DNS Cache verwendet, der einen externen
-Nameserver (8.8.8.8) verwendet für Ziele die er nicht kennt.
+IP-Adresse in dem Netz brauchen. Damit auch Namen außerhalb des eigenen Netzes
+aufgelöst werden können, wird der Server als DNS Cache verwendet, der einen externen
+Nameserver (\texttt{8.8.8.8}) verwendet für Ziele, die er nicht kennt.
