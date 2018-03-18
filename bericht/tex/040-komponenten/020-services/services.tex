@@ -124,4 +124,10 @@ Die client - Tabelle ist relevant für das Anzeigen der möglichen Eingabefelder
 Die game - Tabelle ist vorallem interessant für die LUA API, da sie die Einträge enthält, die von dem Spieler vor Beginn des Spieles mithilfe des Menüs übergeben werden, wie zum Beispiel der Spielmodus und die Rundendauer. Gleichzeitig beinhaltet die Tabelle auch den Status, den das jeweilige Spiel zu jeder Zeit hat. Dieser Status wird von allen Parteien benutzt: die LUA API muss das Spiel nach Überschreiten der Rundendauer pausieren oder es beenden, die Netzwerkkommunikation muss bei einem gestoppten Spiel aufhören, Nachrichten weiterzuschicken, damit keine Punkte während eines pausierten oder beendeten Spieles verteilt werden.\\\\\\
 Die "playing" - Tabelle wird für unsere Historie und gleichzeitig der Darstellung des Scoreboards benutzt. Sie teilt jedem Spieler eine gameID, den jeweiligen Score, die Dateifragmente usw. zu und macht es möglich die Tabelle nach der gameID zu sortieren um einzelne Spiele wieder einsehen zu können.
 
+<<<<<<< HEAD
 \shorthandon{"}
+=======
+\subsubsection{Debugging}
+
+Um Fehler zu finden und das Verhalten des Systems nachvollziehen zu können, geben sowohl Client als auch Server Log-Ausgaben auf \texttt{stderr} aus. Da beide von systemd gestartet werden, können diese Log-Ausgaben auch mit den üblichen Systemd-Kommandos angezeigt werden.
+>>>>>>> d739d65091acd174012f55da13de52fcf55c17d7
