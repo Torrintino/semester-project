@@ -10,21 +10,21 @@ Mitglieder und Aufgaben:
   \item
     Kevin Marc Trogant (Integration von Hardware und Server)
   \item
-    Pascal Jochmann (Website Backend, Client-Server Kommunikation (Proto buffer))
+    Pascal Jochmann (Website Backend, Client-Server Kommunikation)
   \item
     Tim Sikatzki (Website Backend und Datenbank)
 \end{itemize}
 
 \subsubsection{Aufbau}
 Das gesamte Netzwerk ist über eine zentrales System realisiert. Die einzelnen 
-Client kommunizieren nicht untereinander sonder alle mit dem Server der die Spielverwaltung übernimmt. 
+Clients kommunizieren nicht untereinander sonder alle mit dem Server, der die Spielverwaltung übernimmt. 
 Die Einstellungen der Spielparameter und die Darstellung des Punktestandes übernimmt eine Website die auf dem Server läuft. 
-Auf dieser können die Spieler Dinge wie Spieleranzahl und Rundendauer festlegen außerdem meldet 
+Auf dieser können die Spieler Dinge wie Spieleranzahl und Rundendauer festlegen; außerdem meldet 
 die Website dem Server den Start des Spiels. Zuletzt gibt es noch eine Datenbank zur Festhaltung des Punktestandes. 
 Sie wird vom Server aktuell gehalten und von der Website auf einem Scoreboard dargestellt.
 
 \subsubsection{Kommunikation}
-Dieser Abschnitt erläutert, wie die Hardware mit dem Server kommuniziert, sowie den Aufbau der Software beides Geräte.
+Dieser Abschnitt erläutert, wie die Hardware mit dem Server kommuniziert, sowie den Aufbau der Software beider Geräte.
 Für diese Aufgabe war Kevin Marc Trogant verantwortlich. Für Teile der Kommunikation zwischen Server und Client außerdem Pascal Jochmann.
 
 Der Spielserver \texttt{services-server} nutzt einen eigenen Thread für die Kommunikation mit den Clients und
@@ -52,7 +52,7 @@ Der Thread für die Kommunikation führt in einer Endlosschleife folgende Schrit
 
 Damit Spiel-Ereignisse an den Spieler kommuniziert werden können, kann die Spiellogik Funktionen auf dem Server aufrufen, die dafür sorgen das passende Nachrichten an die Clients gesendet werden. Dazu gibt es einen Nachrichtentyp in dem mittels eines Enums kodierte LED-Befehle enthalten sind. 
 
-Das Nachrichtenformat ist mittels Google Protocol Buffers, Googles Lösung der Datenformatserialisierung umgesetzt. Dies ist eine sehr simple Lösung der Frage, wie wir die Nachrichten einheitlich und verständlich strukturieren. Protocol Buffers ist dabei im Vergleich zu den betrachteten alternativen wie XML am simpelsten mit dem wenigsten Overhead, während es trotzdem unseren Anforderungen genügt.\\
+Das Nachrichtenformat ist mittels Google Protocol Buffers, Googles Lösung der Datenformatserialisierung umgesetzt. Dies ist eine sehr simple Lösung der Frage, wie wir die Nachrichten einheitlich und verständlich strukturieren. Protocol Buffers ist dabei im Vergleich zu den betrachteten Alternativen wie XML am simpelsten mit dem wenigsten Overhead, während es trotzdem unseren Anforderungen genügt.\\
  Da Protocol Buffers jedoch selbst keine Möglichkeit
 implementiert um aus einem empfangenem Byte-String den Nachrichtentyp zu rekonstruieren, wird vor jeder Nachricht
 ein Header verschickt der den Nachrichtentyp und die Länge der Nachricht in Bytes enthält.
@@ -86,7 +86,7 @@ Zur Entwicklung der Website haben wir "Flask" benutzt, ein Webframework auf Pyth
 Um die oben genannten Funktionen gewährleisten zu können, besteht unsere Webapplikation aus mehreren HTML-Seiten.\\\\
 Die erste Seite (\cref{fig:start}) ist der Kern der Website. Sie wird benutzt, um das eigentliche Spiel zu erstellen. Nicht nur nimmt sie die eingegebenen Daten der Spieler auf, sondern überträgt die Einstellungen direkt auf die Datenbank und erstellt dort direkt Einträge, die für das Scoreboard relevant sind. In der Sektion Datenbank werden die Einträge und Tabellen genauer erläutert. Die möglichen Einträge der Spielernamen sind hierbei abhängig von der Anzahl der verbundenen Clients. Sind nur drei Clients zum Server verbunden, so können wir auch nur drei Namen zuweisen.
 Auch die Spielmodi, die ausgewählt werden können, werden dynamisch erstellt. Hierbei wird aus einem Ordner ausgelesen, in dem die Lua-Skripte abgelegt werden können. Die Teams werden von der Webapplikation mithilfe von einer Modulo-Operation, abhängig von der Teamanzahl, automatisch zugeteilt. Es ist also \\\\
-Sobald ein Spiel gestartet wird, leitet die Seite auf das Scoreboard weiter.\\ Das Scoreboard zieht sich seine Einträge direkt aus der Datenbank und aktualisiert dieses asynchron unter der Verwendung von jQuery und ajax. Es stellt die Einträge in Form von Tabellen da, hierbei gibt es eine Tabelle die Spieler und eine Tabelle für die Teams (\cref{fig:team}). Auf der Seite haben wir dann die Möglichkeit, das Spiel manuell zu pausieren oder auch zu beenden. Wenn die Dauer einer Runde ausgelaufen ist, wird das Spiel automatisch in den pausierten Zustand gesetzt. Wir können nun jederzeit eine mithilfe des Links "Spiel fortfuehren" Eine neue Runde starten bzw. das pausierte Spiel weiterspielen.\\
+Sobald ein Spiel gestartet wird, leitet die Seite auf das Scoreboard weiter.\\ Das Scoreboard zieht sich seine Einträge direkt aus der Datenbank und aktualisiert dieses asynchron unter der Verwendung von JavaSyript (unter Verwendung von jQuery) und ajax. Es stellt die Einträge in Form von Tabellen da, hierbei gibt es eine Tabelle die Spieler und eine Tabelle für die Teams (\cref{fig:team}). Auf der Seite haben wir dann die Möglichkeit, das Spiel manuell zu pausieren oder auch zu beenden. Wenn die Dauer einer Runde ausgelaufen ist, wird das Spiel automatisch in den pausierten Zustand gesetzt. Wir können nun jederzeit eine mithilfe des Links "Spiel fortfuehren" Eine neue Runde starten bzw. das pausierte Spiel weiterspielen.\\
 Der Link "Spiel beenden" funktioniert dementsprechend genauso, allerdings ist es danach nicht mehr möglich, das Spiel weiterzuführen. Der Nutzer dann danach auf einen Button klicken, um zurück zur Startseite zu gelangen und ein neues Spiel zu starten .\\\\
 Insgesamt ist die Webapplikation seitens Funktionalität vollständig. Es könnten noch Verbesserungen hinsichtlich der Anzeige der verschiedenen Dateifragmente und der Effizienz der Anzeige des Scoreboards gemacht werden.
 
