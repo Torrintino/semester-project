@@ -24,7 +24,8 @@ die Website dem Server den Start des Spiels. Zuletzt gibt es noch eine Datenbank
 Sie wird vom Server aktuell gehalten und von der Website auf einem Scoreboard dargestellt.
 
 \subsubsection{Kommunikation}
-
+Dieser Abschnitt erläutert, wie die Hardware mit dem Server kommuniziert, sowie den Aufbau der Software beides Geräte.
+Für diese Aufgabe war Kevin Marc Trogant verantwortlich. Für Teile der Kommunikation zwischen Server und Client außerdem Pascal Jochmann.
 Der Spielserver \texttt{services-server} nutzt einen eigenen Thread für die Kommunikation mit den Clients und
 der Webseite. Clients und Server kommunizieren über BSD Sockets.
 Als Alternative kam Googles gRPC in Frage. Dieses wurde verworfen, weil:
@@ -64,6 +65,7 @@ Zuerst erhält der Client eine Nachricht von der Hardware-API, die mitteilt das 
 Der Server erhält die Nachricht, parst diese und sucht nach einem Spiel das beide Clients - Schießenden und Getroffenen - enthält. Findet er kein passendes Spiel, wird die Nachricht verworfen. Falls ein passendes Spiel gefunden wurde, werden die Client-IDs zu den entsprechenden Spieler-IDs aufgelöst (die Zuordnung ist pro Spiel eindeutig) und eine passende Nachricht an den entsprechenden Spiel-Thread geschickt.
 
 \subsubsection{LUA API (services)}
+Dieser Abschnitt erläutert, wie die LUA API mit dem Server kommuniziert. Für diese Aufgabe war Jan Arne Sparka verantwortlich.
 
 Um Spielmodi zu beschreiben und sauber von den anderen Komponenten abzutrennen brauchten wir eine API. Die erste Entscheidung war zwischen LUA, c-Code und einer eigenen Spielmodus-DSL. Da unsere Spiellogikgruppe die Entscheidung für LUA traf und sogar schon einen funktionierenden Simulator für Spiele in sehr schneller sukzession herausbrachte, war diese Entscheidung für uns damit schnell getroffen.
 
@@ -76,6 +78,7 @@ Der Hauptteil der API Arbeit auf der service Seite war die vorhandene Spiellogik
 Die services Seite der LUA API hatte als Hauptproblem, das sie aufgrund der sehr zentralen Stellung (Verknüpfung von 3 Komponenten), sehr viele Abhängigkeiten hatte und sehr schwierig zu testen war. Dies ist dem Projekt letztendlich zum Verhängnis geworden, da wir in der Interaktion dieser vier Komponenten einen Fehler haben, den wir bisher noch nicht lokalisieren konnten. Das Debugging ist auf Grund von LUA auch nur sehr begrenzt möglich und wird uns noch einiges an Aufwand einbringen.
 \shorthandoff{"}
 \subsubsection{Website}
+Dieser Abschnitt erläutert, wie die Website aufgebaut ist und funktioniert. Für diese Aufgabe waren Tim Sikatzki, Angelina Jellinek und Pascal Jochmann verantwortlich.
 
 Unsere Website bildet das Herzstück in der Interaktion zwischen dem Nutzer und der Software. Sie gibt ihm die Möglichkeit, die Konfigurationen für das Spiel einzustellen, wie zum Beispiel die Anzahl der Teams, dem Spielmodus und den Spielgeräten Namen zuzuteilen. Außerdem haben die Spieler durch sie die Möglichkeit, ihre Leistungen während des Spiels in Echtzeit einsehen zu können.\\\\
 Zur Entwicklung der Website haben wir "Flask" benutzt, ein Webframework auf Python-Basis. Wir haben uns für dieses Framework entschieden, da es zunächst sehr leicht zu benutzen ist und uns gleichzeitig alles geboten hat, um die erwarteten Funktionalitäten der Website implementieren zu können, wie zum Beispiel ein MySQL-Package, welches wir zur Interaktion zwischen Webapplikation und Datenbank benutzt haben.
@@ -104,6 +107,7 @@ Insgesamt ist die Webapplikation seitens Funktionalität vollständig. Es könnt
 %\begin{figure}[b]
 	
 %\end{figure}
+Dieser Abschnitt erläutert, wie die Website gestaltet wurde. Für diese Aufgabe war Angelina Jellinek verantwortlich.
 
 Viele Styleformatierungen sind auf der Scoreboardseite genau wie auf der Startseite. Es gibt jedoch auch noch einige Besonderheiten. Da sich das Scoreboard regelmäßig aktualisiert mussten wir die Links zu der gestoppten und pausierten Seite so designen, dass er im „Originalzustand“ und „angeklicktem Zustand“ genau gleich aussieht und nicht als Link erkennbar ist.
 Das Aussehen der Website ist  dynamisch gestaltet. Die Größe des Scoreboards passt sich individuell an die Anzahl der Einträge an. Auch die Box passt sich dynamisch an die Einträge an. Gleichzeitig gibt es auch nur ein extra Scoreboard für Teams, wenn es Teams auch wirklich gibt.\\ Sowohl der Hintergrund, als auch die Schriftart und die Farben sind so gewählt, dass sie zum Thema Lasertag und Nerd Style passen. 
@@ -118,6 +122,7 @@ Die Schrift ist in grün gehalten, damit ein guter Kontrast zwischen Hintergrund
 		\label{fig:database}
 	\end{center}
 \end{figure}
+Dieser Abschnitt erläutert, wie die Website mit der Datenbank zusammenarbeitet. Für diese Aufgabe war Tim Sikatzki verantwortlich.
 Unsere Datenbank ist die ermöglichte uns die Interaktion innerhalb der services-Gruppe. Wir haben uns für eine Datenbank entschieden, da wir eine Spielhistorie aus den vergangenen Spielen erstellen wollten. Gleichzeitig bot sich die Datenbank auch für die Darstellung des Scoreboard an, da die SQL Anfragen für eben dieses sehr trivial waren.\\\\
 Um die Fehlerquelle einer Datenbank in Form einer Datei zu umgehen, haben wir uns nach einiger Zeit dafür entschieden von SQLite auf MySQL, als Datenbankmanagementsystem, umzusteigen.\\\\
 %Abbildung mit Tabellen hier einfügen
@@ -130,4 +135,7 @@ Die "playing" - Tabelle wird für unsere Historie und gleichzeitig der Darstellu
 \shorthandon{"}
 \subsubsection{Debugging}
 
-Um Fehler zu finden und das Verhalten des Systems nachvollziehen zu können, geben sowohl Client als auch Server Log-Ausgaben auf \texttt{stderr} aus. Da beide von systemd gestartet werden, können diese Log-Ausgaben auch mit den üblichen Systemd-Kommandos angezeigt werden.
+Um Fehler zu finden und das Verhalten des Systems nachvollziehen zu können, geben sowohl Client als auch Server Log-Ausgaben auf \texttt{stderr} aus. Da beide von systemd gestartet werden, können diese Log-Ausgaben auch mit den üblichen Systemd-Kommandos angezeigt werden.\newline
+
+Zusätzlich zu den genannten Arbeitsaufteilungen fanden regelmäßige Gruppentreffen aller Mitglieder statt bei denen es primär um Abstimmung der Arbeit ging. Auf diesen Treffen wurden jedoch auch gemeinsam der allgemeine Aufbau unserer Komponenten, das Datenbankmodell und ähnliches (weiter)entwickelt, außerdem gemeinsames Bugfixing.
+
