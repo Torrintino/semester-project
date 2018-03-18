@@ -1,11 +1,11 @@
 \subsection{Auswertung}
 \label{sec:auswertung}
 
-Der zuvor beschriebene Systementwurf ist ausreichend um die Anforderungen zu
-erfüllen. Es sind Spielgeräte geplant worden, die denen aus Lasertag ähneln
-und mit Infrarot können sich Spieler gegenseitig abschießen. Es soll ein
-Spielmodi implementiert werden, der an Bittorrent angelehnt ist, jedoch
-wird das Protokoll angepasst um spielgerecht zu sein. Es wurden viele weitere
+Der zuvor beschriebene Systementwurf ist ausreichend, um die Anforderungen zu
+erfüllen. Es sind Spielgeräte geplant worden, die denen aus Lasertag ähneln,
+und mit Infrarot können sich Spieler gegenseitig abschießen. Es sollte mindestens ein
+Spielmodus implementiert werden, der an BitTorrent angelehnt ist. Jedoch
+wurden weitreichende Anpassungen vorgenommen, um gute Spielbarkeit zu gewährleisten. Es wurden viele weitere
 Faktoren bedacht, welche das Spielerlebnis verbessern sollen, etwa die
 Möglichkeit Informationen zum Spielstand zu erlangen, oder die freie
 Beweglichkeit im Raum. Jedoch ist nicht alles planmäßig verlaufen und der
@@ -32,6 +32,10 @@ optisches Feedback bieten, jedoch müssen sich neue Spieler erst mit den Codes
 vertraut machen, was vielleicht etwas unintuitiv ist. Die Infrarotübertragung
 hat technisch funktioniert, wir sind uns allerdings noch nicht ganz über ihre
 Grenzen klar, weil wir Abschüsse nicht genug getestet haben.
+
+Ziel der Spiellogik-Gruppe war die Erstellung mehrerer Spielmodi im Stil von Lasertag, die ein Netzwerkprotokoll für die Spieler erlebbar machen sollten. Dabei fiel die Wahl auf BitTorrent als Grundlage für alle Spielmodi, da wir viele Analogien zwischen der Funktionsweise von BitTorrent und den allgemeinen Prinzipien von Lasertag fanden. Es mussten dabei viele Entscheidungen getroffen werden, die die Spielmodi vereinfachten und in unserer Vorstellung spielbarer machten, jedoch damit auch die Unterschiede zwischen den Spielmodi und BitTorrent vergrößerten. Diese Vereinfachungen bzw. Abwandlungen waren Teil der Anforderungen. Insofern denken wir, dass wir eine gute Balance zwischen Aspekten von BitTorrent und von Lasertag in den Spielmodi gefunden haben. Die Erstellung mehrerer Spielmodi machte es uns zudem möglich, verschiedene Eigenschaften von BitTorrent auf mehrere Spielmodi zu verteilen, um so die Komplexität jedes einzelnen Spielmodus für die Spieler möglichst klein zu halten.
+Leider haben wir die Spielmodi nur mit dem Simulator und nicht im Praxiseinsatz, also auf einem echten Spielfeld mit echten Spielern, testen können. Dadurch könnten uns Faktoren, die den Spielverlauf in der Praxis beeinflussen und damit eventuell Anpassungen an den Annahmen und bspw. Punktzahlen der Spielmodi nötig machen würden, völlig unbekannt geblieben sein.
+Besonders für das Balancing von Parametern wie Punktzahlen und die Zuweisung der initialen Dateifragmente hätte ein automatisches Testen sinnvoll sein können. Andererseits hätten auch bei automatischen Tests Rahmenbedingungen bzw. Testfälle festgelegt werden müssen, die ohne Daten bzw. Erfahrungen aus der Praxis nur schwer realistisch festgelegt hätten werden können.
 
 ------------------ OLD VERSION ------------------
 
