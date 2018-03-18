@@ -64,8 +64,8 @@ verwendet, sie ist lediglich im Installationsprozess notwendig. Hierfür wird
 die Ethernet-Schnittstelle (\texttt{eth0}) des Servers mit einem Uplink verbunden, über
 den per DHCP eine IP-Adresse und Zugang zum Internet bezogen werden kann. Die
 Routingregeln sind so eingestellt, dass \texttt{eth0} die Default-Schnittstelle ist und
-lediglich Pakete im \texttt{10.0.0.0/8} Netzwerk über die WLAN Schnittstelle gesendet
-werden. Damit auch die Client Geräte Internetzugang haben, ist auf dem Server
+lediglich Pakete im \texttt{10.0.0.0/8} Netzwerk über die WLAN-Schnittstelle gesendet
+werden. Damit auch die Client-Geräte Internetzugang haben, ist auf dem Server
 IP Forwarding aktiviert und es wird NAT mit einfachem Port Forwarding verwendet,
 damit Pakete von außen die Clients erreichen, ohne dass die Clients selber eine
 IP-Adresse in dem Netz brauchen. Damit auch Namen außerhalb des eigenen Netzes
