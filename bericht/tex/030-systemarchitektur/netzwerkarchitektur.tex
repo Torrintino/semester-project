@@ -9,14 +9,14 @@ ein Gerät mitten im Spiel die Verbindung verlieren könnte.
 Stattdessen wurde eine simplere Client-Server-Architektur gewählt, in der Clients lediglich
 den Server informieren, wenn der Spieler abgeschossen wurde.
 Der Server wertet die Daten aus und benachrichtigt die Clients über den Spielstatus.
-Diese geben dann mit LED's Informationen an den Spieler weiter.
-Durch diese Architektur werden viele potenzielle Logikfehler, die sich durch konkurrente Nachrichten
-ergeben, eliminiert. Um das Spiel zu starten und zu administrieren wurde eine
-Webseite angelegt, die auf dem Server gehosted wird und auf die alle Geräte im
+Diese geben dann mit LEDs Informationen an den Spieler weiter.
+Durch diese Architektur werden viele potenzielle Logikfehler, die sich durch konkurrierende Nachrichten
+ergeben, eliminiert. Um das Spiel zu starten und zu administrieren, wurde eine
+Webseite angelegt, die auf dem Server gehostet wird und auf die alle Geräte im
 Netzwerk zugreifen können. Über die Webseite wird außerdem der aktuelle
 Spielstand angezeigt. Alle für das Spiel relevanten Information, die nicht
-rein Spielmodi intern sind, werden in einer Datenbank gespeichert. Die Webseite
-benutzt diese um Punktetabelle zu generieren, der Server braucht die Informationen,
+rein Spielmodi-intern sind, werden in einer Datenbank gespeichert. Die Webseite
+benutzt diese, um Punktetabelle zu generieren; der Server braucht die Informationen,
 um den Spielverlauf zu steuern und die Clients auf den neuesten Stand zu halten.
 
 Die Clients und der Server verwenden zur Kommunikation WLAN. Dies ist die naheliegendste Lösung, da
