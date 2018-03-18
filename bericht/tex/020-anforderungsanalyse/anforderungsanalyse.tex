@@ -1,20 +1,21 @@
 \section{Anforderungsanalyse}
+\label{sec:anforderungsanalyse}
 
-Die Aufgabe war ein gut spielbares Lasertag nachzubauen mit Regeln die ein
-P2P Netzwerkprotokoll nachahmen. Dies sind sehr wage Anforderungen in die man
+Die Aufgabe war, ein gut spielbares Lasertag nachzubauen mit Regeln, die ein
+P2P Netzwerkprotokoll nachahmen. Dies sind sehr wage Anforderungen, in die man
 viel hinnein interpretieren kann. Somit war den Studenten viel Freiraum
-überlassen ein System zu entwerfen, dass dem entspricht.
+überlassen, ein System zu entwerfen, dass dem entspricht.
 
 Bei der Projektvorstellung wurde der Gruppe ein Text vorgelegt, in dem diese
 Anforderungen niedergeschrieben sind. In dem war die Rede von 
-"Augmented Reality", daher fällt das Spiel nicht rein virtuell aus, sondern
-die Spieler habe echte Geräte mit denen sie umgehen müssen und visuelles
-Feedback. Wie im Original muss hier eine Sender - Empfänger Kombination
-eingesetzt werden, die an jedem Spieler vergeben werden. Für die Geräte sind
+„Augmented Reality“, daher fällt das Spiel nicht rein virtuell aus, sondern
+die Spieler habe echte Geräte, mit denen sie umgehen müssen, und visuelles
+Feedback. Wie im Original muss hier eine Sender-Empfänger-Kombination
+eingesetzt werden, die an jedem Spieler vergeben wird. Für die Geräte sind
 zumindest die Pistolen erforderlich. Es ist jedoch unklar, wo die Sender und
 Empfänger angebracht werden. So könnte die Pistole als Sender fungieren und
-am Körper werden Sensoren angebracht, wenn ein Sensor nun ein Signal empfängt,
-wurde der entsprechende Spieler getroffen. Man könnte anders herum aber auch
+am Körper werden Sensoren angebracht. Wenn ein Sensor nun ein Signal empfängt,
+wurde der entsprechende Spieler getroffen. Man könnte andersherum aber auch
 den Sensor an der Pistole befestigen und der Spieler hat einen anderen
 getroffen, wenn der Sensor etwas empfängt. In beiden Fällen hat immer nur ein
 Spieler die Information des Abschusses, in einem Netzwerkprotokoll müssen
@@ -22,14 +23,14 @@ allerdings beide Endpunkte wissen, ob ein Signal angekommen ist. Daher muss
 es auch ein Mittel zum Informationsaustausch geben.
 
 Die Forderung nach Spielbarkeit impliziert, dass die Spieler ein Ziel haben
-müssen auf das sie hinarbeiten. Im Lasertag gibt es einen Sieger nach Punkten,
-die steht im Gegensatz zu gewöhnlichen Netzwerkprotokoll, in dem mehrere
+müssen, auf das sie hinarbeiten. Im Lasertag gibt es einen Sieger nach Punkten.
+Das steht im Gegensatz zu gewöhnlichen Netzwerkprotokollen, in dem mehrere
 Teilnehmer ein gemeinsames Ziel erreichen müssen. Um das Spiel interessant zu
-gestalten muss es ein gewisses Element der Konkurrenz und Herausforderung geben.
+gestalten, muss es ein gewisses Element der Konkurrenz und Herausforderung geben.
 Dabei besteht eine starke Spannung zum Netzwerk, da in einer Infrastruktur
 solche Probleme möglichst ausgeschlossen werden sollen. Außerdem werden dort
-Informationen in der Regel nur kopiert, es gibt keine Möglichkeit Daten zu
-klauen oder anderen Teilnehmern Schaden zuzufügen. Das letztere lässt sich
+Informationen in der Regel nur kopiert, es gibt keine Möglichkeit, Daten zu
+klauen oder anderen Teilnehmern Schaden zuzufügen. Das Letztere lässt sich
 allerdings umgehen, wenn man sich nicht an die Regeln hält, also das Protokoll
 umgeht. Dieses Element der Fairness kann ausgenutzt werden, um den Spielmodus
 interessanter zu gestalten. Aber in jedem Fall ist ein Kompromiss notwendig,
@@ -40,19 +41,19 @@ Faktoren. So wird bereits eine gewisse Qualität und Ästethik erwartet, in
 Bezug auf die Ausrüstung, aber auch visuelles Feedback allgemein und die
 Zuverlässigkeit des Systems. Die Regeln sollten leicht zu lernen sein und
 trotzdem eine gewisse Tiefe besitzen, welche den Wiederspielwert erhöht.
-Um ein gute Mobilität zu bieten sollte die Ausrüstung gut handhabbar sein
-und vor allem drahtlos. Optimalerweise ist das Spielfeld möglichst groß, dies
-steht jedoch im Widerspruch zur Zuverlässigkeit der Übertragung, die besser ist
+Um eine gute Mobilität zu bieten, sollte die Ausrüstung gut handhabbar sein
+und vor allem drahtlos. Optimalerweise ist das Spielfeld möglichst groß. Dies
+steht jedoch im Widerspruch zur Zuverlässigkeit der Übertragung, die besser ist,
 je kürzer die Distanz der drahtlosen Kommunikation ist.
 
-Auch wenn es die Option gibt mit dem Spielmodus das unfaire Ausnutzen eines
+Auch wenn es die Option gibt, mit dem Spielmodus das unfaire Ausnutzen eines
 Protokolles zu simulieren, so sollte das eigentliche Spiel mit seinen Regeln
-fair sein. Das bedeutet, dass jeder Spieler der mit den selben Vorwissen spielt
-die selben Chancen auf Sieg hat und die Regeln nicht umgangen werden können.
-Hierbei müssen zwei Fälle unterschieden werden: Ob ein Spieler bewusst versucht
+fair sein. Das bedeutet, dass jeder Spieler, der mit demselben Vorwissen spielt,
+dieselben Chancen auf Sieg hat und die Regeln nicht umgangen werden können.
+Hierbei müssen zwei Fälle unterschieden werden: Ob ein Spieler bewusst versucht,
 das Spiel zu manipulieren, oder das System im Hintergrund einen Fehler macht
 und somit eine falsche Wertung auftritt. Letzeres sollte natürlich niemals
-passieren, weil aber mit drahtlosen Übertragungstechniken gearbeitet werden
+passieren. Weil aber mit drahtlosen Übertragungstechniken gearbeitet werden
 muss, stellen sich komplizierte Fragen in Bezug auf Konkurrenz. Was passiert
 etwa, wenn zwei Spieler sich gegenseitig abschießen und der eine Spieler
 zwar schneller war, das Signal des Abschusses aber langsamer übertragen wurde.
