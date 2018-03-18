@@ -3,8 +3,8 @@
 
 Als grundsätzliche Designentscheidung verwendet jeder Spielmodus ein eigenes Lua Skript.
 Dies ist sinnvoll, da sich die Spielmodi teils massiv unterscheiden, denn es gibt z.B. je nach
-Spielmodus vollkommen verschiedenen Start- und Siegbedingungen. Somit muss es
-zwischen der Spiellogik und der Services Komponente klar sein, welches Lua Skript bzw.
+Spielmodus vollkommen verschiedene Start- und Siegbedingungen. Somit muss es
+zwischen der Spiellogik und der Services Komponente klar sein, welches Lua Skript bzw. welcher
 Spielmodus gerade gespielt wird. Dieses Problem wird gelöst durch die Art und Weise, wie
 ein Lua Skript in C++ eingebunden wird.
 
@@ -15,7 +15,7 @@ beide Richtungen genutzt und gebraucht, wobei über das gesamte Spiel und auch d
 Anzahl der Funktionen hinweggesehen die meisten Aufrufe von den Lua Skripten zu den C++ Funktionen laufen.
 
 Die Entwicklung der API ging stark einher mit der Entwicklung des Simulators, da dieser die
-API verwendet. Es war also erforderlich möglichst schnell eine stabile API zu haben, um mit
+API verwendet. Es war also erforderlich, möglichst schnell eine stabile API zu haben, um mit
 der Entwicklung der Spielmodi beginnen zu können. Aufgrund dieser frühen Festlegung
 blieb zwar die grundlegende API im Laufe der Entwicklung erhalten, hat aber einige
 Erweiterungen erfahren.
@@ -40,9 +40,9 @@ ebenfalls über die API an die C++ Komponente übergeben.
 
 Nachdem die Spielinitialisierung abgeschlossen ist, wird das Spiel von der C++ Komponente
 aus gestartet. Von nun an besteht die Hauptaufgabe der API darin, auf das Aufrufen der
-shootPlayer(source, target) Funktion zu warten. Sobald ein Schuss von der Hardware
-ausgelöst und von der Services Komponente vorverarbeitet wurde, wird diese shootPlayer
-Funktion aufgerufen. Diese Funktion ist der Hauptteil eines jeden Lua Skripts, dann hier
+\texttt{shootPlayer(source, target)} Funktion zu warten. Sobald ein Schuss von der Hardware
+ausgelöst und von der Services Komponente vorverarbeitet wurde, wird diese \texttt{shootPlayer}
+Funktion aufgerufen. Diese Funktion ist der Hauptteil eines jeden Lua Skripts, denn hier
 wird entschieden, ob der Schuss zulässig war, z.B. ob der Gegner überhaupt verwundbar ist,
 aber auch wer wie viel Punkte und/oder Dateifragmente erhält. Deshalb ist diese Funktion
 recht komplex und enthält letztendlich die gesamte Logik eines Spielmodus.

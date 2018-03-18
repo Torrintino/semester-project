@@ -2,7 +2,8 @@
 \label{sec:leds}
 
 Dieser Abschnitt erklärt die Bedeutung der LEDs.
-Für diese Aufgabe war hauptsächlich Manuel Radatz verantwortlich.
+Für diese Aufgabe war hauptsächlich Manuel Radatz verantwortlich, wobei die Bedeutungen der LEDs
+auch im gesamten Team diskutiert worden sind.
 
 \begin{figure}[h]
   \centering
@@ -58,7 +59,7 @@ Für diese Aufgabe war hauptsächlich Manuel Radatz verantwortlich.
            \textbf{(\subref*{fig:led-red-blink})} wurde getroffen (unverwundbar)
            \textbf{(\subref*{fig:led-red})} tot
            \textbf{(\subref*{fig:led-yellow})} hat getroffen
-           \textbf{(\subref*{fig:led-red-yellow-blink})} letztes Leben}
+           \textbf{(\subref*{fig:led-red-yellow-blink})} „letztes Leben“}
   \label{fig:leds}
 \end{figure}
 Jedes Spielgerät hat jeweils eine rote, eine gelbe und eine grüne LED, die wie auf einer Ampel
@@ -79,6 +80,7 @@ aus Erfahrung, dass als nächstes grün kommt.
 
 Neigt sich das Spiel dem Ende zu, fängt die grüne LED 64 Sekunden vorher langsam an zu blinken und
 blinkt bis zum Ende des Spiels immer schneller.
+Dies ist natürlich nur dann der Fall, wenn der Zeitpunkt des Spielendes vorher feststeht.
 Nach dem Spielende kehren die LEDs zum initialen Zustand zurück.
 Wenn das Spiel läuft, zeigt das Blinken der roten LED an, dass man getroffen wurde und unverwundbar
 ist.
@@ -87,9 +89,14 @@ Zeigt die LED Dauerrot, dann ist man tot.
 In diesem Zustand ist es auch nicht mehr möglich, andere Spieler abzuschießen, d.h. der IR-Sender
 wird deaktiviert.
 Die gelbe LED zeigt an, dass man einen anderen Spieler getroffen hat.
-Das letzte Leben wird dadurch angezeigt, dass die rote und die gelbe LED etwa alle 2 Sekunden für
+Das „letzte Leben“ wird dadurch angezeigt, dass die rote und die gelbe LED etwa alle 2 Sekunden für
 100 Millisekunden synchron aufleuchten.
-Alle LED-Zustände sind zur Übersicht auch in \cref{fig:leds} dargestellt.
+Hierbei ist anzumerken, dass es das Konzept von „Leben“ im übertragenen Sinne nur im Spielmodus
+„No Carry No Win“ in Form von Dateifragmenten gibt, wie es im \cref{sec:spielmodi-speziell}
+beschrieben wird.
+In Spielmodi, in denen Spieler kein „letztes Leben“ haben können, wird dieser LED-Zustand nicht
+genutzt.
+Alle möglichen LED-Zustände sind zur Übersicht auch in \cref{fig:leds} dargestellt.
 
 Ursprünglich wollten wir anstelle von LEDs ganze Displays verwenden, um auch individuelle
 Informationen als Text oder eine Karte des Spielfeldes mit allen Mitspielern anzeigen zu können.

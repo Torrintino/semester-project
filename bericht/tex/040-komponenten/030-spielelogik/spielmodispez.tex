@@ -1,20 +1,21 @@
 \subsubsection{Spielmodi speziell}
+\label{sec:spielmodi-speziell}
 
 Die verschiedenen Spielmodi wurden mittels eines von uns als Simulator bezeichneten Programms entwickelt und ausprobiert. So konnten wir u.a. prüfen, ob die Spielmodi wie erwartet funktionieren und ob bei realistischen Eingaben (also entsprechenden Schusswechseln zwischen den Spielern) Szenarien auftreten können, die entsprechend der Bedeutung des jeweiligen Spielmodus nicht sinnvoll sind. \\
-Der Simulator ist kommandozeilenbasiert. Er ermöglicht alle wichtigen Eingaben, die im fertigen Produkt über die Website möglich sein sollten, u.a. der gewünschte Spielmodus, die Anzahl der Spieler, die Anzahl der zu spielenden Runden und die Unverwundbarkeitszeit. Lediglich Spielernamen kennt der Simulator nicht. Die simulierten Spieler werden einfach von 0 beginnend durchnummeriert. \\
-\begin{figure}
+Der Simulator ist kommandozeilenbasiert. Er ermöglicht alle wichtigen Eingaben, die im fertigen Produkt über die Website möglich sein sollten, u.a. der gewünschte Spielmodus, die Anzahl der Spieler, die Anzahl der zu spielenden Runden und die Unverwundbarkeitszeit. Lediglich Spielernamen kennt der Simulator nicht. Die simulierten Spieler werden einfach von 0 beginnend durchnummeriert.
+\begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth,keepaspectratio]{./040-komponenten/030-spielelogik/Simulator.png}
   \caption{Der Simulator}
   \label{fig:simulator}
-\end{figure}
-Ist ein Spiel gestartet, so können Schüsse simuliert werden, indem jeweils die ID eines Schützen und eines Getroffenen eingegeben wird. Anschließend werden die Veränderungen in Punkten und in den Dateifragmenten jedes Spielers sichtbar. Rot hervorgehobene Zahlen stehen dabei für einen Verlust, grün hervorgehobene Zahlen für einen Gewinn, wie im Bild zu sehen, wie im Bild \cref{fig:simulator} zu sehen.
+\end{figure} \\
+Ist ein Spiel gestartet, so können Schüsse simuliert werden, indem jeweils die ID eines Schützen und eines Getroffenen eingegeben wird. Anschließend werden die Veränderungen in Punkten und in den Dateifragmenten jedes Spielers sichtbar. Rot hervorgehobene Zahlen stehen dabei für einen Verlust, grün hervorgehobene Zahlen für einen Gewinn, wie in \cref{fig:simulator} zu sehen ist.
 Am Ende eines Spiels gibt der Simulator den Gewinner (ein Spieler oder ein ganzes Team) aus. \\
 Mehr zu den technischen Aspekten des Simulators ist im \cref{sec:api-zu-services-komponente} zu finden.
 
 \paragraph{Solo Easy}
 Bei dem Spielmodus „Solo Easy“ handelt es sich um einen Spielmodus, welcher schnell implementiert werden sollte. Demnach soll der Spielmodus einfach spielbar sein. Der Spielmodus funktioniert wie folgt: \\
-Jedem Spieler wird ein Dateifragment zugewiesen. Wird ein Spieler durch einen anderen Spieler getroffen, bekommt der Schütze das ursprüngliche Dateifragment des Getroffenen. Dabei ist zu beachten, dass der getroffene Spieler sein Dateifragment jedoch behält, d.h. Dateifragmente werden bei Treffern somit kopiert. Das Spiel endet sobald ein Spieler alle existierenden Dateifragmente besitzt.
+Jedem Spieler wird ein Dateifragment zugewiesen. Wird ein Spieler durch einen anderen Spieler getroffen, bekommt der Schütze das ursprüngliche Dateifragment des Getroffenen. Dabei ist zu beachten, dass der getroffene Spieler sein Dateifragment jedoch behält, d.h. Dateifragmente werden bei Treffern somit kopiert. Das Spiel endet, sobald ein Spieler alle existierenden Dateifragmente besitzt.
 
 \paragraph{Solo Advanced}
 Der Spielmodus „Solo Advanced“ baut auf dem Spielmodus „Solo Easy“ auf. Der Unterschied hierbei liegt darin, dass bei einem Treffer der getroffene Spieler sein Dateifragment jedoch nicht behält, d.h. Dateifragmente werden nun bei Treffern abgegeben. Das bedeutet also insbesondere, dass Dateifragmente nicht kopiert werden. Ein Dateifragment zählt hierbei wie ein Punkt. \\
@@ -24,7 +25,7 @@ Des Weiteren kann der Spielmodus in mehreren Runden gespielt werden, wobei eine 
 Als Variation kann der Spielmodus „Solo Advanced“ auch teambasiert gespielt werden, wobei die Teamzuweisung manuell erfolgt. Gewonnen hat demnach das Team, welches am Ende einer Runde die meisten Punkte hat. Teambeschuss wird hierbei nicht beachtet (ist nicht erlaubt) und führt demnach zu keinem Ereignis (kein Punktabzug o.Ä.).
 
 \paragraph{No Carry No Win}
-„No Carry No Win“ ist ein Spielmodus, der ausschließlich teambasiert gespielt wird, wobei die Teamzuweisung manuell erfolgt. Hierbei wird pro Team ein Spieler zufällig ausgewählt, welcher alle Dateifragmente einer begehrten Datei besitzt, der sogenannten „Carry“. Er hat besondere Bedeutung für das BitTorrent-Netzwerk in dem zugrundeliegenden Szenario, denn da er bereits alle Dateifragmente hat, tritt er nur noch als Seed auf und ist für das Netzwerk (sein Team) besonders wichtig. \\
+„No Carry No Win“ ist ein Spielmodus, der ausschließlich teambasiert gespielt wird, wobei die Teamzuweisung manuell erfolgt. Hierbei wird pro Team ein Spieler zufällig ausgewählt, welcher alle Dateifragmente einer begehrten Datei besitzt, der sogenannte „Carry“. Er hat besondere Bedeutung für das BitTorrent-Netzwerk in dem zugrundeliegenden Szenario, denn da er bereits alle Dateifragmente hat, tritt er nur noch als Seed auf und ist für das Netzwerk (sein Team) besonders wichtig. \\
 Nun bricht ein Kampf zwischen den Teams aus, ganz im Stile von Lasertag. In diesem Kampf ist folglich das Ziel jedes normalen Spielers (jedes Spielers, der kein Carry ist), seinen Carry zu verteidigen, ihn also im BitTorrent-Netzwerk zu halten, denn sie wollen von ihm in Zukunft auch noch Dateifragmente erhalten können. \\
 Jeder normale Spieler besitzt zu Beginn wie üblich ein Dateifragment. Zu beachten ist hierbei, dass in diesem „Kampf“ Dateifragmente nicht kopiert oder übertragen, sondern nur als Leben gewertet werden. Ein Spieler „stirbt“, scheidet also aus einer Runde aus, wenn er kein Dateifragment mehr besitzt. Das bedeutet, dass ein normaler Spieler nach einem Treffer, der Carry jedoch erst nach mehreren Treffern „stirbt“. \\
 Der Spielmodus kann in mehreren Runden gespielt werden, wobei eine Runde dann endet, wenn nur noch ein Carry übrig ist. Das Team, dessen Carry zuletzt übrig ist, gewinnt die jeweilige Runde.
