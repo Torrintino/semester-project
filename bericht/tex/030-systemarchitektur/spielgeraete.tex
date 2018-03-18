@@ -1,4 +1,5 @@
 \subsection{Die Spielgeräte}
+\label{sec:architektur-spielgeraete}
 
 Wie oben bereits beschrieben, war für das Nachbilden von Lasertag eine drahtlose Übertragungsmethode
 notwendig, die möglichst zuverlässig ist.
@@ -8,16 +9,16 @@ Auch in diesem Projekt fiel die Wahl auf Infrarot.
 Es ist im Gegensatz zu Laser nicht schädlich für die Augen und die Komponenten sind weitaus billiger.
 Diese sind zum Beispiel LEDs und Sensoren, sowie Open-Source-Treiber für die
 Modellierung für Daten.
-Es reicht nicht aus einfach nur zu erkennen, dass man getroffen wurde, weil es für die Spielregeln
+Es reicht nicht aus, einfach nur zu erkennen, dass man getroffen wurde, weil es für die Spielregeln
 notwendig ist zu wissen, von welchem Spieler der Schuss kam.
 Diese Notwendigkeit ergibt sich daraus, dass zwei Systeme, die über das Netzwerk kommunizieren, dazu
-in der Lage sein müssen sich eindeutig zu identifizieren.
+in der Lage sein müssen, sich eindeutig zu identifizieren.
 Da über Infrarot Daten versendet werden können, wie zum Beispiel bei
 Fernbedienungen, ist es somit genau die richtige technische Lösung für das Lasertag.
-Die Frequenz des Infrarot-Signals wurde möglichst hoch gewählt, da es so zu höheren Reichweiten und weniger Fehlern bei der Übertragung entstehen. Sie liegt bei 56kHz
+Die Frequenz des Infrarot-Signals wurde möglichst hoch gewählt, da so höhere Reichweiten und weniger Fehlern bei der Übertragung entstehen.
+Sie liegt bei 56kHz.
 
-
-Die gegenseitige Identifizierung wurde so gelöst, dass das Spielgerät eines Spielers beim Abschuss
+Die gegenseitige Identifizierung erfolgt auf die Art und Weise, dass das Spielgerät eines Spielers beim Abschuss
 eine ID versendet.
 Wenn der Sensor eines Spielers diese ID empfängt, weiß das Gerät, von wem der Schuss kam, und es
 weiß ebenso seine eigene ID.
