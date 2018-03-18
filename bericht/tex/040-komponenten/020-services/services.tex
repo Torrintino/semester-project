@@ -26,6 +26,7 @@ Sie wird vom Server aktuell gehalten und von der Website auf einem Scoreboard da
 \subsubsection{Kommunikation}
 Dieser Abschnitt erläutert, wie die Hardware mit dem Server kommuniziert, sowie den Aufbau der Software beides Geräte.
 Für diese Aufgabe war Kevin Marc Trogant verantwortlich. Für Teile der Kommunikation zwischen Server und Client außerdem Pascal Jochmann.
+
 Der Spielserver \texttt{services-server} nutzt einen eigenen Thread für die Kommunikation mit den Clients und
 der Webseite. Clients und Server kommunizieren über BSD Sockets.
 Als Alternative kam Googles gRPC in Frage. Dieses wurde verworfen, weil:
@@ -123,6 +124,7 @@ Die Schrift ist in grün gehalten, damit ein guter Kontrast zwischen Hintergrund
 	\end{center}
 \end{figure}
 Dieser Abschnitt erläutert, wie die Website mit der Datenbank zusammenarbeitet. Für diese Aufgabe war Tim Sikatzki verantwortlich.
+
 Unsere Datenbank ist die ermöglichte uns die Interaktion innerhalb der services-Gruppe. Wir haben uns für eine Datenbank entschieden, da wir eine Spielhistorie aus den vergangenen Spielen erstellen wollten. Gleichzeitig bot sich die Datenbank auch für die Darstellung des Scoreboard an, da die SQL Anfragen für eben dieses sehr trivial waren.\\\\
 Um die Fehlerquelle einer Datenbank in Form einer Datei zu umgehen, haben wir uns nach einiger Zeit dafür entschieden von SQLite auf MySQL, als Datenbankmanagementsystem, umzusteigen.\\\\
 %Abbildung mit Tabellen hier einfügen
