@@ -1,8 +1,9 @@
 \subsection{Auswertung}
+\label{sec:auswertung}
 
 Es gibt zwei Sichten darauf, wieviel von der geplanten Architektur umgesetzt wurden: zum einen die
 Implentierung der einzelnen Komponenten, zum anderen die Integration derselben.
-Um eine technische Machbarkeit der Lösung zu demonstrieren, reicht es aus, mit Unit Tests die
+Um eine technische Machbarkeit der Lösung zu demonstrieren, reicht es aus, mit Unit-Tests die
 Funktionalität der Einzelkomponenten zu beweisen.
 Allerdings war als Endprodukt ein Spiel gefordert, wofür es notwendig ist, dass die Integration
 reibungslos funktioniert.
@@ -11,12 +12,12 @@ interne Funktionsweise zu haben.
 
 Die einzelnen Komponenten, die geplant waren, wurden alle implementiert und zumindest teilweise
 getestet.
-Die Spielelogikgruppe konnte mit einem Simulator demonstrieren, dass die einzelnen Spielmodi das
-Soll-Verhalten aufweisen und die Hardware-Gruppe konnte mit Hilfe eines Treibers demonstrieren, dass
-Infrarotabschüsse an den Services-Client durchgereicht und LED Events korrekt angezeigt werden.
+Die Spiellogikgruppe konnte mit einem Simulator demonstrieren, dass die einzelnen Spielmodi das
+Soll-Verhalten aufweisen und die Hardware-Gruppe konnte mit Hilfe von Testtreibern demonstrieren,
+dass Infrarotabschüsse an den Services-Client durchgereicht und LED-Events korrekt angezeigt werden.
 Die Services-Gruppe hat die Funktionalität der Webseite demonstriert, indem sie manuell Einträge in
-die Datenbank hinzufügten und bestätigten, dass jene Änderungen auf der Webseite übernommen werden. 
-Auch grundlegende Client-Server Kommunikation war möglich.
+die Datenbank hinzufügten und bestätigten, dass jene Änderungen auf der Webseite übernommen werden.
+Auch grundlegende Client-Server-Kommunikation war möglich.
 
 Die Integration der Komponenten ist unvollständig.
 Es lässt sich nachweisen, dass der Server mit LUA kommuniziert.
@@ -27,8 +28,8 @@ komplexeren bringen jedoch Deadlocks von Mutex-Objekten den Server zum Absturz.
 Es kam außerdem zu diversen Fehlern bei Zugriffen des Servers auf die Datenbank.
 Der Services-Server und der Services-Client können sich miteinander verbinden und
 Abschussinformationen werden ausgetauscht.
-Allerdings führt ein Verbindungsverlust des Clients zurzeit noch dazu, dass der zugehörige Spieler sich 
-nicht mehr mit dem Spiel verbinden kann.
+Allerdings führt ein Verbindungsverlust des Clients zurzeit noch dazu, dass der zugehörige Spieler
+sich nicht mehr mit dem Spiel verbinden kann.
 Diese Problem machen derzeit einen Neustart der Systemd-Units auf allen Geräten notwendig, wenn ein
 neues Spiel gestartet wird.
 Die Verbindung der Client/Server-Programme mit Systemd ist noch instabil.
