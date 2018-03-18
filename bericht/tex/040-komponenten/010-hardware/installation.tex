@@ -1,47 +1,75 @@
 \subsubsection{Installation des Projekts}
 
-Dieser Abschnitt erläutert, wie die einzelnen Komponenten des Projekts auf die Geräte verteilt
-werden.
-Für diese Aufgabe war Lennart Weiß verantwortlich.
+Dieser Abschnitt erläutert, wie die einzelnen Komponenten des Projekts auf die
+Geräte verteilt werden. Für diese Aufgabe war Lennart Weiß verantwortlich.
 
-Der gesamte Source-Code für die verschiedenen Komponenten befindet sich in einem Git-Repository.
-Um die neueste Version des Projekts auf die Geräte zu verteilen, wird auf dem Server ein Skript
-aufgerufen, welches zuerst die einzelnen Komponenten kompiliert und die erforderlichen Dateien
-installiert.
+In den vorherigen Abschnitten wurde die Basis für unser Projekt vorgestellt,
+allerdings blieb offen, wie die verschiedenen Komponenten verteilt werden.
+Dafür gibt es grundsätzlich zwei Anforderungen: Zum einen muss festgelegt
+werden, aus welchen Komponenten das System besteht und welche Installations-
+schritte notwendig sind. Zum anderen muss ein Prozess definiert werden, mit dem
+die Installation automatisiert vollzogen wird. Letzterer Schritt ist aus
+verschiedenen Gründen wichtig. So können durch einen automatisierten
+Prozess Schusselfehler ausgeschlossen werden. Aber vor allem die Geschwindigkeit
+mit der simultan die neueste Version unserer Software auf alle Geräte verteilt
+werden kann ist ausschlaggebend. Müsste dies manuell gemacht werden, wäre es
+unmöglich an einem Tag mehrere verschiedenen Versionen auf den Geräten zu
+testen, weil nach jeder Änderung die Software neu verteilt werden muss.
 
-Dies sind die Komponenten die installiert werden müssen: \texttt{services-server},
-\texttt{services-website} und \texttt{mysql} auf dem Server sowie \texttt{services-client},
-\texttt{hardware-api} und \texttt{lirc} auf dem Client.
-Dabei sind \texttt{mysql} und \texttt{lirc} externe Komponenten, die anderen wurden von uns
-entwickelt.
+Die Systemkomponenten wurden bereits beschrieben. Im folgenden Abschnitt wird
+erklärt, wie diese auf welchem System installiert werden. Zuerst müssen externe
+Voraussetzungen erfüllt werden. Auf dem Server werden diverse MySQL Pakete
+installiert und auf dem Client einige Lirc Pakete. Die lirc Konfiguration muss
+angepasst werden und es müssen beim Systemstart zusätzliche Treiber geladen
+werden. Die dafür notwendigen Konfigurationsdateien befinden sich im Hardware
+Repository. Die verschiedenen Spielemodi sind LUA Dateien und befinden sich
+im Spielemodi Repository. Sie sollen auf dem Server nach 
+\texttt{/var/lib/spielmodi} kopiert werden. Die Website besteht aus einer
+Python Datei und einigen HTML Seiten. Diese befinden sich in einem Ordner im
+Services Repository und sollen auf dem Server nach 
+\texttt{/usr/bin/services-website} kopiert werden. Außerdem müssen mit Pip
+einige zusätzliche Pakete installiert werden. Die restlichen Dateien
+müssen noch zuvor kompiliert werden. Die daraus resultierenden Binaries 
+\texttt{services-client} und \texttt{hardware-api} sollen auf den Client nach
+\texttt{/usr/bin} kopiert werden und ebenso \texttt{services-server} auf
+den Server. Die Shared Library \texttt{libservices-common.so} wird auf allen
+Geräten nach \texttt{/usr/lib} verschoben und auf dem Server wird zusätzlich
+\texttt{/usr/libmysqlclient.so.18} in das selbe Verzeichnis kopiert.
 
-Für jede Komponente wird eine Systemd Unit definiert und entweder auf dem Server oder auf allen
-Clients verteilt.
-Es ist erwünscht, dass die verschiedenen Dienste nach dem Systemstart automatisch gestartet werden
-und mit Systemd können Abhängigkeiten und die richtige Reihenfolge festgelegt werden.
-Auf den Clients ist \texttt{services-client} von \texttt{hardware-api} abhängig und Letzteres von
-\texttt{lircd}.
-Auf dem Server hängt \texttt{services-server} von \texttt{services-website} und diese wiederum von
-\texttt{mysql} ab.
-Die Prozesse werden also durch das Betriebssystem verwaltet und sollte einer abstürzen, lassen sich
-die Logs mit \texttt{journalctl} nachlesen.
-Das Verwalten vieler Prozesse auf mehreren Geräten lässt sich somit besser handhaben.
+Nun da festgelegt ist was installiert werden soll, erläutern wir den
+automatisierten Prozess um dies zu bewerkstelligen. Auf dem Server befindet
+sich ein Skript, dass jedes mal ausgeführt wird, wenn die neueste Version des
+Projekts verteilt werden soll. Bevor das Skript aufgerufen wird, muss die
+gewünschte Version von Gitlab heruntergeladen werden. Wenn es in der neusten
+Version einen schwerwiegenden Fehler gibt, ist es somit möglich auf eine
+funktionierende umzusteigen. Als nächstes werden diverse Makefiles aufgerufen,
+um die Binaries zu kompilieren. Danach werden die Dateien die auf dem Server
+installiert werden sollen direkt in die entsprechenden Verzeichnisse kopiert.
 
-Um die benötigten Binaries zu kompilieren, wird die benötigte Version aus dem Git-Repository
-gepullt.
-Dann wird ein Skript aufgerufen, welches in die verschiedenen Ordner der Komponenten geht und
-Makefiles aufruft.
-Diese erzeugen dann die erforderlichen Dateien.
-Wenn diese auf dem Server benötigt werden, werden sie direkt in \texttt{/usr/bin} oder
-\texttt{/usr/lib} kopiert, je nachdem welchen Zweck sie erfüllen.
-Die entsprechenden Systemd Units werden dann neu gestartet.
-Werden die Dateien auf den Clients benötigt, werden sie in das Puppet-Code-Verzeichnis kopiert.
-Wurden diese Dateien noch nicht zuvor verwendet, muss darüber hinaus noch die Konfiguration von
-Puppet angepasst werden.
-Die Verteilung wird dann über Puppet automatisiert.
+Der Installationsprozess für die Clients wird mit einem Orchestrationstool
+names Puppet organisiert. Der Server ist der Puppetmaster und in einem
+speziellen Ordner befindet sich die Beschreibung des erwünschten Systemzustands
+der Client, sowie die Dateien die dafür auf den Client kopiert werden müssen.
+Der Vorteil in der Verwendung dieses Werkzeugs ist, dass der erwünschte
+Systemzustand der Clients in Gitlab dokumentiert und unter Versionskontrolle
+ist. Außerdem kümmert sich nun Puppet im Hintergrund um die Installation und
+ist in der Lage im Falle eines Fehlschlags den bisherigen Installationsprozess
+rückgängig zu machen und das System in den bisherigen Zustand zu bringen. Das
+Installationsskript auf den Server kopiert automatisch alle für die Clients
+benötigten Dateien in das Puppet Verzeichnis. Die Clients werden nun entweder
+innerhalb der nächsten halben Stunde auf die neueste Version umsteigen, oder
+die Update Prozess kann manuell sofort gestartet werden.
 
-Es gibt auch einige Dateien, die verteilt, jedoch nicht kompiliert werden müssen.
-Die Webseite wird einfach vom Git-Verzeichnis als Ordner nach \texttt{/usr/bin/services-website}
-kopiert.
-Die Systemd Unit startet Flask und der Pfad der Flask-Applikation wird exportiert.
-Die Spielmodi werden ebenfalls aus Git heruntergeladen und nach \texttt{/var/lib/spielmodi} kopiert.
+Nun müssen die Applikationen noch gestartet und Abhängigkeiten gelöst werden.
+Dafür wurde Systemd verwendet. Es ist die Systemstartlösung von Raspbian und
+definiert, welche Applikationen in welcher Reihenfolge gestartet werden. Um
+den Spielstart zu vereinfachen, sollen die Coding Tag Programme bereits starten,
+wenn die Geräte mit Strom versorgt werden. Für jedes Programm gibt es eine
+Systemd Unit, die bei jedem Systemstart ausgeführt wird. Damit kann die
+richtige Reihenfolge durch Abhängigkeiten definiert werden. Auf dem Server
+sind die Website und der Services Server von MySQL abhängig. Auf dem Client
+hängt der Services Client von der Hardware API ab und diese wiederum von Lirc.
+Sollte ein Service abstürzen, können die Fehlermeldungen im Systemlog
+nachgelesen werden. Außerdem lassen sich die Programme über systemctl
+komfortabel starten oder stoppen.
+
