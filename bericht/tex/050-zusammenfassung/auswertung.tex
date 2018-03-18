@@ -1,6 +1,42 @@
 \subsection{Auswertung}
 \label{sec:auswertung}
 
+Der zuvor beschriebene Systementwurf ist ausreichend um die Anforderungen zu
+erfüllen. Es sind Spielgeräte geplant worden, die denen aus Lasertag ähneln
+und mit Infrarot können sich Spieler gegenseitig abschießen. Es soll ein
+Spielmodi implementiert werden, der an Bittorrent angelehnt ist, jedoch
+wird das Protokoll angepasst um spielgerecht zu sein. Es wurden viele weitere
+Faktoren bedacht, welche das Spielerlebnis verbessern sollen, etwa die
+Möglichkeit Informationen zum Spielstand zu erlangen, oder die freie
+Beweglichkeit im Raum. Jedoch ist nicht alles planmäßig verlaufen und der
+Entwurf wurde nicht vollständig umgesetzt.
+
+Zuallererst möchten wir auswerten, wie weit die einzelnen Komponenten
+entwickelt wurden. Die Hardware bildet die Basis für das Projekt und ist somit
+die Voraussetzung für ein funktionierendes System. Die Gruppe hatte sich zum
+Ziel gesetzt nicht nur ein stabile Infrastruktur zur Verfügung zu stellen,
+sondern auch den darüberliegenden Schichten Komfort zu bieten, indem
+hardwarenahe Details abstrahiert werden. Dies hat gut funktioniert und hat die
+Kommunikation mit den anderen Gruppen erleichert, weil es nur sehr wenig
+Schnittstellen gab. Die Hardwaregruppe hat außerdem die Installation des 
+Projekts übernommen, womit sich die Entwickler voll und ganz auf ihre Arbeit
+konzentrieren konnten, ohne sich um die Verteilung der Software kümmern zu
+müssen. Das Netzwerk hat sich als zuverlässig erwiesen, jedoch ist die
+Reichweite noch ausbaufähig. Die Raspberry Pi's haben sich also günstige, aber
+sehr effektive Lösung erwiesen und wir konnten mit den Powerbanks die
+Geräte komplett ohne externe Kabel realisieren. Allerdings sind sie noch sehr
+klobig und die Powerbanks passen nicht rein, wodurch sie die ganze Zeit über
+zusätzlich gehalten werden müssen. Insgesamt sind die Geräte nicht sehr schön.
+Die LED's machen das ganze Spiel sehr viel lebendiger, indem sie etwas
+optisches Feedback bieten, jedoch müssen sich neue Spieler erst mit den Codes
+vertraut machen, was vielleicht etwas unintuitiv ist. Die Infrarotübertragung
+hat technisch funktioniert, wir sind uns allerdings noch nicht ganz über ihre
+Grenzen klar, weil wir Abschüsse nicht genug getestet haben.
+
+------------------ OLD VERSION ------------------
+
+
+
 Es gibt zwei Sichten darauf, wieviel von der geplanten Architektur umgesetzt wurden: zum einen die
 Implentierung der einzelnen Komponenten, zum anderen die Integration derselben.
 Um eine technische Machbarkeit der Lösung zu demonstrieren, reicht es aus, mit Unit-Tests die
