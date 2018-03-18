@@ -80,9 +80,9 @@ Die services Seite der LUA API hatte als Hauptproblem, das sie aufgrund der sehr
 Unsere Website bildet das Herzstück in der Interaktion zwischen dem Nutzer und der Software. Sie gibt ihm die Möglichkeit, die Konfigurationen für das Spiel einzustellen, wie zum Beispiel die Anzahl der Teams, dem Spielmodus und den Spielgeräten Namen zuzuteilen. Außerdem haben die Spieler durch sie die Möglichkeit, ihre Leistungen während des Spiels in Echtzeit einsehen zu können.\\\\
 Zur Entwicklung der Website haben wir "Flask" benutzt, ein Webframework auf Python-Basis. Wir haben uns für dieses Framework entschieden, da es zunächst sehr leicht zu benutzen ist und uns gleichzeitig alles geboten hat, um die erwarteten Funktionalitäten der Website implementieren zu können, wie zum Beispiel ein MySQL-Package, welches wir zur Interaktion zwischen Webapplikation und Datenbank benutzt haben.
 Um die oben genannten Funktionen gewährleisten zu können, besteht unsere Webapplikation aus mehreren HTML-Seiten.\\\\
-Die erste Seite (Abb.3) ist der Kern der Website. Sie wird benutzt, um das eigentliche Spiel zu erstellen. Nicht nur nimmt sie die eingegebenen Daten der Spieler auf, sondern überträgt die Einstellungen direkt auf die Datenbank und erstellt dort direkt Einträge, die für das Scoreboard relevant sind. In der Sektion Datenbank werden die Einträge und Tabellen genauer erläutert. Die möglichen Einträge der Spielernamen sind hierbei abhängig von der Anzahl der verbundenen Clients. Sind nur drei Clients zum Server verbunden, so können wir auch nur drei Namen zuweisen.
+Die erste Seite (\cref{fig:start}) ist der Kern der Website. Sie wird benutzt, um das eigentliche Spiel zu erstellen. Nicht nur nimmt sie die eingegebenen Daten der Spieler auf, sondern überträgt die Einstellungen direkt auf die Datenbank und erstellt dort direkt Einträge, die für das Scoreboard relevant sind. In der Sektion Datenbank werden die Einträge und Tabellen genauer erläutert. Die möglichen Einträge der Spielernamen sind hierbei abhängig von der Anzahl der verbundenen Clients. Sind nur drei Clients zum Server verbunden, so können wir auch nur drei Namen zuweisen.
 Auch die Spielmodi, die ausgewählt werden können, werden dynamisch erstellt. Hierbei wird aus einem Ordner ausgelesen, in dem die Lua-Skripte abgelegt werden können. Die Teams werden von der Webapplikation mithilfe von einer Modulo-Operation, abhängig von der Teamanzahl, automatisch zugeteilt. Es ist also \\\\
-Sobald ein Spiel gestartet wird, leitet die Seite auf das Scoreboard weiter.\\ Das Scoreboard zieht sich seine Einträge direkt aus der Datenbank und aktualisiert dieses asynchron unter der Verwendung von jQuery und ajax. Es stellt die Einträge in Form von Tabellen da, hierbei gibt es eine Tabelle die Spieler und eine Tabelle für die Teams (Abb.4). Auf der Seite haben wir dann die Möglichkeit, das Spiel manuell zu pausieren oder auch zu beenden. Wenn die Dauer einer Runde ausgelaufen ist, wird das Spiel automatisch in den pausierten Zustand gesetzt. Wir können nun jederzeit eine mithilfe des Links "Spiel fortfuehren" Eine neue Runde starten bzw. das pausierte Spiel weiterspielen.\\
+Sobald ein Spiel gestartet wird, leitet die Seite auf das Scoreboard weiter.\\ Das Scoreboard zieht sich seine Einträge direkt aus der Datenbank und aktualisiert dieses asynchron unter der Verwendung von jQuery und ajax. Es stellt die Einträge in Form von Tabellen da, hierbei gibt es eine Tabelle die Spieler und eine Tabelle für die Teams (\cref{fig:team}). Auf der Seite haben wir dann die Möglichkeit, das Spiel manuell zu pausieren oder auch zu beenden. Wenn die Dauer einer Runde ausgelaufen ist, wird das Spiel automatisch in den pausierten Zustand gesetzt. Wir können nun jederzeit eine mithilfe des Links "Spiel fortfuehren" Eine neue Runde starten bzw. das pausierte Spiel weiterspielen.\\
 Der Link "Spiel beenden" funktioniert dementsprechend genauso, allerdings ist es danach nicht mehr möglich, das Spiel weiterzuführen. Der Nutzer dann danach auf einen Button klicken, um zurück zur Startseite zu gelangen und ein neues Spiel zu starten .\\\\
 Insgesamt ist die Webapplikation seitens Funktionalität vollständig. Es könnten noch Verbesserungen hinsichtlich der Anzeige der verschiedenen Dateifragmente und der Effizienz der Anzeige des Scoreboards gemacht werden.
 
@@ -93,10 +93,12 @@ Insgesamt ist die Webapplikation seitens Funktionalität vollständig. Es könnt
 	\begin{center}
 		\includegraphics[width=0.75 \textwidth]{websitemenue.JPG}
 		\caption{Startseite}
+		\label{fig:start}
 	\end{center}
 \begin{center}
 	\includegraphics[width=0.75 \textwidth]{scoreboardteams.JPG}
 	\caption{Scoreboard mit Teams}
+	\label{fig:team}
 \end{center}
 \end{figure}
 %\begin{figure}[b]
@@ -113,13 +115,14 @@ Die Schrift ist in grün gehalten, damit ein guter Kontrast zwischen Hintergrund
 	\begin{center}
 		\includegraphics[width=0.8 \textwidth]{Databasestrucb.png}
 		\caption{Datenbankstruktur}
+		\label{fig:database}
 	\end{center}
 \end{figure}
 Unsere Datenbank ist die ermöglichte uns die Interaktion innerhalb der services-Gruppe. Wir haben uns für eine Datenbank entschieden, da wir eine Spielhistorie aus den vergangenen Spielen erstellen wollten. Gleichzeitig bot sich die Datenbank auch für die Darstellung des Scoreboard an, da die SQL Anfragen für eben dieses sehr trivial waren.\\\\
-Um die Fehlerquelle einer Datenbank in Forvm einer Datei zu umgehen, haben wir uns nach einiger Zeit dafür entschieden von SQLite auf MySQL, als Datenbankmanagementsystem, umzusteigen.\\\\
+Um die Fehlerquelle einer Datenbank in Form einer Datei zu umgehen, haben wir uns nach einiger Zeit dafür entschieden von SQLite auf MySQL, als Datenbankmanagementsystem, umzusteigen.\\\\
 %Abbildung mit Tabellen hier einfügen
 
-In Abbildung 5 sehen wir den Aufbau unserer Datenbank. Wie wir sehen können, ist sie in drei Tabellen unterteilt.\\
+In der Grafik (\cref{fig:database}) sehen wir den Aufbau unserer Datenbank. Wie wir sehen können, ist sie in drei Tabellen unterteilt.\\
 Die client - Tabelle ist relevant für das Anzeigen der möglichen Eingabefelder für die Spielernamen im Menü der Website. Hierbei wird unterschieden, ob ein Client mit dem Server verbunden ist oder nicht.\\\\
 Die game - Tabelle ist vorallem interessant für die LUA API, da sie die Einträge enthält, die von dem Spieler vor Beginn des Spieles mithilfe des Menüs übergeben werden, wie zum Beispiel der Spielmodus und die Rundendauer. Gleichzeitig beinhaltet die Tabelle auch den Status, den das jeweilige Spiel zu jeder Zeit hat. Dieser Status wird von allen Parteien benutzt: die LUA API muss das Spiel nach Überschreiten der Rundendauer pausieren oder es beenden, die Netzwerkkommunikation muss bei einem gestoppten Spiel aufhören, Nachrichten weiterzuschicken, damit keine Punkte während eines pausierten oder beendeten Spieles verteilt werden.\\\\\\
 Die "playing" - Tabelle wird für unsere Historie und gleichzeitig der Darstellung des Scoreboards benutzt. Sie teilt jedem Spieler eine gameID, den jeweiligen Score, die Dateifragmente usw. zu und macht es möglich die Tabelle nach der gameID zu sortieren um einzelne Spiele wieder einsehen zu können.
