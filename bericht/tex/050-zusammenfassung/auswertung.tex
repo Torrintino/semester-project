@@ -37,6 +37,19 @@ Ziel der Spiellogik-Gruppe war die Erstellung mehrerer Spielmodi im Stil von Las
 Leider haben wir die Spielmodi nur mit dem Simulator und nicht im Praxiseinsatz, also auf einem echten Spielfeld mit echten Spielern, testen können. Dadurch könnten uns Faktoren, die den Spielverlauf in der Praxis beeinflussen und damit eventuell Anpassungen an den Annahmen und bspw. Punktzahlen der Spielmodi nötig machen würden, völlig unbekannt geblieben sein.
 Besonders für das Balancing von Parametern wie Punktzahlen und die Zuweisung der initialen Dateifragmente hätte ein automatisches Testen sinnvoll sein können. Andererseits hätten auch bei automatischen Tests Rahmenbedingungen bzw. Testfälle festgelegt werden müssen, die ohne Daten bzw. Erfahrungen aus der Praxis nur schwer realistisch festgelegt hätten werden können.
 
+Die Service-Gruppe hatte mehrere sehr unterschiedliche Aufgaben zu bewältigen. Das waren zum einem das entwickeln eines Servers,
+dessen Aufgabe es ist, die Parameter des aktuellen Spieles, basierend auf Hardware und Logik Input zu verwalten.
+Des weiteren musste eine diese Kommunikation zwischen den Service Komponenten und den beiden anderen Gruppen etabliert werden. 
+Zuletzt musste noch ein Weg gefunden werden, dem Spieler zu ermöglichen ein Spiel zu erstellen, zu verwalten und zu starten, sowie den derzeitigen Stand abzufragen.
+Im Großteil konnten diese Aufgaben alle bewältigt werden. Der Server selbst kann das Spiel konstant aufrecht erhalten und auf 
+Input reagieren. Bei Integrationstest zeigte sich jedoch, dass insbesondere Input der Hardwareebene nicht korrekt verarbeitet wird. 
+Auch die Kommunikation über LUA mit der Spiellogik ist größtenteils funktionsfähig.
+Das Problem des Benutzer Inputs konnte relativ simpel über eine Webseite gelöst werden. 
+HTML (und CSS) reichte für die meisten Funktionen dabei aus, für die anderen benötigten Feature könnten JavaScript und 
+Flask ausreichend helfen. Zugunsten von Datenpersistenz und einfacher Implementierung simultaner Spiele kommuniziert die Seite 
+nicht (wie die anderen Komponenten) schlicht über Googles Protocol Buffers sondern schreibt alle eingegebenen Daten in eine MySQL Datenbank.
+Obwohl die Vorteile dieses Systems groß sind hat sich bei dem Versuch der Integration mit dem Server gezeigt, dass viel mehr Probleme 
+auftreten als erwartet, was dazu führte, dass sie zur Endpräsentation nicht komplett einsatzfähig war.
 ------------------ OLD VERSION ------------------
 
 
