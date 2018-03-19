@@ -28,7 +28,7 @@ Sie wird vom Server aktuell gehalten und von der Website auf einem Scoreboard da
 \subsubsection{Kommunikation}
 \label{sec:services-kommunikation}
 Dieser Abschnitt erläutert, wie die Hardware mit dem Server kommuniziert, sowie den Aufbau der Software beider Geräte.
-Für diese Aufgabe war Kevin Marc Trogant verantwortlich. Für Teile der Kommunikation zwischen Server und Client außerdem Pascal Jochmann.
+Für diese Aufgabe war Kevin Marc Trogant verantwortlich. Für die Kommunikation zwischen Client und Server zusätzlich Pascal Jochmann.
 
 Der Spielserver \texttt{services-server} nutzt einen eigenen Thread für die Kommunikation mit den Clients und
 der Webseite. Clients und Server kommunizieren über BSD Sockets.
@@ -63,7 +63,7 @@ ein Header verschickt, der den Nachrichtentyp und die Länge der Nachricht in By
 Die Nachrichten selbst können einfach mittels der Protocol-Buffers Bibliothek zu entsprechenden C++ Objekte geparst werden, die dann Nachrichtenfelder als \glqq Getter- und Setter-Funktionen\grqq \, verfügbar machen.
 
 Die Kommunikation mit der Hardware-Komponente läuft über eine eigene Komponente (\texttt{services-client}), die auf den Spielgeräten ausgeführt wird. Diese empfängt Nachrichten von der Hardware-Schnittstelle über einen Unix-Socket, wandelt diese in das Services-interne Format um und sendet sie dann über einen TCP Socket an den Server. Außerdem kümmert sich die Komponente darum, in regelmäßigen Abständen (ca. 5 Sekunden) eine kurze \glqq Keep-Alive\grqq \, Nachricht an den Server zu senden, um zu signalisieren, dass der Client noch verbunden ist und am Spielbetrieb teilnimmt. 
-Eingehende Nachrichten vom Server, zum Beispiel um mittels der auf dem Gerät vorhandenden LEDs Treffer etc. anzuzeigen, werden vom Client empfangen und an die Hardware API weitergeleitet.\newline \newline
+Eingehende Nachrichten vom Server, zum Beispiel um mittels der auf dem Gerät vorhandenden LEDs Treffer anzuzeigen, werden vom Client empfangen und an die Hardware API weitergeleitet.\newline \newline
 Da für ein Lasertag das Treffen von anderen Spielern von relativ hoher Bedeutung ist, soll hier noch kurz ausgeführt werden, was aus Sicht der Services-Komponente passiert, wenn ein Spieler einen anderen trifft.
 
 Zuerst erhält der Client eine Nachricht von der Hardware-API, die mitteilt, dass der Client getroffen wurde. In der Nachricht ist die ID des Clients enthalten, von der das Gerät getroffen wurde. Die eigene ID erhält der Client beim Start. Diese beiden Informationen werden in eine sog. \glqq Hit-Message\grqq \, verpackt und an den Server gesendet. 
@@ -77,7 +77,7 @@ Um Spielmodi zu beschreiben und sauber von den anderen Komponenten abzutrennen, 
 
 Die LUA API auf Services-Seite war sehr schwierig einzubauen. Die erste Option war es, die API als Singleton bereitzustellen, dies stellte sich aber sehr schnell als schlechter Ansatz heraus, da der Start einer weiteren Runde hierdurch zu einem komplizierten und unschönen Hack geworden wäre. Daher und da wir die Architektur für potentiel mehrere Spiele, die parallel laufen, offen halten wollten, entschieden wir uns für den jetztigen Ansatz, die API läuft in einem eigenen Thread. 
 
-Der Logik-Thread sammelt sich erstmal die relevanten Spieldaten zusammen, initialisiert dann die Felder, auf welche LUA zugreift und geht dann in eine Event Loop über. In dieser Gameloop wird zuerst überprüft, ob Schussnachrichten durchgereicht wurden, welche wiederum an LUA weitergereicht werden. Danach werden alle potentiellen Timer weitergetickt um die vergangene Zeit. Als Letztes wird noch abgeprüft, ob der Server uns ein \texttt{AskedToExit} Event schickt, welches mit Aufräumen und Beenden des Spiels quittiert wird.
+Der Logik-Thread sammelt sich erstmal die relevanten Spieldaten zusammen, initialisiert dann die Felder, auf welche LUA zugreift und geht dann in eine Event Loop über. In dieser Gameloop wird zuerst überprüft, ob Schussnachrichten durchgereicht wurden, welche wiederum an LUA weitergereicht werden. Danach werden alle potentiellen Timer weitergetickt um die vergangene Zeit. Als Letztes wird noch überprüft, ob der Server uns ein \texttt{AskedToExit} Event schickt, welches mit Aufräumen und Beenden des Spiels quittiert wird.
 
 Der Hauptteil der API-Arbeit auf der Service-Seite war, die vorhandene Spiellogik API (den Simulator) an die real genutzte Hardware und Software anzubinden. Der Großteil der Input/Output Operationen wurde über unser Datenbankconnection Singleton umgeleitet. Das Scoreboard wird dabei permanent mitgeführt, wodurch Erweiterungen, wie z.B. spielerseitige Displays denkbar sind und was uns die Probleme von Score Serialisierung ignorieren lässt, da dieser sowieso von der Datenbank serialisiert wird. Da dann letztendlich die Relevanz eines Timers für LUA Skripte aufkam, welcher nicht den Logik-Thread vom Arbeiten abhält, haben wir einen einfachen Timer entwickelt, der mit Funktionen Callbacks arbeitet. Die letzte Erweiterung der API war das Hinzufügen der LED Events und der Abstraktion dieser in Funktionen, die Teil der LUA API wurden.
 
