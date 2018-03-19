@@ -87,6 +87,19 @@ Die Services-Seite der LUA API hatte als Hauptproblem, dass sie aufgrund der seh
 \label{sec:services-website}
 Dieser Abschnitt erläutert, wie die Website aufgebaut ist und funktioniert. Für diese Aufgabe waren Tim Sikatzki, Angelina Jellinek und Pascal Jochmann verantwortlich.
 
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[width=0.75 \textwidth]{websitemenue.JPG}
+		\caption{Startseite}
+		\label{fig:start}
+	\end{center}
+\begin{center}
+	\includegraphics[width=0.75 \textwidth]{scoreboardteams.JPG}
+	\caption{Scoreboard mit Teams}
+	\label{fig:team}
+\end{center}
+\end{figure}
+
 Unsere Website bildet das Herzstück in der Interaktion zwischen dem Nutzer und der Software. Sie gibt ihm die Möglichkeit, die Konfigurationen für das Spiel einzustellen, wie zum Beispiel die Anzahl der Teams, dem Spielmodus und den Spielgeräten Namen zuzuteilen. Außerdem haben die Spieler durch sie die Möglichkeit, ihre Leistungen während des Spiels in Echtzeit einsehen zu können.\\\\
 Zur Entwicklung der Website haben wir „Flask“ benutzt, ein Webframework auf Python-Basis. Wir haben uns für dieses Framework entschieden, da es zunächst sehr leicht zu benutzen ist und uns gleichzeitig alles geboten hat, um die erwarteten Funktionalitäten der Website implementieren zu können, wie zum Beispiel ein MySQL-Package, welches wir zur Interaktion zwischen Webapplikation und Datenbank benutzt haben.
 Um die oben genannten Funktionen gewährleisten zu können, besteht unsere Webapplikation aus mehreren HTML-Seiten.\\\\
@@ -112,23 +125,11 @@ bestimmen zu können, ohne kleine Unregelmäßigkeiten der Einrückungen zu beko
 die erste angewandt wird, die dargestellt werden kann. Hier handelt es sich um die Schriftarten Georgia und Times New Roman. 
 Das Design ist dunkel genug und wenig belastend für die Augen, um es in einer dunklen Halle auf eine Leinwand zu übertragen, ohne dabei die Spieler 
 von ihrem Spiel abzulenken. 
-\begin{figure}[htb]
-	\begin{center}
-		\includegraphics[width=0.75 \textwidth]{websitemenue.JPG}
-		\caption{Startseite}
-		\label{fig:start}
-	\end{center}
-\begin{center}
-	\includegraphics[width=0.75 \textwidth]{scoreboardteams.JPG}
-	\caption{Scoreboard mit Teams}
-	\label{fig:team}
-\end{center}
-\end{figure}
 
 
 \subsubsection{Datenbank}
 \label{sec:services-datenbank}
-\begin{figure}[htb]
+\begin{figure}[h]
 	\begin{center}
 		\includegraphics[width=0.8 \textwidth]{Databasestrucb.png}
 		\caption{Datenbankstruktur}
