@@ -1,20 +1,20 @@
 \subsection{Auswertung}
 \label{sec:auswertung}
 
-Der zuvor beschriebene Systementwurf ist ausreichend, um die Anforderungen zu
+Der zuvor beschriebene Systementwurf ist geeignet, um die Anforderungen zu
 erfüllen. Es sind Spielgeräte geplant worden, die denen aus Lasertag ähneln,
 und mit Infrarot können sich Spieler gegenseitig abschießen. Es sollte mindestens ein
 Spielmodus implementiert werden, der an BitTorrent angelehnt ist. Jedoch
 wurden weitreichende Anpassungen vorgenommen, um gute Spielbarkeit zu gewährleisten. Es wurden viele weitere
 Faktoren bedacht, welche das Spielerlebnis verbessern sollen, etwa die
-Möglichkeit Informationen zum Spielstand zu erlangen, oder die freie
+Möglichkeit, Informationen zum Spielstand zu erlangen, oder die freie
 Beweglichkeit im Raum. Jedoch ist nicht alles planmäßig verlaufen und der
 Entwurf wurde nicht vollständig umgesetzt.
 
 Zuallererst möchten wir auswerten, wie weit die einzelnen Komponenten
 entwickelt wurden. Die Hardware bildet die Basis für das Projekt und ist somit
 die Voraussetzung für ein funktionierendes System. Die Gruppe hatte sich zum
-Ziel gesetzt nicht nur ein stabile Infrastruktur zur Verfügung zu stellen,
+Ziel gesetzt, nicht nur ein stabile Infrastruktur zur Verfügung zu stellen,
 sondern auch den darüberliegenden Schichten Komfort zu bieten, indem
 hardwarenahe Details abstrahiert werden. Dies hat gut funktioniert und hat die
 Kommunikation mit den anderen Gruppen erleichert, weil es nur sehr wenig
@@ -24,13 +24,13 @@ Die Hardwaregruppe hat außerdem die Installation des
 Projekts übernommen, womit sich die Entwickler voll und ganz auf ihre Arbeit
 konzentrieren konnten, ohne sich um die Verteilung der Software kümmern zu
 müssen. Das Netzwerk hat sich als zuverlässig erwiesen, jedoch ist die
-Reichweite noch ausbaufähig. Die Raspberry Pi's haben sich also günstige, aber
+Reichweite noch ausbaufähig. Die Raspberry Pis haben sich als günstige, aber
 sehr effektive Lösung erwiesen und wir konnten mit den Powerbanks die
 Geräte komplett ohne externe Kabel realisieren. Allerdings sind sie noch sehr
 klobig und die Powerbanks passen nicht rein, wodurch sie die ganze Zeit über
 zusätzlich gehalten werden müssen. Insgesamt sind die Geräte nicht sehr schön.
 
-Die LED's machen das ganze Spiel sehr viel lebendiger, indem sie etwas
+Die LEDs machen das ganze Spiel sehr viel lebendiger, indem sie etwas
 optisches Feedback bieten, jedoch müssen sich neue Spieler erst mit den Codes
 vertraut machen, was vielleicht etwas unintuitiv ist. Die Infrarotübertragung
 hat technisch funktioniert, wir sind uns allerdings noch nicht ganz über ihre
@@ -64,24 +64,24 @@ realistisch festgelegt hätten werden können.
 \newline
 
 Die Service-Gruppe hatte mehrere sehr unterschiedliche Aufgaben zu bewältigen. 
-Das waren zum einem das entwickeln eines Servers, dessen Aufgabe es ist, die Parameter des aktuellen Spieles, 
-basierend auf Hardware und Logik Input zu verwalten. Des weiteren musste eine diese Kommunikation zwischen den 
-Service Komponenten und den beiden anderen Gruppen etabliert werden. Zuletzt musste noch ein Weg gefunden werden, 
-dem Spieler zu ermöglichen ein Spiel zu erstellen, zu verwalten und zu starten, sowie den derzeitigen Stand abzufragen.
+Das waren zum einem die Entwicklung eines Servers, dessen Aufgabe es ist, die Parameter des aktuellen Spieles, 
+basierend auf Hardware und Logik-Input zu verwalten. Des Weiteren musste eine Kommunikation zwischen den 
+Services-Komponenten und den beiden anderen Gruppen etabliert werden. Zuletzt musste noch ein Weg gefunden werden, 
+dem Spieler zu ermöglichen, ein Spiel zu erstellen, zu verwalten und zu starten, sowie den derzeitigen Stand abzufragen.
 
 Im Großteil konnten diese Aufgaben alle bewältigt werden. Der Server selbst kann das Spiel konstant aufrecht erhalten 
 und auf Input reagieren. Die Kommunikation zwischen Client und Server, sowie die Funktionen der LEDs sind vollständig implementiert. 
-Test zeigen zwar, dass alle Komponenten korrekt arbeiten, jedoch konnte mangels Parxistest nicht ausgeschlossen werden, dass unerwartete Probleme auftreten.
+Tests zeigen zwar, dass alle Komponenten korrekt arbeiten, jedoch konnte mangels Parxistest nicht ausgeschlossen werden, dass unerwartete Probleme auftreten.
 
- Bei Integrationstest zeigte sich jedoch, dass insbesondere Input der Hardwareebene nicht korrekt verarbeitet wird. 
- Eine Kommunikation mit der Logik über LUA konnte hergestellt werden und die Daten korrekt vom Server verarbeitet werden, 
- da jedoch die Ergebnisse nicht korrekt sind, haben wir einen unlokalisierten Bug in der Aufnahme oder Verarbeitung.
+ Bei Integrationstests zeigte sich jedoch, dass insbesondere Input der Hardwareebene nicht korrekt von der Services-Komponente verarbeitet wird. 
+ Eine Kommunikation mit der Logik über LUA konnte hergestellt werden und die Daten konnten korrekt vom Server verarbeitet werden. 
+ Da jedoch die Ergebnisse nicht korrekt sind, haben wir einen unlokalisierten Bug in der Aufnahme oder Verarbeitung.
  
-Das Problem des Benutzer Inputs konnte relativ simpel über eine Webseite gelöst werden. HTML (und CSS) reichte für die 
-meisten Funktionen dabei aus, für die anderen benötigten Feature könnten JavaScript und Flask ausreichend helfen. 
+Das Problem der Benutzereingabe konnte relativ simpel über eine Webseite gelöst werden. HTML (und CSS) reichte für die 
+meisten Funktionen dabei aus, für die anderen benötigten Features könnten JavaScript und Flask ausreichend helfen. 
 Zugunsten von Datenpersistenz und einfacher Implementierung simultaner Spiele kommuniziert die Seite nicht (wie die anderen Komponenten) 
-schlicht über Googles Protocol Buffers sondern schreibt alle eingegebenen Daten in eine MySQL Datenbank. Obwohl die Vorteile dieses Systems 
-groß sind hat sich bei dem Versuch der Integration mit dem Server gezeigt, dass viel mehr Probleme auftreten als erwartet, was dazu führte, 
-dass sie zur Endpräsentation nicht komplett einsatzfähig war.
+schlicht über Google Protocol Buffers, sondern schreibt alle eingegebenen Daten in eine MySQL-Datenbank. Obwohl die Vorteile dieses Systems 
+groß sind, hat sich bei dem Versuch der Integration mit dem Server gezeigt, dass viel mehr Probleme auftreten als erwartet, was dazu führte, 
+dass es zur Endpräsentation nicht komplett einsatzfähig war.
 
 
